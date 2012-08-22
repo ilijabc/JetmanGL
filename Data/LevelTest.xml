@@ -1,0 +1,11 @@
+<world gravity="0 -10">
+
+    <body type="static" position="0 -10">
+        <shape type="box">50 10</shape>
+    </body>
+
+    <body type="dynamic" position="0 4">
+        <shape type="box" density="1" friction="0.3">1 1</shape>
+    </body>
+
+</world>

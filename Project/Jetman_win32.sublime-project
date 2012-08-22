@@ -1,0 +1,40 @@
+{
+	"folders":
+	[
+		{
+			"path": "/C/ilija/p/JetmanGL"
+		}
+	],
+	"build_systems":
+	[
+		{
+			"name": "Jetman Debug",
+			"cmd": [ "mingw32-make", "SHELL=CMD.exe", "build" ],
+			"shell": "true",
+			"working_dir": "C:\\ilija\\p\\JetmanGL",
+			"file_regex": "^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)$",
+			"encoding": "cp1252",
+			"env":
+			{
+				"PATH": "$PATH;C:\\MinGW\\bin",
+				"TARGET": "win32-msys"
+			},
+			"variants":
+			[
+				{
+					"name": "Run",
+					"cmd": [ "mingw32-make", "run" ]
+				},
+				{
+					"name": "Clean",
+					"cmd": [ "mingw32-make", "clean" ]
+				}
+			]
+		}
+	],
+	"settings":
+	{
+		"sublimegdb_workingdir": "C:\\ilija\\p\\JetmanGL",
+	    "sublimegdb_commandline": "C:\\MinGW\\bin\\gdb.exe --interpreter=mi ./Out/Jetman.exe"
+	}
+}
