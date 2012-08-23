@@ -31,7 +31,7 @@ GameApp::GameApp(int width, int height)
     mouse.button[2] = 0;
     mouse.button[3] = 0;
     memset(keyState, 0, (GLFW_KEY_LAST + 1) * sizeof(int));
-    camera.set(0, 0, 200);
+    camera.set(0, 0, 2000);
 
     view = new GLView();
 	view->setup();
@@ -76,9 +76,8 @@ void GameApp::onDraw()
 	view->endScene2D();
 
 	view->beginGui();
-	view->drawRect(0, 0, 200, 100);
-	font->beginText(0, 0, 200, 100);
-	font->drawText(text, 0);
+	font->beginText(0, 0, 300, 50);
+	font->drawText("JetmanGL git version", 0);
 	font->endText();
 	view->endGui();
 }
@@ -126,6 +125,9 @@ void GameApp::onMouseMoveEvent(int x, int y)
 		boom->position.y = mouse.sy;
 	}
 
+	boom->position.x = mouse.sx - camera.x;
+	boom->position.y = mouse.sy - camera.y;
+
 	//state
 	mouse.x = x;
 	mouse.y = y;
@@ -138,8 +140,6 @@ void GameApp::onMouseButtonEvent(int button, int press)
 	{
 		if (press)
 		{
-			boom->position.x = mouse.sx;
-			boom->position.y = mouse.sy;
 			boom->startEmitter(0.02);
 		}
 		else

@@ -25,6 +25,13 @@ private:
     void generateFloor();
     void generateCeiling();
     void generateIsland();
+
+private:
+    float mPositionX;
+    float mPositionY;
+    float mSizeX;
+    float mSizeY;
+    Type mType;
 };
 
 #endif // GAMEPLATFORM_H

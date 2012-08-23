@@ -50,5 +50,10 @@ protected:
 #endif
 
 inline float randf() { return (float)rand() / (float)RAND_MAX; }
+inline float randf(float max) { return (float)rand() / (float)RAND_MAX * max; }
+inline float randf(float min, float max) { return (float)rand() / (float)RAND_MAX * (max - min) + min; }
+
+#define MIN(A, B) (((A) < (B)) ? (A) : (B))
+#define MAX(A, B) (((A) > (B)) ? (A) : (B))
 
 #endif /* GAMECOMMON_H_ */
