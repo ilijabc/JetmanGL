@@ -2,7 +2,7 @@
 	"folders":
 	[
 		{
-			"path": "~/dev/Jetman"
+			"path": "/home/djukici/dev/JetmanGL"
 		}
 	],
 	"build_systems":
@@ -10,14 +10,12 @@
 		{
 			"name": "Jetman Debug",
 			"cmd": [ "make", "build" ],
-			"working_dir": "$project_path",
+			"working_dir": "/home/djukici/dev/JetmanGL",
 			"file_regex": "^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)$",
 			"env":
 			{
 				"TARGET": "linux",
-				"BUILD": "debug",
-				"GLFW_DIR": "/home/djukici/dev/glfw-2.7.6",
-				"LD_LIBRARY_PATH": "$(GLFW_DIR)/lib/x11"
+				"BUILD": "debug"
 			},
 			"variants":
 			[
@@ -34,7 +32,7 @@
 	],
 	"settings":
 	{
-		"sublimegdb_workingdir": "/home/djukici/dev/Jetman",
+		"sublimegdb_workingdir": "/home/djukici/dev/JetmanGL",
 		"sublimegdb_commandline": "gdb --interpreter=mi ./Out/Jetman",
 		"tab_size": 4
 	}

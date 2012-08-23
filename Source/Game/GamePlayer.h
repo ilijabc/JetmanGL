@@ -13,7 +13,7 @@
 class GamePlayer: public GameObject
 {
 public:
-	GamePlayer(b2Body *b);
+	GamePlayer(GameLevel *level, float x, float y);
 	virtual ~GamePlayer();
 
 	virtual void onUpdate(float dt);

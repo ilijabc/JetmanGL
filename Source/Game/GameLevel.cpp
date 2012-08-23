@@ -9,36 +9,21 @@
 
 GameLevel::GameLevel()
 {
-	world = new b2World(b2Vec2(0, -10));
-	worldUpdateTimeout = 0;
+	mWorld = new b2World(b2Vec2(0, -10));
+	mWorldUpdateTimeout = 0;
 
-	b2BodyDef groundBodyDef;
-	groundBodyDef.position.Set(0.0f, -10.0f);
-	b2Body* groundBody = world->CreateBody(&groundBodyDef);
-	b2PolygonShape groundBox;
-	groundBox.SetAsBox(50.0f, 10.0f);
-	groundBody->CreateFixture(&groundBox, 0.0f);
+	createPlatform(-10, -1, 10, -2, GamePlatform::FLOOR);
 
-	b2BodyDef bodyDef;
-	bodyDef.type = b2_dynamicBody;
-	bodyDef.position.Set(0.0f, 4.0f);
-	b2Body* body = world->CreateBody(&bodyDef);
-	b2PolygonShape dynamicBox;
-	dynamicBox.SetAsBox(1.0f, 1.0f);
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &dynamicBox;
-	fixtureDef.density = 1.0f;
-	fixtureDef.friction = 0.3f;
-	body->CreateFixture(&fixtureDef);
+	GamePlayer *player = createPlayer(0.0f, 4.0f);
 }
 
 GameLevel::~GameLevel()
 {
-	delete world;
-	for (std::list<GameObject*>::iterator iobj = gameObjectList.begin(); iobj != gameObjectList.end(); iobj++)
+	for (std::list<GameObject*>::iterator iobj = mGameObjectList.begin(); iobj != mGameObjectList.end(); iobj++)
 	{
 		delete *iobj;
 	}
+	delete mWorld;
 }
 
 void GameLevel::update(float dt)
@@ -46,23 +31,21 @@ void GameLevel::update(float dt)
 	float32 timeStep = 1.0f / 60.0f;
 	int32 velocityIterations = 6;
 	int32 positionIterations = 2;
-	worldUpdateTimeout += dt;
-	if (worldUpdateTimeout >= timeStep)
+	mWorldUpdateTimeout += dt;
+	if (mWorldUpdateTimeout >= timeStep)
 	{
-		world->Step(timeStep, velocityIterations, positionIterations);
-		worldUpdateTimeout -= timeStep;
+		mWorld->Step(timeStep, velocityIterations, positionIterations);
+		mWorldUpdateTimeout -= timeStep;
 	}
-	for (std::list<GameObject*>::iterator iobj = gameObjectList.begin(); iobj != gameObjectList.end(); iobj++)
+	for (std::list<GameObject*>::iterator iobj = mGameObjectList.begin(); iobj != mGameObjectList.end(); iobj++)
 	{
 		(*iobj)->onUpdate(dt);
 	}
 }
 
-
-
 void GameLevel::draw(GLView *view)
 {
-	b2Body *body = world->GetBodyList();
+	b2Body *body = mWorld->GetBodyList();
 	while (body)
 	{
 		GameObject* obj = (GameObject*)body->GetUserData();
@@ -80,6 +63,22 @@ void GameLevel::draw(GLView *view)
 		//next
 		body = body->GetNext();
 	}
+}
+
+// Factory
+
+GamePlayer *GameLevel::createPlayer(float x, float y)
+{
+	GamePlayer *player = new GamePlayer(this, x, y);
+	mGameObjectList.push_back(player);
+	return player;
+}
+
+GamePlatform *GameLevel::createPlatform(float x1, float y1, float x2, float y2, GamePlatform::Type type)
+{
+	GamePlatform *platform = new GamePlatform(this, x1, y1, x2, y2, type);
+	mGameObjectList.push_back(platform);
+	return platform;
 }
 
 void GameLevel::drawBodyDebug(b2Body *body)

@@ -149,7 +149,7 @@ void GameApp::onMouseButtonEvent(int button, int press)
 	}
 	else if (button == 1 && press)
 	{
-		level->createObject<GamePlayer>(mouse.sx, mouse.sy);
+		GamePlayer *player = level->createPlayer(mouse.sx, mouse.sy);
 	}
 
 	//state

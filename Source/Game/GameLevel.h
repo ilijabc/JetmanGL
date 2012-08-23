@@ -10,46 +10,27 @@
 
 #include "GameCommon.h"
 #include "GamePlayer.h"
-
+#include "GamePlatform.h"
 
 class GameLevel
 {
 public:
 	GameLevel();
 	virtual ~GameLevel();
-
 	void update(float dt);
 	void draw(GLView *view);
-
-	void addBox(float x, float y, bool is_player);
-
-	template <class T> T* createObject(float x, float y);
+    inline b2World *getWorld() const { return mWorld; }
+    //factory
+    GamePlayer *createPlayer(float x, float y);
+    GamePlatform *createPlatform(float x1, float y1, float x2, float y2, GamePlatform::Type type);
 
 private:
 	void drawBodyDebug(b2Body *body);
 
 private:
-	b2World		*world;
-	float		worldUpdateTimeout;
-	std::list<GameObject*> gameObjectList;
+	b2World *mWorld;
+	float mWorldUpdateTimeout;
+	std::list<GameObject*> mGameObjectList;
 };
-
-//
-//create implementation
-//
-template <class T>
-T* GameLevel::createObject(float x, float y)
-{
-    //create body
-    b2BodyDef bodyDef;
-    bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(x, y);
-    b2Body* body = world->CreateBody(&bodyDef);
-    //create object
-    T* obj = new T(body);
-    body->SetUserData(obj);
-    gameObjectList.push_back(obj);
-    return obj;
-}
 
 #endif /* JETMANLEVEL_H_ */

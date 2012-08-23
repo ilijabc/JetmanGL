@@ -7,11 +7,24 @@
 class GamePlatform : public GameObject
 {
 public:
-    GamePlatform(b2Body *b);
+    enum Type
+    {
+        FLOOR = 0,
+        CEILING,
+        ISLAND
+    };
+
+public:
+    GamePlatform(GameLevel *level, float x1, float y1, float x2, float y2, Type type);
     virtual ~GamePlatform();
 	virtual void onUpdate(float dt);
 	virtual void onDraw(GLView *view);
 	virtual void onCollision(b2Body *other);
+
+private:
+    void generateFloor();
+    void generateCeiling();
+    void generateIsland();
 };
 
 #endif // GAMEPLATFORM_H
