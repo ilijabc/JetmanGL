@@ -31,7 +31,7 @@ GameApp::GameApp(int width, int height)
     mouse.button[2] = 0;
     mouse.button[3] = 0;
     memset(keyState, 0, (GLFW_KEY_LAST + 1) * sizeof(int));
-    camera.set(0, 0, 2000);
+    camera.set(0, 0, 200);
 
     view = new GLView();
 	view->setup();
@@ -46,6 +46,8 @@ GameApp::GameApp(int width, int height)
 	strcpy(text, "...");
 
 	level = new GameLevel();
+	mPlayer = level->createPlayer(10, 10);
+	mLockOnPlayer = true;
 }
 
 
@@ -64,13 +66,18 @@ void GameApp::onUpdate(float dt)
 	sprintf(text, "#%d", boom->getParticlesCount());
 
 	level->update(dt);
+	if (mLockOnPlayer)
+	{
+		camera.x = mPlayer->getBody()->GetPosition().x;
+		camera.y = mPlayer->getBody()->GetPosition().y;
+	}
 }
 
 
 void GameApp::onDraw()
 {
 	sceneSize = view->beginScene2DWide(camera.z / 10);
-	glTranslatef(camera.x, camera.y, 0);
+	glTranslatef(-camera.x, -camera.y, 0);
 	boom->draw();
 	level->draw(view);
 	view->endScene2D();
@@ -111,22 +118,28 @@ void GameApp::onMouseMoveEvent(int x, int y)
 	int dx = x - mouse.x;
 	int dy = y - mouse.y;
 
-	mouse.sx = sceneSize.x / view->getWidth() * x - sceneSize.x / 2;
-	mouse.sy = sceneSize.y / 2 - sceneSize.y / view->getHeight() * y;
+	mouse.sx = sceneSize.x / view->getWidth() * x - sceneSize.x / 2 + camera.x;
+	mouse.sy = sceneSize.y / 2 - sceneSize.y / view->getHeight() * y + camera.y;
 
-	if (mouse.button[0])
+	if (mLockOnPlayer)
 	{
-		camera.x += dx * 0.1;
-		camera.y -= dy * 0.1;
+		if (mouse.button[0])
+		{
+			b2Vec2 mv(mouse.sx, mouse.sy);
+			mPlayer->getBody()->ApplyForceToCenter(mPlayer->getBody()->GetPosition() - mv);
+		}
 	}
-	else if (mouse.button[1])
+	else
 	{
-		boom->position.x = mouse.sx;
-		boom->position.y = mouse.sy;
+		if (mouse.button[0])
+		{
+			camera.x -= dx * 0.1;
+			camera.y += dy * 0.1;
+		}
 	}
 
-	boom->position.x = mouse.sx - camera.x;
-	boom->position.y = mouse.sy - camera.y;
+	boom->position.x = mouse.sx;
+	boom->position.y = mouse.sy;
 
 	//state
 	mouse.x = x;

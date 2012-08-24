@@ -44,6 +44,8 @@ private:
 	GLParticleSystem *boom;
 	char 		text[200];
 	GameLevel	*level;
+	GamePlayer* mPlayer;
+	bool mLockOnPlayer;
 };
 
 #endif /* GAMEAPP_H_ */
