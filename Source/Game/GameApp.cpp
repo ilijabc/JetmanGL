@@ -37,23 +37,28 @@ GameApp::GameApp(int width, int height)
 	view->setup();
     view->setSize(width, height);
 
-	tex = new GLTexture("Data/spot.png");
+	mTexturePool[0] = new GLTexture("Data/spot.png");
+	mTexturePool[1] = new GLTexture("Data/craft.png");
 	font = new GLFont("Data/Arial.fnt");
 	boom = new GLParticleSystem();
 	boom->Properties = PSP_Fire;
-	boom->setTexture(tex);
+	boom->setTexture(mTexturePool[0]);
 	boom->rotation = 90;
 	strcpy(text, "...");
 
-	level = new GameLevel();
-	mPlayer = level->createPlayer(10, 10);
-	mLockOnPlayer = true;
+	level = new GameLevel("Data/level01.svg");
+	mPlayer = level->getPlayer();
+    mLockOnPlayer = true;
+    camera.x = mPlayer->getBody()->GetPosition().x;
+    camera.y = mPlayer->getBody()->GetPosition().y;
+
 }
 
 
 GameApp::~GameApp()
 {
-	delete tex;
+    for (int i = 0; i < 2; i++)
+        delete mTexturePool[i];
 	delete font;
 	delete boom;
 	delete level;
@@ -63,14 +68,38 @@ GameApp::~GameApp()
 void GameApp::onUpdate(float dt)
 {
 	boom->update(dt);
-	sprintf(text, "#%d", boom->getParticlesCount());
+	sprintf(text, "%f %f", mouse.sx + camera.x, mouse.sy + camera.y);
 
 	level->update(dt);
-	if (mLockOnPlayer)
+	if (mPlayer && mLockOnPlayer)
 	{
-		camera.x = mPlayer->getBody()->GetPosition().x;
-		camera.y = mPlayer->getBody()->GetPosition().y;
+		if (mouse.button[0])
+		{
+		    float k = 5000;
+			b2Vec2 pv = mPlayer->getBody()->GetPosition();
+			b2Vec2 mv(mouse.sx - pv.x + camera.x, mouse.sy - pv.y + camera.y);
+            mv.Normalize();
+            mv.x *= dt * k * 0.75;
+            mv.y *= dt * k;
+            if (mv.y < 0) mv.y = 0;
+			mPlayer->getBody()->ApplyForceToCenter(mv);
+		}
+		float cx = camera.x - mPlayer->getBody()->GetPosition().x;
+		float cy = camera.y - mPlayer->getBody()->GetPosition().y;
+		camera.x -= cx * dt;
+		camera.y -= cy * dt;
+        //camera bounds
+        if (camera.x < level->getBounds().x1 + sceneSize.x / 2)
+            camera.x = level->getBounds().x1 + sceneSize.x / 2;
+        if (camera.y < level->getBounds().y1 + sceneSize.y / 2)
+            camera.y = level->getBounds().y1 + sceneSize.y / 2;
+        if (camera.x > level->getBounds().x2 - sceneSize.x / 2)
+            camera.x = level->getBounds().x2 - sceneSize.x / 2;
+        if (camera.y > level->getBounds().y2 - sceneSize.y / 2)
+            camera.y = level->getBounds().y2 - sceneSize.y / 2;
 	}
+    boom->position.x = mouse.sx + camera.x;
+	boom->position.y = mouse.sy + camera.y;
 }
 
 
@@ -85,6 +114,7 @@ void GameApp::onDraw()
 	view->beginGui();
 	font->beginText(0, 0, 300, 50);
 	font->drawText("JetmanGL git version", 0);
+	font->drawText(text, -1);
 	font->endText();
 	view->endGui();
 }
@@ -118,16 +148,12 @@ void GameApp::onMouseMoveEvent(int x, int y)
 	int dx = x - mouse.x;
 	int dy = y - mouse.y;
 
-	mouse.sx = sceneSize.x / view->getWidth() * x - sceneSize.x / 2 + camera.x;
-	mouse.sy = sceneSize.y / 2 - sceneSize.y / view->getHeight() * y + camera.y;
+	mouse.sx = sceneSize.x / view->getWidth() * x - sceneSize.x / 2;
+	mouse.sy = sceneSize.y / 2 - sceneSize.y / view->getHeight() * y;
 
 	if (mLockOnPlayer)
 	{
-		if (mouse.button[0])
-		{
-			b2Vec2 mv(mouse.sx, mouse.sy);
-			mPlayer->getBody()->ApplyForceToCenter(mPlayer->getBody()->GetPosition() - mv);
-		}
+
 	}
 	else
 	{
@@ -137,9 +163,6 @@ void GameApp::onMouseMoveEvent(int x, int y)
 			camera.y += dy * 0.1;
 		}
 	}
-
-	boom->position.x = mouse.sx;
-	boom->position.y = mouse.sy;
 
 	//state
 	mouse.x = x;
@@ -162,7 +185,7 @@ void GameApp::onMouseButtonEvent(int button, int press)
 	}
 	else if (button == 1 && press)
 	{
-		GamePlayer *player = level->createPlayer(mouse.sx, mouse.sy);
+		GamePlayer *player = level->createPlayer(mouse.sx + camera.x, mouse.sy + camera.y, 1, 1, GamePlayer::BOX);
 	}
 
 	//state

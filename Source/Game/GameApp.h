@@ -39,7 +39,7 @@ private:
 	GLView      *view;
 	GLFloat3	camera;
 	GLFloat2	sceneSize;
-	GLTexture 	*tex;
+	GLTexture *mTexturePool[10];
 	GLFont 		*font;
 	GLParticleSystem *boom;
 	char 		text[200];

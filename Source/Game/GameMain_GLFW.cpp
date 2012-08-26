@@ -50,8 +50,8 @@ static void cb_size(int width, int height)
 
 int main(int argc, char *argv[])
 {
-    int     width = 640;
-    int     height = 480;
+    int     width = 800;
+    int     height = 600;
     float   ftime = 0;
 
     if (!glfwInit())

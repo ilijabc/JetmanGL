@@ -13,12 +13,23 @@
 class GamePlayer: public GameObject
 {
 public:
-	GamePlayer(GameLevel *level, float x, float y);
-	virtual ~GamePlayer();
+	enum Type
+	{
+		BOX = 0,
+		CRAFT
+	};
 
+public:
+	GamePlayer(GameLevel *level, float x, float y, float w, float h, Type type);
+	virtual ~GamePlayer();
 	virtual void onUpdate(float dt);
 	virtual void onDraw(GLView *view);
 	virtual void onCollision(b2Body *other);
+	inline void setTexture(GLTexture *tex) { mTexture = tex; }
+	inline GLTexture *getTexture() const { return mTexture; }
+
+private:
+    GLTexture *mTexture;
 };
 
 #endif /* JETMANPLAYER_H_ */
