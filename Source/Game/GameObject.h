@@ -8,13 +8,21 @@ class GameObject
 public:
 	enum Type
 	{
-		BOX = 0,
+		UNKNOWN = 0,
+		BOX,
 		CRAFT,
-		ALIEN
+		ALIEN,
+		PLATFORM,
+		RECT
 	};
 
+private:
+	void init();
+
 public:
+	GameObject();
 	GameObject(GameLevel *level, float x, float y, float w, float h, Type type);
+	GameObject(GameLevel *level, b2Vec2 *plist, int plist_size);
 	virtual ~GameObject();
 	virtual void onUpdate(float dt);
 	virtual void onDraw(GLView *view);
@@ -41,6 +49,18 @@ private:
     GameObject *mEventObject;
     float mFule;
     char *mMessage;
+	b2Vec2 *mEdgeList;
+	Triangle *mTriangleList;
+
+public:
+	struct
+	{
+		bool hasLine;
+		bool hasFill;
+		float lineColor[4];
+		float lineWidth;
+		float fillColor[4];
+	} mPathStyle;
 };
 
 #endif // GAMEOBJECT_H

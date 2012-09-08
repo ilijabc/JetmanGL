@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <list>
+#include <time.h>
 
 class GameLevel;
 
@@ -22,6 +23,11 @@ struct Rect
     Rect() : x1(0), y1(0), x2(0), y2(0) { }
     Rect(float _x1, float _y1, float _x2, float _y2) : x1(_x1), y1(_y1), x2(_x2), y2(_y2) { }
     inline bool testPoint(float x, float y) { return (x >= x1 && x <= x2 && y >= y1 && y <= y2); }
+};
+
+struct Triangle
+{
+	b2Vec2 a, b, c;
 };
 
 #ifdef DEBUG
@@ -34,7 +40,17 @@ inline float randf() { return (float)rand() / (float)RAND_MAX; }
 inline float randf(float max) { return (float)rand() / (float)RAND_MAX * max; }
 inline float randf(float min, float max) { return (float)rand() / (float)RAND_MAX * (max - min) + min; }
 
+inline void set4fv(float *pf, float x, float y, float z, float w) { pf[0]=x; pf[1]=y; pf[2]=z; pf[3]=w; }
+
 #define MIN(A, B) (((A) < (B)) ? (A) : (B))
 #define MAX(A, B) (((A) > (B)) ? (A) : (B))
+
+inline void parseIntColor(int color, float *vcolor)
+{
+	vcolor[0] = ((color >> 16) & 0xFF) / 255.0f;
+	vcolor[1] = ((color >> 8) & 0xFF) / 255.0f;
+	vcolor[2] = ((color >> 0) & 0xFF) / 255.0f;
+	vcolor[3] = ((color >> 24) & 0xFF) / 255.0f;
+}
 
 #endif /* GAMECOMMON_H_ */

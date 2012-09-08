@@ -10,12 +10,13 @@
 
 #include "GameCommon.h"
 #include "GameLevel.h"
+#include "ALPlus/ALContext.h"
 #include <GL/glfw.h>
 
 class GameApp
 {
 public:
-	GameApp(int width, int height);
+	GameApp(int width, int height, bool enable_audio);
 	virtual ~GameApp();
 	void onUpdate(float dt);
 	void onDraw();
@@ -49,6 +50,7 @@ private:
 	float mTime;
 	bool mTimer;
 	float mFadeOut;
+	ALContext *mAudio;
 };
 
 #endif /* GAMEAPP_H_ */

@@ -67,6 +67,7 @@ void GameLevel::update(float dt)
 
 void GameLevel::draw(GLView *view)
 {
+#if 0
 	for (std::list<GameObject*>::iterator iobj = mGameObjectList.begin(); iobj != mGameObjectList.end(); iobj++)
 	{
 		GameObject* obj = *iobj;
@@ -78,17 +79,19 @@ void GameLevel::draw(GLView *view)
 		obj->onDraw(view);
 		glPopMatrix();
 	}
+#endif
 	// DEBUG DRAW FOR BOX2D
 	for (b2Body *body = mWorld->GetBodyList(); body; body = body->GetNext())
 	{
 	    GameObject* obj = (GameObject*)body->GetUserData();
-	    if (obj && obj->getTexture())
-            continue;
+	    //if (obj && obj->getTexture())
+        //    continue;
 		b2Vec2 position = body->GetPosition();
 		float rotation = body->GetAngle() * GLPLUS_TODEG;
 		glPushMatrix();
 		glTranslatef(position.x, position.y, 0);
 		glRotatef(rotation, 0, 0, 1);
+		obj->onDraw(view);
 		drawBodyDebug(body);
 		glPopMatrix();
 	}
@@ -128,6 +131,13 @@ GameObject *GameLevel::createObject(float x, float y, float w, float h, GameObje
 	return obj;
 }
 
+GameObject *GameLevel::createPlatform(b2Vec2 *plist, int plist_size)
+{
+	GameObject *obj = new GameObject(this, plist, plist_size);
+	mGameObjectList.push_back(obj);
+	return obj;
+}
+
 void GameLevel::destroyObject(GameObject *obj)
 {
     if (obj->getType() == GameObject::BOX)
@@ -141,8 +151,11 @@ void GameLevel::destroyObject(GameObject *obj)
 	}
 #endif
 }
+
 void GameLevel::drawBodyDebug(b2Body *body)
 {
+	GameObject *obj = (GameObject*)body->GetUserData();
+	if (!obj) return;
 	b2Fixture *fix = body->GetFixtureList();
 	while (fix)
 	{
@@ -151,29 +164,61 @@ void GameLevel::drawBodyDebug(b2Body *body)
 		{
 			if (shape->GetType() == b2Shape::e_polygon)
 			{
-				glColor3f(1, 1, 1);
-				glLineWidth(2);
-				glBegin(GL_LINE_LOOP);
-				b2PolygonShape *poly = (b2PolygonShape*)shape;
-				for (int i = 0; i < poly->GetVertexCount(); i++)
+				if (obj->mPathStyle.hasFill)
 				{
-					b2Vec2 v = poly->GetVertex(i);
-					glVertex2f(v.x, v.y);
+					glColor4fv(obj->mPathStyle.fillColor);
+					glBegin(GL_POLYGON);
+					b2PolygonShape *poly = (b2PolygonShape*)shape;
+					for (int i = 0; i < poly->GetVertexCount(); i++)
+					{
+						b2Vec2 v = poly->GetVertex(i);
+						glVertex2f(v.x, v.y);
+					}
+					glEnd();
 				}
-				glEnd();
-				glLineWidth(1);
+				if (obj->mPathStyle.hasLine)
+				{
+					glColor4fv(obj->mPathStyle.lineColor);
+					glLineWidth(obj->mPathStyle.lineWidth);
+					glBegin(GL_LINE_LOOP);
+					b2PolygonShape *poly = (b2PolygonShape*)shape;
+					for (int i = 0; i < poly->GetVertexCount(); i++)
+					{
+						b2Vec2 v = poly->GetVertex(i);
+						glVertex2f(v.x, v.y);
+					}
+					glEnd();
+					glLineWidth(1);
+				}
 			}
 			else if (shape->GetType() == b2Shape::e_chain)
 			{
-				glColor3f(1, 1, 1);
-				glBegin(GL_LINE_STRIP);
-				b2ChainShape *chain = (b2ChainShape*)shape;
-				for (int i = 0; i < chain->m_count; i++)
+				if (obj->mPathStyle.hasFill)
 				{
-					b2Vec2 v = chain->m_vertices[i];
-					glVertex2f(v.x, v.y);
+					glColor4fv(obj->mPathStyle.fillColor);
+					glBegin(GL_POLYGON);
+					b2ChainShape *chain = (b2ChainShape*)shape;
+					for (int i = 0; i < chain->m_count; i++)
+					{
+						b2Vec2 v = chain->m_vertices[i];
+						glVertex2f(v.x, v.y);
+					}
+					glEnd();
 				}
-				glEnd();
+				if (obj->mPathStyle.hasLine)
+				{
+					glColor4fv(obj->mPathStyle.lineColor);
+					glLineWidth(obj->mPathStyle.lineWidth);
+					glBegin(GL_LINE_STRIP);
+					b2ChainShape *chain = (b2ChainShape*)shape;
+					for (int i = 0; i < chain->m_count; i++)
+					{
+						b2Vec2 v = chain->m_vertices[i];
+						glVertex2f(v.x, v.y);
+					}
+					glEnd();
+					glLineWidth(1);
+				}
 			}
 		}
 		//next
@@ -203,41 +248,42 @@ void GameLevel::loadSVGLevel(const char *filename)
     struct SVGPath* plist;
     plist = svgParseFromFile(filename);
 
-    b2BodyDef groundBodyDef;
-    groundBodyDef.position.Set(0, 0);
-    mGround = mWorld->CreateBody(&groundBodyDef);
+    //b2BodyDef groundBodyDef;
+    //groundBodyDef.position.Set(0, 0);
+    //mGround = mWorld->CreateBody(&groundBodyDef);
 
     // Use...
-    for (SVGPath* it = plist; it; it = it->next)
+    for (SVGPath* path = plist; path; path = path->next)
     {
-        b2Vec2 vs[it->npts];
+		GameObject *obj = NULL;
+        b2Vec2 vs[path->npts];
         int i = 0;
         float x, y, w, h;
-        for (i = 0; i < it->npts; ++i)
+        for (i = 0; i < path->npts; ++i)
         {
-            vs[i].Set(it->pts[i*2] * gscale,
-                      -it->pts[i*2+1] * gscale);
+            vs[i].Set(path->pts[i*2] * gscale,
+                      -path->pts[i*2+1] * gscale);
         }
-        if (it->closed)
+        if (path->closed)
             vs[i++] = vs[0];
-        if (it->npts == 4)
+        if (path->npts == 4)
         {
             x = (vs[0].x + vs[2].x) ? (vs[0].x + vs[2].x) / 2 : 0;
             y = (vs[0].y + vs[2].y) ? (vs[0].y + vs[2].y) / 2 : 0;
             w = fabs(vs[0].x - vs[2].x);
             h = fabs(vs[0].y - vs[2].y);
         }
-        if (it->type == SVG_TYPE_IMAGE && it->link)
+        if (path->type == SVG_TYPE_IMAGE && path->link)
         {
             char img_name[64] = "Data";
-            strcat(img_name, strrchr(it->link, '/'));
+            strcat(img_name, strrchr(path->link, '/'));
             GLTexture *tex = getTexture(img_name);
             if (tex)
             {
                 GameObject::Type type = GameObject::BOX;
-                if (strcmp(it->id, "player") == 0)
+                if (strcmp(path->id, "player") == 0)
                     type = GameObject::CRAFT;
-                else if (strcmp(it->id, "alien") == 0)
+                else if (strcmp(path->id, "alien") == 0)
                     type = GameObject::ALIEN;
                 GameObject *player = createObject(x, y, w, h, type);
                 player->setTexture(tex);
@@ -245,26 +291,46 @@ void GameLevel::loadSVGLevel(const char *filename)
                     mPlayer = player;
             }
         }
-        else if (it->type == SVG_TYPE_RECT)
+        else if (path->type == SVG_TYPE_RECT)
         {
-            if (it->id && strcmp(it->id, "back") == 0)
+            if (path->id && strcmp(path->id, "back") == 0)
             {
                 mBounds = Rect(vs[0].x, vs[2].y, vs[2].x, vs[0].y);
-                b2ChainShape chain;
-                chain.CreateChain(vs, i);
-                mGround->CreateFixture(&chain, 0.0f);
+				obj = createObject(vs[0].x, vs[2].y, vs[2].x - vs[0].x, vs[0].y - vs[2].y, GameObject::RECT);
+                //b2ChainShape chain;
+                //chain.CreateChain(vs, i);
+                //mGround->CreateFixture(&chain, 0.0f);
             }
             else
             {
-                createObject(x, y, w, h, GameObject::BOX);
+                obj = createObject(x, y, w, h, GameObject::BOX);
             }
         }
         else
         {
-            b2ChainShape chain;
+            /*b2ChainShape chain;
             chain.CreateChain(vs, i);
-            mGround->CreateFixture(&chain, 0.0f);
+            mGround->CreateFixture(&chain, 0.0f);*/
+			obj = createPlatform(vs, i);
         }
+		//apply style
+		if (obj)
+		{
+			printf("id=%s stroke=%d:0x%X fill=%d:0x%X\n", path->id,
+				path->hasStroke, path->strokeColor,
+				path->hasFill, path->fillColor);
+			if (path->hasStroke)
+			{
+				obj->mPathStyle.hasLine = true;
+				parseIntColor(path->strokeColor, obj->mPathStyle.lineColor);
+				obj->mPathStyle.lineWidth = path->strokeWidth;
+			}
+			if (path->hasFill)
+			{
+				obj->mPathStyle.hasFill = true;
+				parseIntColor(path->fillColor, obj->mPathStyle.fillColor);
+			}
+		}
     }
 
     // Delete

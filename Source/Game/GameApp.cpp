@@ -8,9 +8,9 @@
 #include "GameApp.h"
 #include <GL/glfw.h>
 #include <string.h>
+#include "MathGL/GLVector.h"
 
-
-GameApp::GameApp(int width, int height)
+GameApp::GameApp(int width, int height, bool enable_audio)
 {
 	GLParticleSystemProperties PSP_Boom;
 	PSP_Boom.Size.setValue(1, 2);
@@ -59,11 +59,16 @@ GameApp::GameApp(int width, int height)
     mTime = 0;
     mTimer = false;
     mFadeOut = 0;
+
+	mAudio = new ALContext(enable_audio);
+	mAudio->createSound("Data/game.ogg", 0);
+	mAudio->play(0);
 }
 
 
 GameApp::~GameApp()
 {
+	delete mAudio;
     for (int i = 0; i < 1; i++)
         delete mTexturePool[i];
 	delete font;
@@ -74,6 +79,7 @@ GameApp::~GameApp()
 
 void GameApp::onUpdate(float dt)
 {
+	mAudio->update();
     if (mTimer && level && level->getBoxes())
         mTime += dt;
     if (level && level->getBoxes() == 0)
@@ -100,8 +106,8 @@ void GameApp::onUpdate(float dt)
 		}
 		float cx = camera.x - mPlayer->getBody()->GetPosition().x;
 		float cy = camera.y - mPlayer->getBody()->GetPosition().y;
-		camera.x -= cx * dt;
-		camera.y -= cy * dt;
+		camera.x -= cx * dt * 2;
+		camera.y -= cy * dt * 2;
         //camera bounds
         if (camera.x < level->getBounds().x1 + sceneSize.x / 2)
             camera.x = level->getBounds().x1 + sceneSize.x / 2;
@@ -121,8 +127,8 @@ void GameApp::onDraw()
 {
 	sceneSize = view->beginScene2DWide(camera.z / 10);
 	glTranslatef(-camera.x, -camera.y, 0);
-	boom->draw();
 	level->draw(view);
+	boom->draw();
 	view->endScene2D();
 
     int s = (int)mTime % 60;

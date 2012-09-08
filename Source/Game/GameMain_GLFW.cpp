@@ -66,7 +66,14 @@ int main(int argc, char *argv[])
     int height = iniparser_getint(ini, "video:height", 480);
     int fullscreen = iniparser_getint(ini, "video:fullscreen", 0);
     int desktop = iniparser_getint(ini, "video:desktop", 0);
+	int audio = iniparser_getint(ini, "audio:enabled", 0);
     iniparser_freedict(ini);
+#ifdef DEBUG
+	width = 800;
+	height = 600;
+	fullscreen = 0;
+	desktop = 0;
+#else
     if (desktop)
     {
         GLFWvidmode dm;
@@ -75,6 +82,8 @@ int main(int argc, char *argv[])
         height = dm.Height;
         fullscreen = 1;
     }
+#endif
+
     //glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, GL_TRUE);
     if (!glfwOpenWindow(width, height, 8, 8, 8, 8, 16, 0, fullscreen ? GLFW_FULLSCREEN : GLFW_WINDOW))
     {
@@ -95,7 +104,7 @@ int main(int argc, char *argv[])
     //
     //init
     //
-    g_game = new GameApp(width, height);
+    g_game = new GameApp(width, height, audio ? true : false);
     float ftime = glfwGetTime();
 
     while (glfwGetWindowParam(GLFW_OPENED))

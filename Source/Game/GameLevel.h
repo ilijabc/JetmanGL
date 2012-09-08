@@ -22,11 +22,12 @@ public:
     inline b2World *getWorld() const { return mWorld; }
     //factory
     GameObject *createObject(float x, float y, float w, float h, GameObject::Type type);
+	GameObject *createPlatform(b2Vec2 *plist, int plist_size);
     void destroyObject(GameObject *obj);
     inline GameObject *getPlayer() const { return mPlayer; }
     GLTexture *getTexture(const char *filename);
     inline const Rect& getBounds() const { return mBounds; }
-    inline b2Body *getGround() const { return mGround; }
+    //inline b2Body *getGround() const { return mGround; }
     inline void setFont(GLFont *font) { mFont = font; }
     GLFont *getFont() const { return mFont; }
     inline int getBoxes() const { return mBoxCounter; }
@@ -43,7 +44,7 @@ private:
 	GameObject *mPlayer;
 	std::vector<GLTexture*> mTexturePool;
 	Rect mBounds;
-	b2Body *mGround;
+	//b2Body *mGround;
 	GLParticleSystem mBoom;
 	GLFont *mFont;
 	int mBoxCounter;
