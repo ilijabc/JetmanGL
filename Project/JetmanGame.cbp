@@ -28,13 +28,20 @@
 				<Option output="..\Out\Jetman" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="..\" />
 				<Option object_output="..\Out\Release\" />
-				<Option type="1" />
+				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="..\Source" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add option="-static-libgcc" />
+					<Add option="-static-libstdc++" />
+					<Add library="glfw" />
+					<Add library="opengl32" />
+					<Add library="glu32" />
+					<Add library="gdi32" />
 				</Linker>
 			</Target>
 		</Build>
@@ -43,6 +50,7 @@
 		</Compiler>
 		<Unit filename="..\Data\level01.svg" />
 		<Unit filename="..\Data\level02.svg" />
+		<Unit filename="..\Data\settings.ini" />
 		<Unit filename="..\Source\Box2D\Box2D.h" />
 		<Unit filename="..\Source\Box2D\Collision\Shapes\b2ChainShape.cpp" />
 		<Unit filename="..\Source\Box2D\Collision\Shapes\b2ChainShape.h" />
@@ -165,10 +173,12 @@
 		<Unit filename="..\Source\Game\GameLevel.cpp" />
 		<Unit filename="..\Source\Game\GameLevel.h" />
 		<Unit filename="..\Source\Game\GameMain_GLFW.cpp" />
-		<Unit filename="..\Source\Game\GamePlatform.cpp" />
-		<Unit filename="..\Source\Game\GamePlatform.h" />
-		<Unit filename="..\Source\Game\GamePlayer.cpp" />
-		<Unit filename="..\Source\Game\GamePlayer.h" />
+		<Unit filename="..\Source\Game\GameObject.cpp" />
+		<Unit filename="..\Source\Game\GameObject.h" />
+		<Unit filename="..\Source\NanoSVG\nanosvg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\Source\NanoSVG\nanosvg.h" />
 		<Unit filename="..\Source\Resources\resource.h" />
 		<Unit filename="..\Source\Resources\resource.rc">
 			<Option compilerVar="WINDRES" />

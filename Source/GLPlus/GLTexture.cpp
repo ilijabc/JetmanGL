@@ -52,11 +52,11 @@ GLTexture::GLTexture(const char *file_name, int flags, float *color)
         _bpp = img_bpp;
 		_fileName = (char*)malloc(strlen(file_name) + 1);
 		strcpy(_fileName, file_name);
-		
+
 		//only 32bit images (for now)
 		type = GL_RGBA;
 		_bpp = 4;
-		
+
         glGenTextures(1, &_textureId);
         glBindTexture(GL_TEXTURE_2D, _textureId);
 
@@ -138,8 +138,8 @@ void GLTexture::push() const
 
 void GLTexture::pop() const
 {
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
-	//glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void GLTexture::drawImage(float x1, float y1, float x2, float y2, float u1, float v1, float u2, float v2) const

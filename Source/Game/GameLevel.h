@@ -9,8 +9,7 @@
 #define JETMANLEVEL_H_
 
 #include "GameCommon.h"
-#include "GamePlayer.h"
-#include "GamePlatform.h"
+#include "GameObject.h"
 
 class GameLevel : public b2ContactListener
 {
@@ -22,15 +21,18 @@ public:
 	void draw(GLView *view);
     inline b2World *getWorld() const { return mWorld; }
     //factory
-    GamePlayer *createPlayer(float x, float y, float w, float h, GamePlayer::Type type);
-    GamePlatform *createPlatform(float x1, float y1, float x2, float y2, GamePlatform::Type type);
-    inline GamePlayer *getPlayer() const { return mPlayer; }
+    GameObject *createObject(float x, float y, float w, float h, GameObject::Type type);
+    void destroyObject(GameObject *obj);
+    inline GameObject *getPlayer() const { return mPlayer; }
     GLTexture *getTexture(const char *filename);
     inline const Rect& getBounds() const { return mBounds; }
+    inline b2Body *getGround() const { return mGround; }
+    inline void setFont(GLFont *font) { mFont = font; }
+    GLFont *getFont() const { return mFont; }
+    inline int getBoxes() const { return mBoxCounter; }
 
 private:
 	void drawBodyDebug(b2Body *body);
-    void generateLevel();
     void loadSVGLevel(const char *filename);
     void loadSVGLevel_XML(const char *filename);
 
@@ -38,9 +40,13 @@ private:
 	b2World *mWorld;
 	float mWorldUpdateTimeout;
 	std::list<GameObject*> mGameObjectList;
-	GamePlayer *mPlayer;
+	GameObject *mPlayer;
 	std::vector<GLTexture*> mTexturePool;
 	Rect mBounds;
+	b2Body *mGround;
+	GLParticleSystem mBoom;
+	GLFont *mFont;
+	int mBoxCounter;
 };
 
 #endif /* JETMANLEVEL_H_ */

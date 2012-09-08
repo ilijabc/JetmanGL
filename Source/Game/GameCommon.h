@@ -24,25 +24,6 @@ struct Rect
     inline bool testPoint(float x, float y) { return (x >= x1 && x <= x2 && y >= y1 && y <= y2); }
 };
 
-class GameObject
-{
-public:
-	GameObject(GameLevel *level) : mLevel(level), mBody(NULL) { }
-	virtual ~GameObject() { }
-	//events
-	virtual void onUpdate(float dt) = 0;
-	virtual void onDraw(GLView *view) = 0;
-	virtual void onCollision(b2Body *other) = 0;
-	//funcs
-	inline b2Body *getBody() const { return mBody; }
-    inline void setBounds(float x1, float y1, float x2, float y2) { mBounds = Rect(x1, y1, x2, y2); }
-    inline const Rect& getBounds() const { return mBounds; }
-protected:
-    GameLevel *mLevel;
-	b2Body *mBody;
-    Rect mBounds;
-};
-
 #ifdef DEBUG
 #define LOG(msg, args...) printf("[%d] "msg"\n", (int)time(NULL), ##args)
 #else

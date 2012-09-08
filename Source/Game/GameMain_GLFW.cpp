@@ -1,8 +1,13 @@
 #include "GameApp.h"
 #include <GL/glfw.h>
 
-GameApp *g_game = NULL;
+#ifdef __cplusplus
+extern "C" {
+#include "iniParser/iniparser.h"
+}
+#endif
 
+GameApp *g_game = NULL;
 
 static void cb_key(int key, int press)
 {
@@ -50,18 +55,28 @@ static void cb_size(int width, int height)
 
 int main(int argc, char *argv[])
 {
-    int     width = 800;
-    int     height = 600;
-    float   ftime = 0;
-
     if (!glfwInit())
     {
         LOG("init fail");
         return 0;
     }
 
+    dictionary *ini = iniparser_load("Data/settings.ini");
+    int width = iniparser_getint(ini, "video:width", 640);
+    int height = iniparser_getint(ini, "video:height", 480);
+    int fullscreen = iniparser_getint(ini, "video:fullscreen", 0);
+    int desktop = iniparser_getint(ini, "video:desktop", 0);
+    iniparser_freedict(ini);
+    if (desktop)
+    {
+        GLFWvidmode dm;
+        glfwGetDesktopMode(&dm);
+        width = dm.Width;
+        height = dm.Height;
+        fullscreen = 1;
+    }
     //glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, GL_TRUE);
-    if (!glfwOpenWindow(width, height, 8, 8, 8, 8, 16, 0, GLFW_WINDOW))
+    if (!glfwOpenWindow(width, height, 8, 8, 8, 8, 16, 0, fullscreen ? GLFW_FULLSCREEN : GLFW_WINDOW))
     {
         LOG("failed opening window");
         glfwTerminate();
@@ -74,12 +89,14 @@ int main(int argc, char *argv[])
     glfwSetMouseButtonCallback(cb_mouse_button);
     glfwSetMouseWheelCallback(cb_mouse_wheel);
     glfwSetWindowSizeCallback(cb_size);
+    if (fullscreen)
+        glfwEnable(GLFW_MOUSE_CURSOR);
 
     //
     //init
     //
     g_game = new GameApp(width, height);
-    ftime = glfwGetTime();
+    float ftime = glfwGetTime();
 
     while (glfwGetWindowParam(GLFW_OPENED))
     {

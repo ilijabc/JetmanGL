@@ -15,7 +15,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="level01.svg">
+   sodipodi:docname="level02.svg">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -25,11 +25,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.175"
-     inkscape:cx="-1480.7325"
-     inkscape:cy="-255.74322"
+     inkscape:zoom="0.32"
+     inkscape:cx="2236.978"
+     inkscape:cy="990.81986"
      inkscape:document-units="px"
-     inkscape:current-layer="svg2"
+     inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1280"
      inkscape:window-height="751"
@@ -51,44 +51,113 @@
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(-5.7142857,-314.28572)">
-    <image
-       y="856.03217"
-       x="243.73613"
-       id="image2993"
-       xlink:href="file:///C:/ilija/p/JetmanGL/Data/sub.png"
-       height="64.36039"
-       width="128.72078">
-      <title
-         id="title3002">player</title>
-    </image>
+     id="layer1">
+    <rect
+       style="fill:#ffe680"
+       id="back"
+       width="4565.3286"
+       height="1889.8859"
+       x="-1555.3824"
+       y="-1141.7506"
+       inkscape:label="#rect3000"
+       sodipodi:insensitive="true" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 605.08137,191.54104 -57.57869,50.50763 -16.16244,75.76144 52.52793,85.86296 116.16754,60.60916 159.60411,11.11168 125.25891,-88.89343 24.24367,-64.64976 -38.3858,-79.80205 -83.84267,-85.86297 -130.30967,-43.43656 -31.31473,15.15229 -5.05077,27.27412 41.41626,72.73098 -70.71068,36.36549 z"
+       style="fill:none;stroke:#000000;stroke-width:1.56968081px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m -453.70927,637.90429 193.94302,-15.45746 295.033351,-35.95586 103.953259,74.21791 162.16706,30.08874 207.90652,8.02323 229.49225,-55.69306 17.63274,-203.26069 126.06158,-4.89177 67.01894,186.46272 326.96945,17.20624 164.2462,44.12917 149.6927,-178.52455 56.1347,118.34799 220.3809,-46.13612 126.8231,64.18863 118.5066,36.10686 201.6694,-52.15332 99.7951,-174.5134 -76.9255,-118.348 -74.8463,-126.37123 -49.8975,-108.318719 -180.8788,-104.3066464 33.2651,-128.3772646 -74.8463,-114.33592 -110.1905,-26.07666 -43.6604,-106.31269 49.8976,-138.40654 122.6649,-66.19467 -3.3042,110.45166 175.9177,-4.32856 22.2665,-89.07691 75.3984,-15.04015 66.5301,48.14124 137.2182,0 137.2185,-66.19467 -39.5023,122.36008 16.6325,78.22998 -72.7673,88.25925 -54.0557,-10.02927 -43.6604,28.0827 72.7673,96.2825 89.3998,36.10592 58.2139,-18.0525 95.637,82.241142 176.7204,2.00604 74.8464,-170.501322 -31.186,-238.70111 31.186,-82.24206 -35.3441,-162.47716 -35.3441,-108.31874 -106.0324,-164.48327 -114.3485,8.0233 -114.3486,-18.0534 -95.637,46.1361 -197.5112,-22.0646 -20.7906,156.45997 -41.5813,-148.43677 -207.9066,42.12409 -191.2738,72.21189 -154.0827,24.06047 -52.9957,-37.72379 -127.383,35.92201 -189.7748,-141.15537 -131.2826,43.60181 71.7507,107.70552 -44.7138,91.42626 -99.0469,112.42469 -40.0347,-319.00492 -187.95526,47.81557 24.69691,112.98242 -120.10408,52.48413 -128.42294,112.69076 -213.4318,20.42381 -79.02951,-114.92169 4.15025,-45.72673 285.4517,-0.96539 -17.15756,-190.85874 -347.05399,24.84333 -261.785198,-32.30861 -64.211442,142.81971 -142.72124,-155.48649 -72.27038,117.41078 -163.51827,-46.3995 -217.07119,-137.83462 -114.65922,145.97459 -344.98148,-138.36359 -182.8813,34.8968 -205.6815,5.5948 21.8199,241.77235 112.2257,86.3377 28.6024,120.41353 -126.2911,177.38268 37.3708,322.168067 216.8128,31.460835 218.11915,-107.921972 153.62322,133.301532 -91.56872,107.760381 -315.63015,56.229487 -173.1748,-44.12916 -82.9462,341.45306 86.1153,171.4776 170.0057,70.6466 78.6055,-114.12177 203.28196,-14.29953 164.31354,68.10413 z"
        id="path2996"
        inkscape:connector-curvature="0"
-       transform="translate(0,308.2677)" />
+       sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+    <rect
+       style="fill:#ff0000"
+       id="box-red"
+       width="87.820137"
+       height="61.808708"
+       x="766.13757"
+       y="369.48572"
+       inkscape:label="#rect2998" />
+    <image
+       y="-627.29791"
+       x="2344.9875"
+       id="player"
+       xlink:href="file:///C:/ilija/p/JetmanGL/Data/nlo.png"
+       height="64"
+       width="128"
+       inkscape:label="#image3004" />
+    <rect
+       style="fill:#ff0000"
+       id="box-red-4"
+       width="87.820137"
+       height="61.808708"
+       x="1191.2307"
+       y="560.75275"
+       inkscape:label="#rect2998" />
+    <rect
+       style="fill:#ff0000"
+       id="box-red-4-0"
+       width="87.820137"
+       height="61.808708"
+       x="2159.2148"
+       y="560.06512"
+       inkscape:label="#rect2998" />
+    <rect
+       style="fill:#ff0000"
+       id="box-red-4-9"
+       width="87.820137"
+       height="61.808708"
+       x="-1337.66"
+       y="-130.55988"
+       inkscape:label="#rect2998" />
+    <rect
+       style="fill:#ff0000"
+       id="box-red-4-4"
+       width="87.820137"
+       height="61.808708"
+       x="487.33994"
+       y="-855.55988"
+       inkscape:label="#rect2998" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m -27.274119,995.79364 69.700526,-30.30458 40.406099,9.09138 24.243664,35.35536 68.69037,16.1624 133.34013,-48.48731 89.90358,1.01016 85.86297,31.31475 117.17769,23.2335 90.91373,-27.2741 120.20815,-40.40614 90.91373,-15.15229 71.72084,13.13199 97.98484,52.52794"
-       id="path2998"
-       inkscape:connector-curvature="0" />
+       d="m -368.75,-96.53052 -59.375,-81.25 18.75,-96.875 96.875,-81.25 279.366447,66.7281 316.606123,-13.38297 112.30467,26.09223 119.84776,92.43764 -19.96473,99.05511 -124.63969,-62.79904 -142.90396,44.98646 L 225,15.969483 55.329447,-63.54704 -172.6588,-133.32797 z"
+       id="path3071"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccccccccc" />
+    <image
+       y="-238.65552"
+       x="2757.875"
+       id="alien"
+       xlink:href="file:///C:/ilija/p/JetmanGL/Data/alien.png"
+       height="128"
+       width="128"
+       inkscape:label="#image3081" />
     <rect
-       style="fill:#0000ff;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       id="rect3000"
-       width="35.355339"
-       height="34.345188"
-       x="47.477169"
-       y="589.54114"
-       transform="translate(0,308.2677)" />
+       style="fill:#ff0000"
+       id="box-red-8"
+       width="87.820137"
+       height="61.808708"
+       x="-1353.285"
+       y="560.06512"
+       inkscape:label="#rect2998" />
     <rect
-       style="fill:#ff0000;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       id="rect2995"
-       width="28.284271"
-       height="46.467018"
-       x="629.68964"
-       y="454.26566"
-       transform="matrix(0.7341838,0.67895077,-0.67895077,0.7341838,0,0)" />
+       style="fill:#ff0000"
+       id="box-red-82"
+       width="87.820137"
+       height="61.808708"
+       x="40.464905"
+       y="-377.43488"
+       inkscape:label="#rect2998" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 1659.375,-55.905517 -137.1012,31.13727 -141.4513,37.53775 -33.0434,105.508667 145.9709,19.56631 40.625,81.25 110.1485,-45.00181 z"
+       id="path3109"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccc" />
+    <rect
+       style="fill:#ff0000"
+       id="box-red-4-4-4"
+       width="87.820137"
+       height="61.808708"
+       x="2052.9648"
+       y="-552.43488"
+       inkscape:label="#rect2998" />
   </g>
 </svg>

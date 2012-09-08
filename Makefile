@@ -15,8 +15,7 @@ SRC_GAME := \
 	Source/Game/GameApp.cpp \
 	Source/Game/GameLevel.cpp \
 	Source/Game/GameMain_GLFW.cpp \
-	Source/Game/GamePlatform.cpp \
-	Source/Game/GamePlayer.cpp
+	Source/Game/GameObject.cpp
 
 SRC_GLPLUS := \
 	Source/GLPlus/BMFont.cpp \
@@ -78,7 +77,13 @@ SRC_BOX2D := \
 	Source/Box2D/Dynamics/Joints/b2WheelJoint.cpp \
 	Source/Box2D/Rope/b2Rope.cpp
 
-SRCS := $(SRC_GAME) $(SRC_GLPLUS) $(SRC_BOX2D)
+SRC_OTHER := \
+	Source/NanoSVG/nanosvg.c \
+	Source/TinyXML/tinyxml2.cpp \
+	Source/iniParser/dictionary.c \
+	Source/iniParser/iniparser.c
+
+SRCS := $(SRC_GAME) $(SRC_GLPLUS) $(SRC_BOX2D) $(SRC_OTHER)
 
 #################################################################################
 # Compiler settings

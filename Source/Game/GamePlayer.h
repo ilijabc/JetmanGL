@@ -10,7 +10,7 @@
 
 #include "GameCommon.h"
 
-class GamePlayer: public GameObject
+class GamePlayer
 {
 public:
 	enum Type
@@ -29,6 +29,8 @@ public:
 	inline GLTexture *getTexture() const { return mTexture; }
 
 private:
+    GameLevel *mLevel;
+	b2Body *mBody;
     GLTexture *mTexture;
 };
 

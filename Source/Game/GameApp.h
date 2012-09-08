@@ -44,8 +44,11 @@ private:
 	GLParticleSystem *boom;
 	char 		text[200];
 	GameLevel	*level;
-	GamePlayer* mPlayer;
+	GameObject* mPlayer;
 	bool mLockOnPlayer;
+	float mTime;
+	bool mTimer;
+	float mFadeOut;
 };
 
 #endif /* GAMEAPP_H_ */

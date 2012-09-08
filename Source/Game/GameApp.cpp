@@ -38,7 +38,6 @@ GameApp::GameApp(int width, int height)
     view->setSize(width, height);
 
 	mTexturePool[0] = new GLTexture("Data/spot.png");
-	mTexturePool[1] = new GLTexture("Data/craft.png");
 	font = new GLFont("Data/Arial.fnt");
 	boom = new GLParticleSystem();
 	boom->Properties = PSP_Fire;
@@ -46,18 +45,26 @@ GameApp::GameApp(int width, int height)
 	boom->rotation = 90;
 	strcpy(text, "...");
 
-	level = new GameLevel("Data/level01.svg");
+	level = new GameLevel("Data/level02.svg");
+	//level->setParticleSystem(boom);
+	level->setFont(font);
 	mPlayer = level->getPlayer();
-    mLockOnPlayer = true;
-    camera.x = mPlayer->getBody()->GetPosition().x;
-    camera.y = mPlayer->getBody()->GetPosition().y;
-
+	if (mPlayer)
+    {
+        mLockOnPlayer = true;
+        camera.x = mPlayer->getBody()->GetPosition().x;
+        camera.y = mPlayer->getBody()->GetPosition().y;
+        mPlayer->setFule(100);
+    }
+    mTime = 0;
+    mTimer = false;
+    mFadeOut = 0;
 }
 
 
 GameApp::~GameApp()
 {
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < 1; i++)
         delete mTexturePool[i];
 	delete font;
 	delete boom;
@@ -67,8 +74,14 @@ GameApp::~GameApp()
 
 void GameApp::onUpdate(float dt)
 {
+    if (mTimer && level && level->getBoxes())
+        mTime += dt;
+    if (level && level->getBoxes() == 0)
+    {
+        mFadeOut += dt * 0.1;
+    }
 	boom->update(dt);
-	sprintf(text, "%f %f", mouse.sx + camera.x, mouse.sy + camera.y);
+	//sprintf(text, "%f %f", mouse.sx + camera.x, mouse.sy + camera.y);
 
 	level->update(dt);
 	if (mPlayer && mLockOnPlayer)
@@ -83,6 +96,7 @@ void GameApp::onUpdate(float dt)
             mv.y *= dt * k;
             if (mv.y < 0) mv.y = 0;
 			mPlayer->getBody()->ApplyForceToCenter(mv);
+			mTimer = true;
 		}
 		float cx = camera.x - mPlayer->getBody()->GetPosition().x;
 		float cy = camera.y - mPlayer->getBody()->GetPosition().y;
@@ -111,33 +125,51 @@ void GameApp::onDraw()
 	level->draw(view);
 	view->endScene2D();
 
+    int s = (int)mTime % 60;
+    int m = (int)mTime / 60;
+    sprintf(text, "%02d:%02d", m, s);
+
 	view->beginGui();
-	font->beginText(0, 0, 300, 50);
-	font->drawText("JetmanGL git version", 0);
-	font->drawText(text, -1);
+	font->beginText(0, 0, view->getWidth(), 70);
+	if (mTimer)
+    {
+        font->drawText(text, 0);
+    }
+    else
+    {
+        font->drawText("Cave of Hungry Alien - by Ilija", -1);
+        font->drawText("    Ludum Dare 24 game entry", -1);
+    }
 	font->endText();
+    glDisable(GL_TEXTURE_2D);
+    if (level)
+    {
+        glPushMatrix();
+        glTranslatef(20, view->getHeight() - 20, 0);
+        for (int i = 0; i < level->getBoxes(); i++)
+        {
+            glColor4f(1, 1, 1, 1);
+            glRectf(-5, -5, 5, 5);
+            glTranslatef(12, 0, 0);
+        }
+        glPopMatrix();
+        if (level->getBoxes() == 0)
+        {
+            glColor4f(0, 0, 0, mFadeOut);
+            glRectf(0, 0, view->getWidth(), view->getHeight());
+            glColor4f(1, 1, 1, 1);
+            if (mFadeOut > 1)
+                font->drawString(100, 100, "Thanks for playing.");
+            if (mFadeOut > 1.2)
+                font->drawString(100, view->getHeight() - 100, "Press ESQ to quit.");
+        }
+    }
 	view->endGui();
 }
 
 
 void GameApp::onKeyEvent(int key, int action)
 {
-	if (action == GLFW_PRESS)
-	{
-		if (key == 'X')
-		{
-			boom->explode(100);
-		}
-		else if (key == 'C')
-		{
-			boom->startEmitter(0.02);
-		}
-		else if (key == 'V')
-		{
-			boom->stopEmitter();
-		}
-	}
-
 	//state
 	keyState[key] = action;
 }
@@ -151,11 +183,7 @@ void GameApp::onMouseMoveEvent(int x, int y)
 	mouse.sx = sceneSize.x / view->getWidth() * x - sceneSize.x / 2;
 	mouse.sy = sceneSize.y / 2 - sceneSize.y / view->getHeight() * y;
 
-	if (mLockOnPlayer)
-	{
-
-	}
-	else
+	if (!mLockOnPlayer)
 	{
 		if (mouse.button[0])
 		{
@@ -177,6 +205,10 @@ void GameApp::onMouseButtonEvent(int button, int press)
 		if (press)
 		{
 			boom->startEmitter(0.02);
+#if DEBUG
+			if (keyState[GLFW_KEY_LCTRL])
+                GameObject *obj = level->createObject(mouse.sx + camera.x, mouse.sy + camera.y, 1, 1, GameObject::BOX);
+#endif
 		}
 		else
 		{
@@ -185,7 +217,8 @@ void GameApp::onMouseButtonEvent(int button, int press)
 	}
 	else if (button == 1 && press)
 	{
-		GamePlayer *player = level->createPlayer(mouse.sx + camera.x, mouse.sy + camera.y, 1, 1, GamePlayer::BOX);
+	    if (mPlayer)
+            mPlayer->releaseBox();
 	}
 
 	//state
