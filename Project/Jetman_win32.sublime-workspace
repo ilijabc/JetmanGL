@@ -1,0 +1,804 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"GamePla",
+				"GamePlayer"
+			],
+			[
+				"gamepla",
+				"GamePlatform"
+			],
+			[
+				"createpla",
+				"createPlatform"
+			],
+			[
+				"msi",
+				"mSizeY"
+			],
+			[
+				"mposi",
+				"mPositionY"
+			],
+			[
+				"msiz",
+				"mSizeX"
+			],
+			[
+				"page",
+				"page_id"
+			],
+			[
+				"SR",
+				"SRC_BOX2D"
+			],
+			[
+				"SRC",
+				"SRC_GLPLUS"
+			],
+			[
+				"SRCG",
+				"SRC_GAME"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/C/ilija/p/JetmanGL/Makefile",
+			"settings":
+			{
+				"buffer_size": 5725,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/ilija/p/JetmanGL/Source/Game/GamePlatform.cpp",
+			"settings":
+			{
+				"buffer_size": 1160,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/ilija/p/JetmanGL/Source/Game/GamePlatform.h",
+			"settings":
+			{
+				"buffer_size": 663,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/ilija/p/JetmanGL/Source/Game/GameLevel.cpp",
+			"settings":
+			{
+				"buffer_size": 11577,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/ilija/p/JetmanGL/Source/Box2D/Collision/Shapes/b2ChainShape.h",
+			"settings":
+			{
+				"buffer_size": 3422,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/ilija/p/JetmanGL/Source/Box2D/Collision/Shapes/b2Shape.h",
+			"settings":
+			{
+				"buffer_size": 3497,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/ilija/p/JetmanGL/Source/Game/GameLevel.h",
+			"settings":
+			{
+				"buffer_size": 1391,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/ilija/p/JetmanGL/Source/Game/GameApp.cpp",
+			"settings":
+			{
+				"buffer_size": 5544,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/ilija/p/JetmanGL/Source/Game/GameCommon.h",
+			"settings":
+			{
+				"buffer_size": 1019,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/ilija/p/JetmanGL/Source/Game/GamePlayer.cpp",
+			"settings":
+			{
+				"buffer_size": 1274,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/ilija/p/JetmanGL/Source/Box2D/Dynamics/b2Fixture.h",
+			"settings":
+			{
+				"buffer_size": 9234,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/ilija/p/JetmanGL/Source/Game/GamePlayer.h",
+			"settings":
+			{
+				"buffer_size": 667,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "Jetman Debug",
+	"command_palette":
+	{
+		"height": 81.0,
+		"selected_items":
+		[
+			[
+				"clean",
+				"Build: Clean"
+			],
+			[
+				"git add",
+				"Git: Add..."
+			],
+			[
+				"git stat",
+				"Git: Status"
+			],
+			[
+				"git pull",
+				"Git: Pull"
+			],
+			[
+				"git gui",
+				"Git: Gui"
+			],
+			[
+				"git push",
+				"Git: Push"
+			],
+			[
+				"git comm",
+				"Git: Commit"
+			],
+			[
+				"add",
+				"Git: Add..."
+			],
+			[
+				"comm",
+				"Git: Commit"
+			],
+			[
+				"commi",
+				"Git: Commit"
+			],
+			[
+				"git diff",
+				"Git: Diff All"
+			],
+			[
+				"git pu",
+				"Git: Push Current Branch"
+			],
+			[
+				"git log",
+				"Git: Log All"
+			],
+			[
+				"git",
+				"Git: Commit history"
+			],
+			[
+				"git check",
+				"Git: Checkout Current File"
+			],
+			[
+				"git togg",
+				"Git: Toggle Annotations"
+			],
+			[
+				"git lo",
+				"Git: Toggle Annotations"
+			],
+			[
+				"git statu",
+				"Git: Status"
+			],
+			[
+				"git status",
+				"Git: Status"
+			],
+			[
+				"gitstat",
+				"Git: Status"
+			],
+			[
+				"clea",
+				"Build: Clean"
+			],
+			[
+				"cle",
+				"Build: Clean"
+			],
+			[
+				"ctags",
+				"CTags: Rebuild Tags"
+			],
+			[
+				"package",
+				"Package Control: Disable Package"
+			],
+			[
+				"gdb st",
+				"SublimeGDB: Start Debugging"
+			],
+			[
+				"gdbst",
+				"SublimeGDB: Start Debugging"
+			],
+			[
+				"gdb",
+				"Preferences: SublimeGDB Settings – Default"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"list",
+				"Package Control: List Packages"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"make",
+				"Set Syntax: Makefile"
+			],
+			[
+				"side",
+				"Set Syntax: NAnt Build File"
+			],
+			[
+				"package inst",
+				"Package Control: Install Package"
+			],
+			[
+				"packa",
+				"Preferences: Browse Packages"
+			]
+		],
+		"width": 400.0
+	},
+	"console":
+	{
+		"height": 146.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/ilija/p/JetmanGL/Source/Box2D/Collision/Shapes/b2PolygonShape.h",
+		"/C/ilija/p/JetmanGL/.gitignore",
+		"/C/ilija/p/JetmanGL/Source/Game/GameMain_GLFW.cpp",
+		"/C/ilija/p/JetmanGL/Source/GLPlus/BMFont.cpp",
+		"/C/ilija/p/JetmanGL/Source/GLPlus/GLTexture.cpp",
+		"/C/ilija/p/JetmanGL/Source/Game/GameApp.cpp",
+		"/C/ilija/p/JetmanGL/Project/Jetman_win32.sublime-project",
+		"/C/ilija/p/JetmanGL/Project/Jetman_linux.sublime-project",
+		"/C/Documents and Settings/idjukic/Application Data/Sublime Text 2/Packages/Default/Default (Windows).sublime-keymap",
+		"/C/Documents and Settings/idjukic/Application Data/Sublime Text 2/Packages/User/Default (Windows).sublime-keymap",
+		"/C/Documents and Settings/idjukic/Application Data/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/C/ilija/p/JetmanGL/README.md",
+		"/C/ilija/p/JetmanGL/Source/Resources/resource.h",
+		"/C/ilija/p/JetmanGL/Makefile",
+		"/C/ilija/p/JetmanGL/Source/Game/GameLevel.cpp",
+		"/C/ilija/p/JetmanGL/Source/Resources/resource.rc",
+		"/C/ilija/p/JetmanGL/Source/Game/GamePlatform.h",
+		"/C/ilija/p/JetmanGL/Jetman_win32.sublime-project",
+		"/C/ilija/p/Jetman - old/Makefile",
+		"/C/ilija/p/Jetman/Makefile",
+		"/C/ilija/p/Jetman/Jetman_win32.sublime-project",
+		"/C/Documents and Settings/idjukic/Application Data/Sublime Text 2/Packages/CTags/CTags.sublime-settings",
+		"/C/Documents and Settings/idjukic/Application Data/Sublime Text 2/Packages/CTags/README.creole",
+		"/C/ilija/p/Jetman/Source/Game/GameApp.cpp",
+		"/C/ilija/p/Jetman/Source/GLPlus/GLParticleSystem.cpp",
+		"/C/ilija/p/Jetman/:8: error:",
+		"/C/ilija/p/Jetman/Source/Game/GameApp.cpp:63",
+		"/C/ilija/p/Jetman/Source/GLPlus/GLParticleSystem.h",
+		"/C/ilija/p/Jetman/Source/GLPlus/GLMath.h",
+		"/C/Documents and Settings/idjukic/Application Data/Sublime Text 2/Packages/CTags/Main.sublime-menu",
+		"/C/Documents and Settings/idjukic/Application Data/Sublime Text 2/Packages/CTags/Default.sublime-keymap",
+		"/C/ilija/p/Jetman/Source/Game/GameMain_GLFW.cpp",
+		"/C/Documents and Settings/idjukic/Application Data/Sublime Text 2/Packages/SublimeGDB/SublimeGDB.sublime-settings",
+		"/C/Documents and Settings/idjukic/Application Data/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/C/Documents and Settings/idjukic/Application Data/Sublime Text 2/Packages/SideBarEnhancements/Side Bar.sublime-settings",
+		"/C/ilija/p/Jetman/test.exe",
+		"/C/ilija/p/Jetman/test.c",
+		"/C/xampp/htdocs/koreja/index.php",
+		"/C/cygwin/home/idjukic/dev/glfw/trunk/include/GL/glfw.h",
+		"/C/cygwin/home/idjukic/dev/glfw/trunk/lib/image.c",
+		"/C/cygwin/home/idjukic/dev/glfw/trunk/lib/tga.c",
+		"/C/cygwin/home/idjukic/dev/glfw/trunk/lib/stream.c"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"C:\\ilija\\p\\Jetman",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"path",
+			"dir",
+			"strncpy",
+			"using",
+			"windows",
+			"run",
+			"tab",
+			"RescaleImage",
+			"_glfwReadStream",
+			"_glfwReadTGA",
+			"glfwReadImage",
+			"GLFWimage",
+			"GLFWthreadfun"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/C/ilija/p/JetmanGL/Makefile",
+					"settings":
+					{
+						"buffer_size": 5725,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								562,
+								562
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Makefile/Makefile.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 270.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/ilija/p/JetmanGL/Source/Game/GamePlatform.cpp",
+					"settings":
+					{
+						"buffer_size": 1160,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								626,
+								626
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 378.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/C/ilija/p/JetmanGL/Source/Game/GamePlatform.h",
+					"settings":
+					{
+						"buffer_size": 663,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								633,
+								633
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 18.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/C/ilija/p/JetmanGL/Source/Game/GameLevel.cpp",
+					"settings":
+					{
+						"buffer_size": 11577,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 575.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/C/ilija/p/JetmanGL/Source/Box2D/Collision/Shapes/b2ChainShape.h",
+					"settings":
+					{
+						"buffer_size": 3422,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3108,
+								3118
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1188.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/C/ilija/p/JetmanGL/Source/Box2D/Collision/Shapes/b2Shape.h",
+					"settings":
+					{
+						"buffer_size": 3497,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1691,
+								1698
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 603.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/C/ilija/p/JetmanGL/Source/Game/GameLevel.h",
+					"settings":
+					{
+						"buffer_size": 1391,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 54.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "/C/ilija/p/JetmanGL/Source/Game/GameApp.cpp",
+					"settings":
+					{
+						"buffer_size": 5544,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"spell_check": true,
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 477.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "/C/ilija/p/JetmanGL/Source/Game/GameCommon.h",
+					"settings":
+					{
+						"buffer_size": 1019,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 540.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "/C/ilija/p/JetmanGL/Source/Game/GamePlayer.cpp",
+					"settings":
+					{
+						"buffer_size": 1274,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1127,
+								1127
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 657.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "/C/ilija/p/JetmanGL/Source/Box2D/Dynamics/b2Fixture.h",
+					"settings":
+					{
+						"buffer_size": 9234,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2466,
+								2477
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1089.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "/C/ilija/p/JetmanGL/Source/Game/GamePlayer.h",
+					"settings":
+					{
+						"buffer_size": 667,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 34.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 101.0
+	},
+	"output.git":
+	{
+		"height": 118.0
+	},
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"gameapp",
+				"Source/Game/GameApp.cpp"
+			],
+			[
+				"glfw.h",
+				"trunk/include/GL/glfw.h"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 245.0,
+	"status_bar_visible": true
+}
