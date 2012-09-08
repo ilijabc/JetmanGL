@@ -248,10 +248,6 @@ void GameLevel::loadSVGLevel(const char *filename)
     struct SVGPath* plist;
     plist = svgParseFromFile(filename);
 
-    //b2BodyDef groundBodyDef;
-    //groundBodyDef.position.Set(0, 0);
-    //mGround = mWorld->CreateBody(&groundBodyDef);
-
     // Use...
     for (SVGPath* path = plist; path; path = path->next)
     {
@@ -297,9 +293,6 @@ void GameLevel::loadSVGLevel(const char *filename)
             {
                 mBounds = Rect(vs[0].x, vs[2].y, vs[2].x, vs[0].y);
 				obj = createObject(vs[0].x, vs[2].y, vs[2].x - vs[0].x, vs[0].y - vs[2].y, GameObject::RECT);
-                //b2ChainShape chain;
-                //chain.CreateChain(vs, i);
-                //mGround->CreateFixture(&chain, 0.0f);
             }
             else
             {
@@ -308,9 +301,6 @@ void GameLevel::loadSVGLevel(const char *filename)
         }
         else
         {
-            /*b2ChainShape chain;
-            chain.CreateChain(vs, i);
-            mGround->CreateFixture(&chain, 0.0f);*/
 			obj = createPlatform(vs, i);
         }
 		//apply style

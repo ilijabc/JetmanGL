@@ -15,11 +15,9 @@ void GameObject::init()
     mTexture = NULL;
     //mBounds = Rect(-w / 2, -h / 2, w / 2, h / 2);
     mType = UNKNOWN;
-    mPoints = 0;
     mJoint = NULL;
     mEvent = 0;
     mEventObject = NULL;
-    mFule = 0;
     mMessage = NULL;
 	mBody = NULL;
 	mPathStyle.hasLine = false;
@@ -179,20 +177,11 @@ void GameObject::onCollision(b2Body *other)
 {
     if (mType == BOX)
         return;
-    //if (other == mLevel->getGround())
-    //{
-    //    addFule(-1);
-    //    return;
-    //}
     GameObject *obj = (GameObject*)other->GetUserData();
     if (obj && obj->getType() == GameObject::BOX && !mJoint)
     {
         mEvent = 1;
         mEventObject = (GameObject*)other->GetUserData();
-    }
-    else
-    {
-        mPoints++;
     }
 }
 

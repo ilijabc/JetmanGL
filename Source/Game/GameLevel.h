@@ -27,7 +27,6 @@ public:
     inline GameObject *getPlayer() const { return mPlayer; }
     GLTexture *getTexture(const char *filename);
     inline const Rect& getBounds() const { return mBounds; }
-    //inline b2Body *getGround() const { return mGround; }
     inline void setFont(GLFont *font) { mFont = font; }
     GLFont *getFont() const { return mFont; }
     inline int getBoxes() const { return mBoxCounter; }
@@ -44,7 +43,6 @@ private:
 	GameObject *mPlayer;
 	std::vector<GLTexture*> mTexturePool;
 	Rect mBounds;
-	//b2Body *mGround;
 	GLParticleSystem mBoom;
 	GLFont *mFont;
 	int mBoxCounter;

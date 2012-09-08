@@ -54,7 +54,6 @@ GameApp::GameApp(int width, int height, bool enable_audio)
         mLockOnPlayer = true;
         camera.x = mPlayer->getBody()->GetPosition().x;
         camera.y = mPlayer->getBody()->GetPosition().y;
-        mPlayer->setFule(100);
     }
     mTime = 0;
     mTimer = false;
