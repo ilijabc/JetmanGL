@@ -30,6 +30,8 @@ private:
 #ifdef ALPLUS_FMOD
 	FMOD_SYSTEM* mSoundSystem;
 	std::vector<FMOD_SOUND*> mSounds;
+#else
+	int mSounds; // Fix for linux build!
 #endif
 };
 

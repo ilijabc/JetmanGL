@@ -7,89 +7,31 @@ OUT_DIR := Out
 OBJ_DIR := $(OUT_DIR)/obj
 ONAME := $(OUT_DIR)/Jetman
 
+# Default target is linux
+ifndef ($(TARGET))
+	TARGET := linux
+endif
+
 #################################################################################
 # Source files
 #################################################################################
 
-SRC_GAME := \
-	Source/Game/GameApp.cpp \
-	Source/Game/GameLevel.cpp \
-	Source/Game/GameMain_GLFW.cpp \
-	Source/Game/GameObject.cpp
+include Files.mk
 
-SRC_GLPLUS := \
-	Source/GLPlus/BMFont.cpp \
-	Source/GLPlus/GLCamera.cpp \
-	Source/GLPlus/GLFont.cpp \
-	Source/GLPlus/GLMaterial.cpp \
-	Source/GLPlus/GLMath.cpp \
-	Source/GLPlus/GLModel.cpp \
-	Source/GLPlus/GLNode.cpp \
-	Source/GLPlus/GLParticleSystem.cpp \
-	Source/GLPlus/GLTexture.cpp \
-	Source/GLPlus/GLView.cpp \
-	Source/GLPlus/stb_image.c
-
-SRC_BOX2D := \
-	Source/Box2D/Collision/b2BroadPhase.cpp \
-	Source/Box2D/Collision/b2CollideCircle.cpp \
-	Source/Box2D/Collision/b2CollideEdge.cpp \
-	Source/Box2D/Collision/b2CollidePolygon.cpp \
-	Source/Box2D/Collision/b2Collision.cpp \
-	Source/Box2D/Collision/b2Distance.cpp \
-	Source/Box2D/Collision/b2DynamicTree.cpp \
-	Source/Box2D/Collision/b2TimeOfImpact.cpp \
-	Source/Box2D/Collision/Shapes/b2ChainShape.cpp \
-	Source/Box2D/Collision/Shapes/b2CircleShape.cpp \
-	Source/Box2D/Collision/Shapes/b2EdgeShape.cpp \
-	Source/Box2D/Collision/Shapes/b2PolygonShape.cpp \
-	Source/Box2D/Common/b2BlockAllocator.cpp \
-	Source/Box2D/Common/b2Draw.cpp \
-	Source/Box2D/Common/b2Math.cpp \
-	Source/Box2D/Common/b2Settings.cpp \
-	Source/Box2D/Common/b2StackAllocator.cpp \
-	Source/Box2D/Common/b2Timer.cpp \
-	Source/Box2D/Dynamics/b2Body.cpp \
-	Source/Box2D/Dynamics/b2ContactManager.cpp \
-	Source/Box2D/Dynamics/b2Fixture.cpp \
-	Source/Box2D/Dynamics/b2Island.cpp \
-	Source/Box2D/Dynamics/b2World.cpp \
-	Source/Box2D/Dynamics/b2WorldCallbacks.cpp \
-	Source/Box2D/Dynamics/Contacts/b2ChainAndCircleContact.cpp \
-	Source/Box2D/Dynamics/Contacts/b2ChainAndPolygonContact.cpp \
-	Source/Box2D/Dynamics/Contacts/b2CircleContact.cpp \
-	Source/Box2D/Dynamics/Contacts/b2Contact.cpp \
-	Source/Box2D/Dynamics/Contacts/b2ContactSolver.cpp \
-	Source/Box2D/Dynamics/Contacts/b2EdgeAndCircleContact.cpp \
-	Source/Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.cpp \
-	Source/Box2D/Dynamics/Contacts/b2PolygonAndCircleContact.cpp \
-	Source/Box2D/Dynamics/Contacts/b2PolygonContact.cpp \
-	Source/Box2D/Dynamics/Joints/b2DistanceJoint.cpp \
-	Source/Box2D/Dynamics/Joints/b2FrictionJoint.cpp \
-	Source/Box2D/Dynamics/Joints/b2GearJoint.cpp \
-	Source/Box2D/Dynamics/Joints/b2Joint.cpp \
-	Source/Box2D/Dynamics/Joints/b2MouseJoint.cpp \
-	Source/Box2D/Dynamics/Joints/b2PrismaticJoint.cpp \
-	Source/Box2D/Dynamics/Joints/b2PulleyJoint.cpp \
-	Source/Box2D/Dynamics/Joints/b2RevoluteJoint.cpp \
-	Source/Box2D/Dynamics/Joints/b2RopeJoint.cpp \
-	Source/Box2D/Dynamics/Joints/b2WeldJoint.cpp \
-	Source/Box2D/Dynamics/Joints/b2WheelJoint.cpp \
-	Source/Box2D/Rope/b2Rope.cpp
-
-SRC_OTHER := \
-	Source/NanoSVG/nanosvg.c \
-	Source/TinyXML/tinyxml2.cpp \
-	Source/iniParser/dictionary.c \
-	Source/iniParser/iniparser.c
-
-SRCS := $(SRC_GAME) $(SRC_GLPLUS) $(SRC_BOX2D) $(SRC_OTHER)
+SRCS := \
+	$(SRC_GAME) \
+	$(SRC_GLPLUS) \
+	$(SRC_ALPLUS) \
+	$(SRC_BOX2D) \
+	$(SRC_NANOSVG) \
+	$(SRC_TINYXML) \
+	$(SRC_INIPARSER)
 
 #################################################################################
 # Compiler settings
 #################################################################################
 
-INC_PATHS := -ISource
+INC_PATHS := -ISource -IExternal
 LIB_PATHS := 
 LIBS := -lglfw
 
@@ -108,7 +50,7 @@ ifeq ($(TARGET),linux)
 	CPP := g++
 	RMDIR := rm -rf
 	MKDIR := mkdir -p
-	LIBS += -lm -ldl -lGL -lGLU
+	LIBS += -lm -ldl -lGL -lGLU -lXrandr
 endif
 
 ifeq ($(TARGET),win32-mingw)
@@ -173,9 +115,9 @@ run: build
 help:
 	@echo " "
 	@echo " -----------------------------------------------------------------------------"
-	@echo " Usage:          make <rule> TARGET=<target>"
+	@echo " Usage:          make <rule> TARGET=<target> BUILD=<build>"
 	@echo " "
-	@echo " <rule>       :  build, clean, help"
-	@echo " <target>     :  linux, win32-mingw, win32-msys"
+	@echo " <rule>       :  build, clean, help                (default: help)"
+	@echo " <target>     :  linux, win32-mingw, win32-msys    (default: linux)"
+	@echo " <build>      :  release, debug                    (default: release)"
 	@echo " -----------------------------------------------------------------------------"
-	@echo " $(TARGET)"

@@ -228,6 +228,7 @@ void GameLevel::drawBodyDebug(b2Body *body)
 
 static void solveTransform(const char *trans, float &x, float &y, float &r)
 {
+/*
     if (!trans) return;
     char *pc;
     if (strncmp(trans, "translate", 9) == 0)
@@ -238,6 +239,7 @@ static void solveTransform(const char *trans, float &x, float &y, float &r)
         y = atof(pc);
         r = 0;
     }
+*/
 }
 
 void GameLevel::loadSVGLevel(const char *filename)
