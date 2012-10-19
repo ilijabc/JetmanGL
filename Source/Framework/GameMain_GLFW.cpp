@@ -1,4 +1,4 @@
-#include "GameApp.h"
+#include "GameClient.h"
 #include <GL/glfw.h>
 
 #ifdef __cplusplus
@@ -7,13 +7,13 @@ extern "C" {
 }
 #endif
 
-GameApp *g_game = NULL;
+GameClient *g_client_game = NULL;
 
 static void cb_key(int key, int press)
 {
-    if (g_game)
+    if (g_client_game)
     {
-        g_game->onKeyEvent(key, press);
+        g_client_game->onKeyEvent(key, press);
     }
     if (key == GLFW_KEY_ESC)
     {
@@ -23,33 +23,33 @@ static void cb_key(int key, int press)
 
 static void cb_mouse_pos(int x, int y)
 {
-    if (g_game)
+    if (g_client_game)
     {
-        g_game->onMouseMoveEvent(x, y);
+        g_client_game->onMouseMoveEvent(x, y);
     }
 }
 
 static void cb_mouse_button(int button, int press)
 {
-    if (g_game)
+    if (g_client_game)
     {
-        g_game->onMouseButtonEvent(button, press);
+        g_client_game->onMouseButtonEvent(button, press);
     }
 }
 
 static void cb_mouse_wheel(int wheel)
 {
-    if (g_game)
+    if (g_client_game)
     {
-        g_game->onMouseWheelEvent(wheel);
+        g_client_game->onMouseWheelEvent(wheel);
     }
 }
 
 static void cb_size(int width, int height)
 {
-    if (g_game)
+    if (g_client_game)
     {
-        g_game->onSize(width, height);
+        g_client_game->onSize(width, height);
     }
 }
 
@@ -102,9 +102,19 @@ int main(int argc, char *argv[])
         glfwEnable(GLFW_MOUSE_CURSOR);
 
     //
-    //init
+    //init game client
     //
-    g_game = new GameApp(width, height, audio ? true : false);
+    GameClientSettings settings;
+    settings.width = width;
+    settings.height = height;
+    settings.audio = audio;
+    g_client_game = GameClient::Initialize(settings);
+    if (!g_client_game)
+    {
+    	glfwTerminate();
+    	return -1;
+    }
+    //g_client_game = new GameClient(width, height, audio ? true : false);
     float ftime = glfwGetTime();
 
     while (glfwGetWindowParam(GLFW_OPENED))
@@ -113,7 +123,7 @@ int main(int argc, char *argv[])
         //update
         //
         float dt = glfwGetTime() - ftime;
-        g_game->onUpdate(dt);
+        g_client_game->onUpdate(dt);
         ftime = glfwGetTime();
 
         //
@@ -121,12 +131,12 @@ int main(int argc, char *argv[])
         //
         glClearColor(0.2, 0.2, 0.2, 1.0);
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-        g_game->onDraw();
+        g_client_game->onDraw();
         glfwSwapBuffers();
     }
 
     //finish
-    delete g_game;
+    delete g_client_game;
 
     glfwTerminate();
 

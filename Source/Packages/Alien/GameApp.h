@@ -8,12 +8,12 @@
 #ifndef GAMEAPP_H_
 #define GAMEAPP_H_
 
-#include "GameCommon.h"
-#include "GameLevel.h"
+#include "Framework/GameClient.h"
+#include "Framework/GameLevel.h"
 #include "ALPlus/ALContext.h"
 #include <GL/glfw.h>
 
-class GameApp
+class GameApp : public GameClient
 {
 public:
 	GameApp(int width, int height, bool enable_audio);

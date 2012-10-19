@@ -10,6 +10,13 @@
 #include <string.h>
 #include "MathGL/GLVector.h"
 
+// General Client Initialization
+GameClient *GameClient::Initialize(GameClientSettings settings)
+{
+	GameApp *game = new GameApp(settings.width, settings.height, settings.audio);
+	return (GameClient*)game;
+}
+
 GameApp::GameApp(int width, int height, bool enable_audio)
 {
 	GLParticleSystemProperties PSP_Boom;

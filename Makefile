@@ -19,7 +19,7 @@ endif
 include Files.mk
 
 SRCS := \
-	$(SRC_GAME) \
+	$(SRC_FRAMEWORK) \
 	$(SRC_GLPLUS) \
 	$(SRC_ALPLUS) \
 	$(SRC_BOX2D) \
@@ -27,11 +27,13 @@ SRCS := \
 	$(SRC_TINYXML) \
 	$(SRC_INIPARSER)
 
+SRCS += $(SRC_PACKAGE_ALIEN)
+
 #################################################################################
 # Compiler settings
 #################################################################################
 
-INC_PATHS := -ISource -IExternal
+INC_PATHS := -ISource -ISource/External -ISource/Shared
 LIB_PATHS := 
 LIBS := -lglfw
 
