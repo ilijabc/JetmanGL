@@ -56,17 +56,8 @@ endif
 ifeq ($(TARGET),win32-mingw)
 	CC := gcc
 	CPP := g++
-	RMDIR := rmdir /S /Q
-	MKDIR := mkdir
-	LIBS += -lgdi32 -lglu32 -lopengl32
-	SRC_RES := Source/Resources/resource.rc
-endif
-
-ifeq ($(TARGET),win32-msys)
-	CC := gcc
-	CPP := g++
 	RMDIR := rm -rf
-	MKDIR := mkdir
+	MKDIR := mkdir -p
 	LIBS += -lgdi32 -lglu32 -lopengl32
 	SRC_RES := Source/Resources/resource.rc
 endif
@@ -98,9 +89,16 @@ $(OBJ_DIR)/%.o:  %.c
 # Build rules
 #################################################################################
 
-all: help
+all: info help
 
-build: $(OBJS) $(RES)
+info:
+	@echo ' ======================='
+	@echo '  OUTPUT=$(ONAME)'
+	@echo '  TARGET=$(TARGET)'
+	@echo '  BUILD=$(BUILD)'
+	@echo ' ======================='
+
+build: info $(OBJS) $(RES)
 	@echo 'Building $(ONAME)'
 	@$(CPP) $(CFLAGS) -o $(ONAME) $(OBJS) $(RES) $(LIBS)
 	@echo 'Finished building target: $(ONAME)'
