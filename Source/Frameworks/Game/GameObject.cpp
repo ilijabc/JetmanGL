@@ -57,21 +57,35 @@ void GameObject::onCollision(b2Body *other)
 {
 }
 
-void GameObject::addPolyLine(b2Vec2 *pointList, int pointCount, float color[4], float width)
+void GameObject::addPolyLine(b2Vec2 *pointList, int pointCount, int color, float width)
 {
 	PolyLine *line = new PolyLine(pointCount);
 	memcpy(line->pointList, pointList, sizeof(b2Vec2) * pointCount);
-	memcpy(line->style.color, color, sizeof(float) * 4);
+	parseIntColor(color, line->style.color);
 	line->style.width = width;
 	mLineList.push_back(line);
 }
 
-void GameObject::addPolyFill(b2Vec2 *pointList, int pointCount, float color[4])
+void GameObject::addPolyFill(b2Vec2 *pointList, int pointCount, int color)
 {
+	PolyLine *line = new PolyLine(pointCount);
+	memcpy(line->pointList, pointList, sizeof(b2Vec2) * pointCount);
+	parseIntColor(color, line->style.color);
+	mLineList.push_back(line);
 }
 
-void GameObject::addRectFill(float x1, float y1, float x2, float y2, float color[4])
+void GameObject::addRectFill(float x1, float y1, float x2, float y2, int color)
 {
+	PolyFill *fill = new PolyFill(2);
+	fill->triangleList[0].a.Set(x1, y1);
+	fill->triangleList[0].b.Set(x2, y1);
+	fill->triangleList[0].c.Set(x2, y2);
+	fill->triangleList[1].a.Set(x2, y2);
+	fill->triangleList[1].b.Set(x1, y2);
+	fill->triangleList[1].c.Set(x1, y1);
+	parseIntColor(color, fill->style.color);
+	fill->style.type = 0;
+	mFillList.push_back(fill);
 }
 
 GameObject::PolyLine::PolyLine(int size)

@@ -19,6 +19,7 @@ TestClient::TestClient(GameClientSettings settings)
 	mView->setSize(settings.width, settings.height);
 	mScene = new GameScene(this);
 	mScene->loadSVG("Data/level02.svg");
+	mZoom = 100;
 }
 
 TestClient::~TestClient()
@@ -34,7 +35,7 @@ void TestClient::onUpdate(float dt)
 
 void TestClient::onDraw()
 {
-	mView->beginScene2DWide(500);
+	mView->beginScene2DWide(mZoom);
 	mScene->draw(mView);
 	mView->endScene2D();
 }
@@ -53,6 +54,7 @@ void TestClient::onMouseButtonEvent(int button, int press)
 
 void TestClient::onMouseWheelEvent(int wheel)
 {
+	mZoom = 100 - wheel * 5;
 }
 
 void TestClient::onSize(int width, int height)

@@ -28,6 +28,7 @@ public:
 private:
 	GLView *mView;
 	GameScene *mScene;
+	float mZoom;
 };
 
 #endif /* TESTCLIENT_H_ */

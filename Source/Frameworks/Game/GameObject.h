@@ -32,14 +32,17 @@ public:
     //setters
 	inline void setBody(b2Body *body) { mBody = body; }
 	inline void setTexture(GLTexture *tex) { mTexture = tex; }
+	inline void setPosition(const b2Vec2 &pos) { mPosition = pos; }
+	inline void setPosition(float x, float y) { mPosition.Set(x, y); }
 	//getters
 	inline b2Body *getBody() const { return mBody; }
 	inline GLTexture *getTexture() const { return mTexture; }
     inline int getType() const { return mType; }
+    inline const b2Vec2 &getPosition() const { return mPosition; }
     //geomtry
-    void addPolyLine(b2Vec2 *pointList, int pointCount, float color[4], float width = 1.0f);
-    void addPolyFill(b2Vec2 *pointList, int pointCount, float color[4]);
-    void addRectFill(float x1, float y1, float x2, float y2, float color[4]);
+    void addPolyLine(b2Vec2 *pointList, int pointCount, int color = 0xFFFFFFFF, float width = 1.0f);
+    void addPolyFill(b2Vec2 *pointList, int pointCount, int color = 0xFFFFFFFF);
+    void addRectFill(float x1, float y1, float x2, float y2, int color = 0xFFFFFFFF);
 
 private:
     GameScene *mScene;
@@ -48,16 +51,7 @@ private:
     GLTexture *mTexture;
     std::list<PolyLine*> mLineList;
     std::list<PolyFill*> mFillList;
-
-public:
-	struct
-	{
-		bool hasLine;
-		bool hasFill;
-		float lineColor[4];
-		float lineWidth;
-		float fillColor[4];
-	} mPathStyle;
+    b2Vec2 mPosition;
 };
 
 #endif // GAMEOBJECT_H

@@ -40,19 +40,17 @@ void GameScene::update(float dt)
 
 void GameScene::draw(GLView *view)
 {
-#if 0
 	for (std::list<GameObject*>::iterator iobj = mGameObjectList.begin(); iobj != mGameObjectList.end(); iobj++)
 	{
 		GameObject* obj = *iobj;
-		b2Vec2 position = obj->getBody()->GetPosition();
-		float rotation = obj->getBody()->GetAngle() * GLPLUS_TODEG;
+		b2Vec2 position = obj->getPosition();
+		//float rotation = obj->getBody()->GetAngle() * GLPLUS_TODEG;
 		glPushMatrix();
 		glTranslatef(position.x, position.y, 0);
-		glRotatef(rotation, 0, 0, 1);
+		//glRotatef(rotation, 0, 0, 1);
 		obj->onDraw(view);
 		glPopMatrix();
 	}
-#endif
 	// DEBUG DRAW FOR BOX2D
 	drawWorldDebug();
 }
@@ -74,25 +72,44 @@ void GameScene::loadSVG(const char *filename)
 	// Use...
 	for (SVGPath* path = plist; path; path = path->next)
 	{
+		GameObject *obj = NULL;
 		// parse svg object
 		b2Vec2 vs[path->npts];
+		int vs_size = path->npts;
 		int i = 0;
-		float x, y, w, h;
-		for (i = 0; i < path->npts; ++i)
+		float cx = 0, cy = 0;
+		float x1, y1, x2, y2;
+		//rescale and calculate center anb bounds
+		for (i = 0; i < vs_size; ++i)
 		{
-			vs[i].Set(path->pts[i*2] * gscale,
-					  -path->pts[i*2+1] * gscale);
+			float x = path->pts[i*2] * gscale;
+			float y = -path->pts[i*2+1] * gscale;
+			vs[i].Set(x, y);
+			cx += x;
+			cy += y;
+			if (i == 0)
+			{
+				x1 = x2 = x;
+				y1 = y2 = y;
+			}
+			else
+			{
+				if (x < x1) x1 = x;
+				if (y < y1) y1 = y;
+				if (x > x2) x2 = x;
+				if (y > y2) y2 = y;
+			}
+		}
+		if (cx != 0) cx = cx / (float)vs_size;
+		if (cy != 0) cy = cy / (float)vs_size;
+		//reposition points
+		for (i = 0; i < vs_size; ++i)
+		{
+			vs[i].x -= cx;
+			vs[i].y -= cy;
 		}
 		if (path->closed)
-			vs[i++] = vs[0];
-		if (path->npts == 4)
-		{
-			x = (vs[0].x + vs[2].x) ? (vs[0].x + vs[2].x) / 2 : 0;
-			y = (vs[0].y + vs[2].y) ? (vs[0].y + vs[2].y) / 2 : 0;
-			w = fabs(vs[0].x - vs[2].x);
-			h = fabs(vs[0].y - vs[2].y);
-		}
-
+			vs[vs_size] = vs[0];
 		// create body
 		if (path->type == SVG_TYPE_IMAGE && path->link)
 		{
@@ -112,7 +129,7 @@ void GameScene::loadSVG(const char *filename)
 					mPlayer = player;
 			}*/
 		}
-		else if (path->type == SVG_TYPE_RECT)
+		/*else if (path->type == SVG_TYPE_RECT)
 		{
 			if (path->id && strcmp(path->id, "back") == 0)
 			{
@@ -148,19 +165,26 @@ void GameScene::loadSVG(const char *filename)
 				fixtureDef.restitution = 0.5f;
 				body->CreateFixture(&fixtureDef);
 			}
-		}
+		}*/
 		else
 		{
-			/*b2BodyDef groundBodyDef;
-		    groundBodyDef.position.Set(0, 0);
-		    mBody = level->getWorld()->CreateBody(&groundBodyDef);
-		    mBody->SetUserData(this);
-			b2ChainShape chain;
-			chain.CreateChain(plist, plist_size);
-			mBody->CreateFixture(&chain, 0.0f);*/
+			obj = new GameObject(this, 0);
+			if (path->hasStroke)
+			{
+				obj->addPolyLine(vs, vs_size, path->strokeColor, path->strokeWidth);
+			}
+			if (path->hasFill)
+			{
+				obj->addPolyFill(vs, vs_size, path->fillColor);
+			}
+			obj->setPosition(cx, cy);
 		}
 
 		// create object
+		if (obj)
+		{
+			addObject(obj);
+		}
 		//obj = addObject(new GameObject(this, 0));
 		//apply style
 		/*if (obj)
