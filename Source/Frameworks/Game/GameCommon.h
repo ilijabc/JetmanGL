@@ -30,11 +30,6 @@ struct Rect
     inline bool testPoint(float x, float y) { return (x >= x1 && x <= x2 && y >= y1 && y <= y2); }
 };
 
-struct Triangle
-{
-	b2Vec2 a, b, c;
-};
-
 #ifdef DEBUG
 #define LOG(msg, args...) printf("[%d] "msg"\n", (int)time(NULL), ##args)
 #else

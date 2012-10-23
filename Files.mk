@@ -1,33 +1,44 @@
-# Source
+#
+# Packages
+#
 
 SRC_PACKAGE_ALIEN := \
     Source/Packages/Alien/GameApp.cpp
 
-SRC_FRAMEWORK := \
-	Source/Framework/GameClient.cpp \
-    Source/Framework/GameLevel.cpp \
-    Source/Framework/GameMain_GLFW.cpp \
-    Source/Framework/GameObject.cpp
+SRC_PACKAGE_TEST := \
+	Source/Packages/Test/TestClient.cpp
 
-SRC_GLPLUS := \
-    Source/Shared/GLPlus/BMFont.cpp \
-    Source/Shared/GLPlus/GLCamera.cpp \
-    Source/Shared/GLPlus/GLFont.cpp \
-    Source/Shared/GLPlus/GLMaterial.cpp \
-    Source/Shared/GLPlus/GLMath.cpp \
-    Source/Shared/GLPlus/GLModel.cpp \
-    Source/Shared/GLPlus/GLNode.cpp \
-    Source/Shared/GLPlus/GLParticleSystem.cpp \
-    Source/Shared/GLPlus/GLTexture.cpp \
-    Source/Shared/GLPlus/GLView.cpp \
-    Source/Shared/GLPlus/stb_image.c
+#
+# Frameworks
+#
 
-SRC_ALPLUS := \
-    Source/Shared/ALPlus/ALContext.cpp
+SRC_FRAMEWORK_GAME := \
+	Source/Frameworks/Game/GameClient.cpp \
+    Source/Frameworks/Game/GameMain_GLFW.cpp \
+    Source/Frameworks/Game/GameObject.cpp \
+    Source/Frameworks/Game/GameScene.cpp
 
-# External
+SRC_FRAMEWORK_GLPLUS := \
+    Source/Frameworks/GLPlus/BMFont.cpp \
+    Source/Frameworks/GLPlus/GLCamera.cpp \
+    Source/Frameworks/GLPlus/GLFont.cpp \
+    Source/Frameworks/GLPlus/GLMaterial.cpp \
+    Source/Frameworks/GLPlus/GLMath.cpp \
+    Source/Frameworks/GLPlus/GLModel.cpp \
+    Source/Frameworks/GLPlus/GLNode.cpp \
+    Source/Frameworks/GLPlus/GLParticleSystem.cpp \
+    Source/Frameworks/GLPlus/GLTexture.cpp \
+    Source/Frameworks/GLPlus/GLView.cpp \
+    Source/Frameworks/GLPlus/stb_image.c
 
-SRC_BOX2D := \
+SRC_FRAMEWORK_ALPLUS := \
+    Source/Frameworks/ALPlus/ALContext.cpp
+
+#
+# Externals
+#
+
+SRC_EXTERNAL_BOX2D := \
     Source/External/Box2D/Collision/b2BroadPhase.cpp \
     Source/External/Box2D/Collision/b2CollideCircle.cpp \
     Source/External/Box2D/Collision/b2CollideEdge.cpp \
@@ -74,12 +85,12 @@ SRC_BOX2D := \
     Source/External/Box2D/Dynamics/Joints/b2WheelJoint.cpp \
     Source/External/Box2D/Rope/b2Rope.cpp
 
-SRC_NANOSVG := \
+SRC_EXTERNAL_NANOSVG := \
     Source/External/NanoSVG/nanosvg.c
 
-SRC_TINYXML := \
+SRC_EXTERNAL_TINYXML := \
     Source/External/TinyXML/tinyxml2.cpp
 
-SRC_INIPARSER := \
+SRC_EXTERNAL_INIPARSER := \
     Source/External/iniParser/dictionary.c \
     Source/External/iniParser/iniparser.c

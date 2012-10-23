@@ -34,7 +34,7 @@ public:
     void releaseBox();
 
 private:
-    GameLevel *mLevel;
+    GameLevel *mScene;
 	b2Body *mBody;
     GLTexture *mTexture;
     Rect mBounds;

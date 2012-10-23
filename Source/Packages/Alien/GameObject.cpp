@@ -11,7 +11,7 @@ static char PLAYER_MSG_TUTOR3[] = "Press right mouse button\nto release the box.
 
 void GameObject::init()
 {
-    mLevel = NULL;
+    mScene = NULL;
     mTexture = NULL;
     //mBounds = Rect(-w / 2, -h / 2, w / 2, h / 2);
     mType = UNKNOWN;
@@ -30,7 +30,7 @@ GameObject::GameObject(GameLevel *level, float x, float y, float w, float h, Typ
 {
 	init();
 
-    mLevel = level;
+    mScene = level;
     mBounds = Rect(-w / 2, -h / 2, w / 2, h / 2);
     mType = type;
 
@@ -81,7 +81,7 @@ GameObject::GameObject(GameLevel *level, b2Vec2 *plist, int plist_size)
 {
 	init();
 
-    mLevel = level;
+    mScene = level;
     //mBounds = Rect(-w / 2, -h / 2, w / 2, h / 2);
     mType = PLATFORM;
 
@@ -107,9 +107,9 @@ void GameObject::onUpdate(float dt)
     {
         mMessage = PLAYER_MSG_TUTOR2;
     }
-    else if (mType == ALIEN && mLevel->getBoxes() == 0)
+    else if (mType == ALIEN && mScene->getBoxes() == 0)
     {
-        b2Vec2 dv = mLevel->getPlayer()->getBody()->GetPosition() - mBody->GetPosition();
+        b2Vec2 dv = mScene->getPlayer()->getBody()->GetPosition() - mBody->GetPosition();
         if (dv.Length() > 5)
         {
             dv.x *= 100;
@@ -136,9 +136,9 @@ void GameObject::onUpdate(float dt)
         }
         else if (mType == ALIEN)
         {
-            mLevel->getPlayer()->releaseBox();
-            mLevel->destroyObject(mEventObject);
-            mLevel->getWorld()->DestroyBody(mEventObject->getBody());
+            mScene->getPlayer()->releaseBox();
+            mScene->destroyObject(mEventObject);
+            mScene->getWorld()->DestroyBody(mEventObject->getBody());
             if (mMessage == ALIEN_MSG_HELLO)
                 mMessage = ALIEN_MSG_NEXT;
             else
@@ -167,7 +167,7 @@ void GameObject::onDraw(GLView *view)
         glPushMatrix();
         glRotatef(-mBody->GetAngle() * GLPLUS_TODEG, 0, 0, 1);
         glScalef(0.02, -0.02, 1);
-        mLevel->getFont()->drawString(-130, -100, mMessage);
+        mScene->getFont()->drawString(-130, -100, mMessage);
         glPopMatrix();
         glDisable(GL_TEXTURE_2D); // TODO: needs to fix GLFont
     }

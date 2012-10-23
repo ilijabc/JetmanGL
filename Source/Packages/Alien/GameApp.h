@@ -8,8 +8,8 @@
 #ifndef GAMEAPP_H_
 #define GAMEAPP_H_
 
-#include "Framework/GameClient.h"
-#include "Framework/GameLevel.h"
+#include "GameClient.h"
+#include "GameScene.h"
 #include "ALPlus/ALContext.h"
 #include <GL/glfw.h>
 
