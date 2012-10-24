@@ -3,6 +3,7 @@
 
 #include "poly2tri/poly2tri.h"
 
+//#define ENABLE_GAME_OBJECT_DRAW_DEBUG
 
 GameObject::GameObject(GameScene *scene, int type)
 		: mScene(scene)
@@ -15,10 +16,10 @@ GameObject::GameObject(GameScene *scene, int type)
 
 GameObject::~GameObject()
 {
-	for (std::list<PolyLine*>::iterator ip = mLineList.begin(); ip != mLineList.end(); ip++)
-		delete *ip;
-	for (std::list<PolyFill*>::iterator il = mFillList.begin(); il != mFillList.end(); il++)
-		delete *il;
+	for (int i = 0; i < mLineList.size(); i++)
+		delete mLineList[i];
+	for (int i = 0; i < mFillList.size(); i++)
+		delete mFillList[i];
 }
 
 void GameObject::onUpdate(float dt)
@@ -28,14 +29,14 @@ void GameObject::onUpdate(float dt)
 void GameObject::onDraw(GLView *view)
 {
 	//fill
-	for (std::list<PolyFill*>::iterator ip = mFillList.begin(); ip != mFillList.end(); ip++)
+	for (int i = 0; i < mFillList.size(); i++)
 	{
-		PolyFill *poly = *ip;
+		PolyFill *poly = mFillList[i];
 		glColor4fv(poly->style.color);
 		glBegin(GL_TRIANGLES);
-		for (int i = 0; i < poly->triangleCount; ++i)
+		for (int j = 0; j < poly->triangleCount; j++)
 		{
-			GameObject::Triangle *tri = &(poly->triangleList[i]);
+			GameObject::Triangle *tri = &(poly->triangleList[j]);
 			glVertex2fv((float*)&(tri->a));
 			glVertex2fv((float*)&(tri->b));
 			glVertex2fv((float*)&(tri->c));
@@ -45,9 +46,9 @@ void GameObject::onDraw(GLView *view)
 #ifdef ENABLE_GAME_OBJECT_DRAW_DEBUG
 		glColor3f(1, 0, 0);
 		glBegin(GL_LINE_STRIP);
-		for (int i = 0; i < poly->triangleCount; ++i)
+		for (int j = 0; j < poly->triangleCount; j++)
 		{
-			GameObject::Triangle *tri = &(poly->triangleList[i]);
+			GameObject::Triangle *tri = &(poly->triangleList[j]);
 			glVertex2fv((float*)&(tri->a));
 			glVertex2fv((float*)&(tri->b));
 			glVertex2fv((float*)&(tri->c));
@@ -58,15 +59,15 @@ void GameObject::onDraw(GLView *view)
 #endif
 	}
 	//outline
-	for (std::list<PolyLine*>::iterator il = mLineList.begin(); il != mLineList.end(); il++)
+	for (int i = 0; i < mLineList.size(); i++)
 	{
-		PolyLine *line = *il;
+		PolyLine *line = mLineList[i];
 		glColor4fv(line->style.color);
 		glLineWidth(line->style.width);
 		glBegin(GL_LINE_LOOP);
-		for (int i = 0; i < line->pointCount; i++)
+		for (int j = 0; j < line->pointCount; j++)
 		{
-			glVertex2fv((float*)&(line->pointList[i]));
+			glVertex2fv((float*)&(line->pointList[j]));
 		}
 		glEnd();
 	}
@@ -84,16 +85,17 @@ void GameObject::onCollision(b2Body *other)
 {
 }
 
-void GameObject::addPolyLine(b2Vec2 *pointList, int pointCount, int color, float width)
+int GameObject::addPolyLine(b2Vec2 *pointList, int pointCount, int color, float width)
 {
 	PolyLine *line = new PolyLine(pointCount);
 	memcpy(line->pointList, pointList, sizeof(b2Vec2) * pointCount);
 	parseIntColor(color, line->style.color);
 	line->style.width = width;
 	mLineList.push_back(line);
+	return mLineList.size() - 1;
 }
 
-void GameObject::addPolyFill(b2Vec2 *pointList, int pointCount, int color)
+int GameObject::addPolyFill(b2Vec2 *pointList, int pointCount, int color)
 {
 	std::vector<p2t::Point*> polyline;
 	for (int i = 0; i < pointCount; i++)
@@ -113,9 +115,10 @@ void GameObject::addPolyFill(b2Vec2 *pointList, int pointCount, int color)
 	}
 	parseIntColor(color, fill->style.color);
 	mFillList.push_back(fill);
+	return mFillList.size() - 1;
 }
 
-void GameObject::addRectFill(float x1, float y1, float x2, float y2, int color)
+int GameObject::addRectFill(float x1, float y1, float x2, float y2, int color)
 {
 	PolyFill *fill = new PolyFill(2);
 	fill->triangleList[0].a.Set(x1, y1);
@@ -127,7 +130,23 @@ void GameObject::addRectFill(float x1, float y1, float x2, float y2, int color)
 	parseIntColor(color, fill->style.color);
 	fill->style.type = 0;
 	mFillList.push_back(fill);
+	return mFillList.size() - 1;
 }
+
+GameObject::PolyLine *GameObject::getPolyLine(int index)
+{
+	if (index < 0 || index >= mLineList.size())
+		return NULL;
+	return mLineList[index];
+}
+
+GameObject::PolyFill *GameObject::getPolyFill(int index)
+{
+	if (index < 0 || index >= mFillList.size())
+		return NULL;
+	return mFillList[index];
+}
+
 
 GameObject::PolyLine::PolyLine(int size)
 {
@@ -137,14 +156,10 @@ GameObject::PolyLine::PolyLine(int size)
 	style.width = 1.0f;
 }
 
-
-
 GameObject::PolyLine::~PolyLine()
 {
 	delete [] pointList;
 }
-
-
 
 GameObject::PolyFill::PolyFill(int size)
 {
@@ -154,11 +169,7 @@ GameObject::PolyFill::PolyFill(int size)
 	style.type = 0;
 }
 
-
-
 GameObject::PolyFill::~PolyFill()
 {
 	delete [] triangleList;
 }
-
-

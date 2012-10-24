@@ -41,9 +41,11 @@ public:
     inline int getType() const { return mType; }
     inline const b2Vec2 &getPosition() const { return mPosition; }
     //geomtry
-    void addPolyLine(b2Vec2 *pointList, int pointCount, int color = 0xFFFFFFFF, float width = 1.0f);
-    void addPolyFill(b2Vec2 *pointList, int pointCount, int color = 0xFFFFFFFF);
-    void addRectFill(float x1, float y1, float x2, float y2, int color = 0xFFFFFFFF);
+    int addPolyLine(b2Vec2 *pointList, int pointCount, int color = 0xFFFFFFFF, float width = 1.0f);
+    int addPolyFill(b2Vec2 *pointList, int pointCount, int color = 0xFFFFFFFF);
+    int addRectFill(float x1, float y1, float x2, float y2, int color = 0xFFFFFFFF);
+    PolyLine *getPolyLine(int index);
+    PolyFill *getPolyFill(int index);
 
 private:
     GameScene *mScene;
@@ -51,8 +53,8 @@ private:
 	b2Body *mBody;
     GLTexture *mTexture;
     b2Vec2 mTextureSize;
-    std::list<PolyLine*> mLineList;
-    std::list<PolyFill*> mFillList;
+    std::vector<PolyLine*> mLineList;
+    std::vector<PolyFill*> mFillList;
     b2Vec2 mPosition;
 };
 

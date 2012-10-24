@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.32"
-     inkscape:cx="-200.522"
-     inkscape:cy="978.3199"
+     inkscape:cx="1033.853"
+     inkscape:cy="465.8199"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -148,7 +148,7 @@
        y="-377.43488"
        inkscape:label="#rect2998" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:#fae5a0;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
        d="m 1659.375,-55.905517 -137.1012,31.13727 -141.4513,37.53775 -33.0434,105.508667 145.9709,19.56631 40.625,81.25 110.1485,-45.00181 z"
        id="path3109"
        inkscape:connector-curvature="0"
