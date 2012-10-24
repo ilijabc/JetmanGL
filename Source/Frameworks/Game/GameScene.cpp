@@ -55,9 +55,12 @@ void GameScene::draw(GLView *view)
 	drawWorldDebug();
 }
 
-GameObject *GameScene::addObject(GameObject *obj)
+GameObject *GameScene::addObject(GameObject *obj, bool to_back)
 {
-	mGameObjectList.push_back(obj);
+	if (to_back)
+		mGameObjectList.push_back(obj);
+	else
+		mGameObjectList.push_front(obj);
 	return obj;
 }
 
@@ -113,59 +116,30 @@ void GameScene::loadSVG(const char *filename)
 		// create body
 		if (path->type == SVG_TYPE_IMAGE && path->link)
 		{
-			/*char img_name[64] = "Data";
-			strcat(img_name, strrchr(path->link, '/'));
-			GLTexture *tex = getTexture(img_name);
-			if (tex)
+			char img_name[256] = "Data";
+			const char *link_name = strrchr(path->link, '/');
+			if (link_name == NULL)
 			{
-				GameObject::Type type = GameObject::BOX;
-				if (strcmp(path->id, "player") == 0)
-					type = GameObject::CRAFT;
-				else if (strcmp(path->id, "alien") == 0)
-					type = GameObject::ALIEN;
-				GameObject *player = createObject(x, y, w, h, type);
-				player->setTexture(tex);
-				if (type == GameObject::CRAFT)
-					mPlayer = player;
-			}*/
-		}
-		/*else if (path->type == SVG_TYPE_RECT)
-		{
-			if (path->id && strcmp(path->id, "back") == 0)
-			{
-				b2BodyDef groundBodyDef;
-				groundBodyDef.position.Set(0, 0);
-				b2Body *body = getWorld()->CreateBody(&groundBodyDef);
-				//body->SetUserData(this);
-				//shape
-				b2Vec2 vs[5];
-				vs[0].Set(x, y);
-				vs[1].Set(x, y+h);
-				vs[2].Set(x+w, y+h);
-				vs[3].Set(x+w, y);
-				vs[4] = vs[0];
-				b2ChainShape chain;
-				chain.CreateChain(vs, 5);
-				body->CreateFixture(&chain, 0.0f);
+				strcat(img_name, "/");
+				strcat(img_name, path->link);
 			}
 			else
 			{
-				b2BodyDef bodyDef;
-				bodyDef.type = b2_dynamicBody;
-				bodyDef.position.Set(x, y);
-				b2Body *body = getWorld()->CreateBody(&bodyDef);
-				//body->SetUserData(this);
-				//shape
-				b2PolygonShape dynamicBox;
-				dynamicBox.SetAsBox(w / 2, h / 2);
-				b2FixtureDef fixtureDef;
-				fixtureDef.shape = &dynamicBox;
-				fixtureDef.density = 1.0f;
-				fixtureDef.friction = 0.3f;
-				fixtureDef.restitution = 0.5f;
-				body->CreateFixture(&fixtureDef);
+				strcat(img_name, link_name);
 			}
-		}*/
+			GLTexture *tex = getGame()->getTexture(img_name);
+			if (tex)
+			{
+				obj = new GameObject(this, 1);
+				obj->setTexture(tex);
+				obj->setTextureSize(x2 - x1, y2 - y1);
+				obj->setPosition(cx, cy);
+			}
+			else
+			{
+				printf("ERROR: texture '%s' not found!", img_name);
+			}
+		}
 		else
 		{
 			obj = new GameObject(this, 0);
@@ -183,27 +157,9 @@ void GameScene::loadSVG(const char *filename)
 		// create object
 		if (obj)
 		{
-			addObject(obj);
+			printf("add object '%s' (%f, %f)\n", path->id, cx, cy);
+			addObject(obj, false);
 		}
-		//obj = addObject(new GameObject(this, 0));
-		//apply style
-		/*if (obj)
-		{
-			printf("id=%s stroke=%d:0x%X fill=%d:0x%X\n", path->id,
-				path->hasStroke, path->strokeColor,
-				path->hasFill, path->fillColor);
-			if (path->hasStroke)
-			{
-				obj->mPathStyle.hasLine = true;
-				parseIntColor(path->strokeColor, obj->mPathStyle.lineColor);
-				obj->mPathStyle.lineWidth = path->strokeWidth;
-			}
-			if (path->hasFill)
-			{
-				obj->mPathStyle.hasFill = true;
-				parseIntColor(path->fillColor, obj->mPathStyle.fillColor);
-			}
-		}*/
 	}
 
 	// Delete

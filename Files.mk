@@ -94,3 +94,10 @@ SRC_EXTERNAL_TINYXML := \
 SRC_EXTERNAL_INIPARSER := \
     Source/External/iniParser/dictionary.c \
     Source/External/iniParser/iniparser.c
+
+SRC_EXTERNAL_POLY2TRI := \
+	Source/External/poly2tri/common/shapes.cc \
+	Source/External/poly2tri/sweep/advancing_front.cc \
+	Source/External/poly2tri/sweep/cdt.cc \
+	Source/External/poly2tri/sweep/sweep_context.cc \
+	Source/External/poly2tri/sweep/sweep.cc

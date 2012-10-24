@@ -26,16 +26,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.32"
-     inkscape:cx="2236.978"
-     inkscape:cy="1115.8199"
+     inkscape:cx="-200.522"
+     inkscape:cy="978.3199"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1280"
-     inkscape:window-height="751"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
-     inkscape:window-maximized="1" />
+     inkscape:window-width="529"
+     inkscape:window-height="507"
+     inkscape:window-x="220"
+     inkscape:window-y="220"
+     inkscape:window-maximized="0" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -76,13 +76,14 @@
        y="369.48572"
        inkscape:label="#rect2998" />
     <image
-       y="-627.29791"
-       x="2344.9875"
-       id="player"
-       xlink:href="file:///C:/ilija/p/JetmanGL/Data/nlo.png"
-       height="64"
+       sodipodi:absref="C:\ilija\projects\JetmanGL\Data\nlo.png"
+       xlink:href="nlo.png"
+       inkscape:label="#image3004"
        width="128"
-       inkscape:label="#image3004" />
+       height="64"
+       id="player"
+       x="2344.9875"
+       y="-627.29791" />
     <rect
        style="fill:#ff0000"
        id="box-red-4"
@@ -116,19 +117,20 @@
        y="-855.55988"
        inkscape:label="#rect2998" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:#cccccc;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m -368.75,-96.53052 -59.375,-81.25 18.75,-96.875 96.875,-81.25 279.366447,66.7281 316.606123,-13.38297 112.30467,26.09223 119.84776,92.43764 -19.96473,99.05511 -124.63969,-62.79904 -142.90396,44.98646 L 225,15.969483 55.329447,-63.54704 -172.6588,-133.32797 z"
        id="path3071"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccccccccc" />
     <image
-       y="-238.65552"
-       x="2757.875"
-       id="alien"
-       xlink:href="file:///C:/ilija/p/JetmanGL/Data/alien.png"
-       height="128"
+       sodipodi:absref="C:\ilija\projects\JetmanGL\Data\alien.png"
+       xlink:href="alien.png"
+       inkscape:label="#image3081"
        width="128"
-       inkscape:label="#image3081" />
+       height="128"
+       id="alien"
+       x="2757.875"
+       y="-238.65552" />
     <rect
        style="fill:#ff0000"
        id="box-red-8"

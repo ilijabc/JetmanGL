@@ -25,7 +25,8 @@ SRCS := \
 	$(SRC_EXTERNAL_BOX2D) \
 	$(SRC_EXTERNAL_NANOSVG) \
 	$(SRC_EXTERNAL_TINYXML) \
-	$(SRC_EXTERNAL_INIPARSER)
+	$(SRC_EXTERNAL_INIPARSER) \
+	$(SRC_EXTERNAL_POLY2TRI)
 
 #SRCS += $(SRC_PACKAGE_ALIEN)
 SRCS += $(SRC_PACKAGE_TEST)
@@ -79,6 +80,11 @@ $(OBJ_DIR)/%.res: %.rc
 	@windres.exe -i $< -J rc -o $@ -O coff
 
 $(OBJ_DIR)/%.o: %.cpp
+	@echo Compiling $<
+	@-$(MKDIR) "$(@D)"
+	@$(CPP) -c $(CFLAGS) $(DEFINES) -o $@ $<
+
+$(OBJ_DIR)/%.o: %.cc
 	@echo Compiling $<
 	@-$(MKDIR) "$(@D)"
 	@$(CPP) -c $(CFLAGS) $(DEFINES) -o $@ $<

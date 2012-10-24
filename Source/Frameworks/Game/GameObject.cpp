@@ -1,11 +1,15 @@
 #include "GameObject.h"
 #include "GameScene.h"
 
+#include "poly2tri/poly2tri.h"
+
+
 GameObject::GameObject(GameScene *scene, int type)
 		: mScene(scene)
 		, mType(type)
 		, mBody(NULL)
 		, mTexture(NULL)
+		, mTextureSize(1, 1)
 {
 }
 
@@ -37,6 +41,21 @@ void GameObject::onDraw(GLView *view)
 			glVertex2fv((float*)&(tri->c));
 		}
 		glEnd();
+		//debug triangles
+#ifdef ENABLE_GAME_OBJECT_DRAW_DEBUG
+		glColor3f(1, 0, 0);
+		glBegin(GL_LINE_STRIP);
+		for (int i = 0; i < poly->triangleCount; ++i)
+		{
+			GameObject::Triangle *tri = &(poly->triangleList[i]);
+			glVertex2fv((float*)&(tri->a));
+			glVertex2fv((float*)&(tri->b));
+			glVertex2fv((float*)&(tri->c));
+			glVertex2fv((float*)&(tri->a));
+		}
+		glEnd();
+
+#endif
 	}
 	//outline
 	for (std::list<PolyLine*>::iterator il = mLineList.begin(); il != mLineList.end(); il++)
@@ -50,6 +69,14 @@ void GameObject::onDraw(GLView *view)
 			glVertex2fv((float*)&(line->pointList[i]));
 		}
 		glEnd();
+	}
+	//image
+	if (mTexture)
+	{
+		glColor3f(1, 1, 1);
+		mTexture->drawImage(
+				-mTextureSize.x, -mTextureSize.y, mTextureSize.x, mTextureSize.y,
+				0, 0, 1, 1);
 	}
 }
 
@@ -68,10 +95,24 @@ void GameObject::addPolyLine(b2Vec2 *pointList, int pointCount, int color, float
 
 void GameObject::addPolyFill(b2Vec2 *pointList, int pointCount, int color)
 {
-	PolyLine *line = new PolyLine(pointCount);
-	memcpy(line->pointList, pointList, sizeof(b2Vec2) * pointCount);
-	parseIntColor(color, line->style.color);
-	mLineList.push_back(line);
+	std::vector<p2t::Point*> polyline;
+	for (int i = 0; i < pointCount; i++)
+	{
+		polyline.push_back(new p2t::Point(pointList[i].x, pointList[i].y));
+	}
+	p2t::CDT cdt(polyline);
+	cdt.Triangulate();
+	std::vector<p2t::Triangle*> triangles = cdt.GetTriangles();
+	PolyFill *fill = new PolyFill(triangles.size());
+	for (int i = 0; i < triangles.size(); i++)
+	{
+		p2t::Triangle& t = *triangles[i];
+		fill->triangleList[i].a.Set(t.GetPoint(0)->x, t.GetPoint(0)->y);
+		fill->triangleList[i].b.Set(t.GetPoint(1)->x, t.GetPoint(1)->y);
+		fill->triangleList[i].c.Set(t.GetPoint(2)->x, t.GetPoint(2)->y);
+	}
+	parseIntColor(color, fill->style.color);
+	mFillList.push_back(fill);
 }
 
 void GameObject::addRectFill(float x1, float y1, float x2, float y2, int color)

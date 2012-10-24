@@ -20,7 +20,7 @@ public:
 	//control
 	void update(float dt);
 	void draw(GLView *view);
-	GameObject *addObject(GameObject *obj);
+	GameObject *addObject(GameObject *obj, bool to_back = true);
 	//loaders
 	void loadSVG(const char *filename);
 	//getters

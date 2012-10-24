@@ -32,6 +32,7 @@ public:
     //setters
 	inline void setBody(b2Body *body) { mBody = body; }
 	inline void setTexture(GLTexture *tex) { mTexture = tex; }
+	inline void setTextureSize(float w, float h) { mTextureSize.Set(w / 2, h / 2); }
 	inline void setPosition(const b2Vec2 &pos) { mPosition = pos; }
 	inline void setPosition(float x, float y) { mPosition.Set(x, y); }
 	//getters
@@ -49,6 +50,7 @@ private:
     int mType;
 	b2Body *mBody;
     GLTexture *mTexture;
+    b2Vec2 mTextureSize;
     std::list<PolyLine*> mLineList;
     std::list<PolyFill*> mFillList;
     b2Vec2 mPosition;

@@ -20,6 +20,11 @@ struct GameClientSettings
 class GameClient
 {
 public:
+    //general
+	// EVERY CLIENT MUST IMPLEMENT THIS
+    static GameClient *Initialize(GameClientSettings settings);
+
+public:
 	GameClient();
 	virtual ~GameClient();
 	//callbacks
@@ -30,8 +35,10 @@ public:
 	virtual void onMouseButtonEvent(int button, int press) = 0;
 	virtual void onMouseWheelEvent(int wheel) = 0;
     virtual void onSize(int width, int height) = 0;
-    //general
-    static GameClient *Initialize(GameClientSettings settings);
+    //managers
+    GLTexture *getTexture(const char *filename, int flags = 0);
+private:
+    std::vector<GLTexture*> mTexturePool;
 };
 
 #endif /* GAMECLIENT_H_ */
