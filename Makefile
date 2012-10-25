@@ -64,6 +64,8 @@ ifeq ($(TARGET),win32-mingw)
 	MKDIR := mkdir -p
 	LIBS += -lgdi32 -lglu32 -lopengl32
 	SRC_RES := Source/Resources/resource.rc
+	INC_PATHS += -I/usr/local/include
+	LIB_PATHS += -L/usr/local/lib
 endif
 
 #################################################################################

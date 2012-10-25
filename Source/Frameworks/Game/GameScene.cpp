@@ -90,7 +90,7 @@ void GameScene::loadSVG(const char *filename)
 		float cx = 0, cy = 0;
 		float x1, y1, x2, y2;
 		//rescale and calculate center anb bounds
-		for (i = 0; i < vs_size; ++i)
+		for (i = 0; i < path->npts; ++i)
 		{
 			float x = path->pts[i*2] * gscale;
 			float y = -path->pts[i*2+1] * gscale;
