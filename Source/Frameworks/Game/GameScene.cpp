@@ -44,10 +44,10 @@ void GameScene::draw(GLView *view)
 	{
 		GameObject* obj = *iobj;
 		b2Vec2 position = obj->getPosition();
-		//float rotation = obj->getBody()->GetAngle() * GLPLUS_TODEG;
+		float rotation = obj->getRotation();
 		glPushMatrix();
 		glTranslatef(position.x, position.y, 0);
-		//glRotatef(rotation, 0, 0, 1);
+		glRotatef(rotation, 0, 0, 1);
 		obj->onDraw(view);
 		glPopMatrix();
 	}
@@ -77,8 +77,11 @@ void GameScene::loadSVG(const char *filename)
 	{
 		GameObject *obj = NULL;
 		// parse svg object
-		b2Vec2 vs[path->npts];
+		// TODO: closed status is fixed here, but should be in nanosvg
 		int vs_size = path->npts;
+		if (path->closed)
+			vs_size = vs_size + 1;
+		b2Vec2 vs[vs_size];
 		int i = 0;
 		float cx = 0, cy = 0;
 		float x1, y1, x2, y2;
@@ -112,7 +115,9 @@ void GameScene::loadSVG(const char *filename)
 			vs[i].y -= cy;
 		}
 		if (path->closed)
-			vs[vs_size] = vs[0];
+			vs[vs_size - 1] = vs[0];
+		else if (vs[0] == vs[vs_size - 1])
+			path->closed = 1;
 		// create body
 		if (path->type == SVG_TYPE_IMAGE && path->link)
 		{
@@ -149,7 +154,7 @@ void GameScene::loadSVG(const char *filename)
 			}
 			if (path->hasFill)
 			{
-				obj->addPolyFill(vs, vs_size, path->fillColor);
+				obj->addPolyFill(vs, path->closed ? vs_size - 1 : vs_size, path->fillColor);
 			}
 			obj->setPosition(cx, cy);
 		}
@@ -157,7 +162,55 @@ void GameScene::loadSVG(const char *filename)
 		// create object
 		if (obj)
 		{
-			printf("add object '%s' (%f, %f)\n", path->id, cx, cy);
+			printf("add object '%s' (%f, %f) %d %d %d\n", path->id, cx, cy, vs_size, path->closed, vs[0] == vs[vs_size-1]);
+			b2Body *body = NULL;
+			if (path->title)
+			{
+				if (strcmp(path->title, "d") == 0)
+				{
+					b2BodyDef bodyDef;
+					bodyDef.type = b2_dynamicBody;
+					bodyDef.position.Set(cx, cy);
+					body = getWorld()->CreateBody(&bodyDef);
+				}
+				else if (strcmp(path->title, "s") == 0)
+				{
+					b2BodyDef bodyDef;
+					bodyDef.type = b2_staticBody;
+					bodyDef.position.Set(cx, cy);
+					body = getWorld()->CreateBody(&bodyDef);
+				}
+			}
+			if (body)
+			{
+				printf("  add shape\n");
+				//connect obj <=> body
+				body->SetUserData(obj);
+				obj->setBody(body);
+				//shape
+				GameObject::PolyFill *fill = obj->getPolyFill(0);
+				GameObject::PolyLine *line = obj->getPolyLine(0);
+				if (fill)
+				{
+					for (int i = 0; i < fill->triangleCount; i++)
+					{
+						b2PolygonShape polyShape;
+						polyShape.Set(&(fill->triangleList[i].a), 3);
+						b2FixtureDef fixtureDef;
+						fixtureDef.shape = &polyShape;
+						fixtureDef.density = 1.0f;
+						fixtureDef.friction = 0.3f;
+						fixtureDef.restitution = 0.5f;
+						body->CreateFixture(&fixtureDef);
+					}
+				}
+				else if (line)
+				{
+					b2ChainShape chainShape;
+					chainShape.CreateChain(line->pointList, line->pointCount);
+					body->CreateFixture(&chainShape, 0.0f);
+				}
+			}
 			addObject(obj, false);
 		}
 	}

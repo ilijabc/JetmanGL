@@ -18,7 +18,7 @@ TestClient::TestClient(GameClientSettings settings)
 	mView->setup();
 	mView->setSize(settings.width, settings.height);
 	mScene = new GameScene(this);
-	mScene->loadSVG("Data/level02.svg");
+	mScene->loadSVG("Data/level01.svg");
 	mZoom = 100;
 }
 

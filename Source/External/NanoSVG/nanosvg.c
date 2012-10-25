@@ -185,6 +185,7 @@ struct SVGParser
 	char pathFlag;
 	char defsFlag;
 	float tol;
+	char contentFlag;
 };
 
 static void xformSetIdentity(float* t)
@@ -324,24 +325,24 @@ static struct SVGPath* svgCreatePath(struct SVGParser* p, char closed, char type
 	int i;
 
 	if (!p)
-		return;
+		return NULL;
 
 	if (!p->nbuf)
 	{
-		return;
+		return NULL;
 	}
 
 	attr = svgGetAttr(p);
 
 	path = (struct SVGPath*)malloc(sizeof(struct SVGPath));
 	if (!path)
-		return;
+		return NULL;
 	memset(path, 0, sizeof(struct SVGPath));
 	path->pts = (float*)malloc(p->nbuf*2*sizeof(float));
 	if (!path->pts)
 	{
 		free(path);
-		return;
+		return NULL;
 	}
 	path->closed = closed;
 	path->type = type;
@@ -1141,10 +1142,6 @@ static void svgParseImage(struct SVGParser* p, const char** attr)
 	}
 }
 
-static void svgParseTitle(struct SVGParser* p, const char** attr)
-{
-}
-
 static void svgParseCircle(struct SVGParser* p, const char** attr)
 {
 	float cx = 0.0f;
@@ -1280,12 +1277,6 @@ static void svgStartElement(void* ud, const char* el, const char** attr)
 		svgParseImage(p, attr);
 		svgPopAttr(p);
 	}
-	else if (strcmp(el, "title") == 0)
-    {
-		svgPushAttr(p);
-		svgParseTitle(p, attr);
-		svgPopAttr(p);
-    }
 	else if (strcmp(el, "circle") == 0)
 	{
 		svgPushAttr(p);
@@ -1314,6 +1305,14 @@ static void svgStartElement(void* ud, const char* el, const char** attr)
 	{
 		p->defsFlag = 1;
 	}
+	else if (strcmp(el, "title") == 0)
+    {
+		p->contentFlag = 1;
+    }
+	else if (strcmp(el, "desc") == 0)
+	{
+		p->contentFlag = 2;
+	}
 }
 
 static void svgEndElement(void* ud, const char* el)
@@ -1332,11 +1331,33 @@ static void svgEndElement(void* ud, const char* el)
 	{
 		p->defsFlag = 0;
 	}
+	else if (strcmp(el, "title") == 0)
+	{
+		p->contentFlag = 0;
+	}
+	else if (strcmp(el, "desc") == 0)
+	{
+		p->contentFlag = 0;
+	}
 }
 
 static void svgContent(void* ud, const char* s)
 {
-	// empty
+	struct SVGParser* p = (struct SVGParser*)ud;
+	struct SVGPath *path = p->plist;
+
+	//title
+	if (p->contentFlag == 1)
+	{
+		path->title = malloc(strlen(s) + 1);
+		strcpy(path->title, s);
+	}
+	//desc
+	else if (p->contentFlag == 2)
+	{
+		path->desc = malloc(strlen(s) + 1);
+		strcpy(path->desc, s);
+	}
 }
 
 struct SVGPath* svgParse(char* input)
@@ -1405,6 +1426,10 @@ void svgDelete(struct SVGPath* plist)
             free(path->link);
         if (path->id)
             free(path->id);
+        if (path->title)
+        	free(path->title);
+        if (path->desc)
+        	free(path->desc);
 		free(path);
 		path = next;
 	}

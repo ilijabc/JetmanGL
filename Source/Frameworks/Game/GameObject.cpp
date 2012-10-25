@@ -11,6 +11,8 @@ GameObject::GameObject(GameScene *scene, int type)
 		, mBody(NULL)
 		, mTexture(NULL)
 		, mTextureSize(1, 1)
+		, mPosition(0, 0)
+		, mRotation(0)
 {
 }
 
@@ -24,6 +26,11 @@ GameObject::~GameObject()
 
 void GameObject::onUpdate(float dt)
 {
+	if (mBody)
+	{
+		mPosition = mBody->GetPosition();
+		mRotation = mBody->GetAngle() * GLPLUS_TODEG;
+	}
 }
 
 void GameObject::onDraw(GLView *view)
@@ -64,7 +71,7 @@ void GameObject::onDraw(GLView *view)
 		PolyLine *line = mLineList[i];
 		glColor4fv(line->style.color);
 		glLineWidth(line->style.width);
-		glBegin(GL_LINE_LOOP);
+		glBegin(GL_LINE_STRIP);
 		for (int j = 0; j < line->pointCount; j++)
 		{
 			glVertex2fv((float*)&(line->pointList[j]));
@@ -97,25 +104,41 @@ int GameObject::addPolyLine(b2Vec2 *pointList, int pointCount, int color, float 
 
 int GameObject::addPolyFill(b2Vec2 *pointList, int pointCount, int color)
 {
-	std::vector<p2t::Point*> polyline;
-	for (int i = 0; i < pointCount; i++)
+	if (pointCount < 2)
 	{
-		polyline.push_back(new p2t::Point(pointList[i].x, pointList[i].y));
+		return -1;
 	}
-	p2t::CDT cdt(polyline);
-	cdt.Triangulate();
-	std::vector<p2t::Triangle*> triangles = cdt.GetTriangles();
-	PolyFill *fill = new PolyFill(triangles.size());
-	for (int i = 0; i < triangles.size(); i++)
+	else if (pointCount == 3)
 	{
-		p2t::Triangle& t = *triangles[i];
-		fill->triangleList[i].a.Set(t.GetPoint(0)->x, t.GetPoint(0)->y);
-		fill->triangleList[i].b.Set(t.GetPoint(1)->x, t.GetPoint(1)->y);
-		fill->triangleList[i].c.Set(t.GetPoint(2)->x, t.GetPoint(2)->y);
+		PolyFill *fill = new PolyFill(1);
+		fill->triangleList[0].a = pointList[0];
+		fill->triangleList[0].b = pointList[1];
+		fill->triangleList[0].c = pointList[2];
+		mFillList.push_back(fill);
+		return mFillList.size() - 1;
 	}
-	parseIntColor(color, fill->style.color);
-	mFillList.push_back(fill);
-	return mFillList.size() - 1;
+	else
+	{
+		std::vector<p2t::Point*> polyline;
+		for (int i = 0; i < pointCount; i++)
+		{
+			polyline.push_back(new p2t::Point(pointList[i].x, pointList[i].y));
+		}
+		p2t::CDT cdt(polyline);
+		cdt.Triangulate();
+		std::vector<p2t::Triangle*> triangles = cdt.GetTriangles();
+		PolyFill *fill = new PolyFill(triangles.size());
+		for (int i = 0; i < triangles.size(); i++)
+		{
+			p2t::Triangle& t = *triangles[i];
+			fill->triangleList[i].a.Set(t.GetPoint(0)->x, t.GetPoint(0)->y);
+			fill->triangleList[i].b.Set(t.GetPoint(1)->x, t.GetPoint(1)->y);
+			fill->triangleList[i].c.Set(t.GetPoint(2)->x, t.GetPoint(2)->y);
+		}
+		parseIntColor(color, fill->style.color);
+		mFillList.push_back(fill);
+		return mFillList.size() - 1;
+	}
 }
 
 int GameObject::addRectFill(float x1, float y1, float x2, float y2, int color)

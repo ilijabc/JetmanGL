@@ -35,17 +35,21 @@ public:
 	inline void setTextureSize(float w, float h) { mTextureSize.Set(w / 2, h / 2); }
 	inline void setPosition(const b2Vec2 &pos) { mPosition = pos; }
 	inline void setPosition(float x, float y) { mPosition.Set(x, y); }
+	inline void setRotation(float rot) { mRotation = rot; }
 	//getters
 	inline b2Body *getBody() const { return mBody; }
 	inline GLTexture *getTexture() const { return mTexture; }
     inline int getType() const { return mType; }
     inline const b2Vec2 &getPosition() const { return mPosition; }
+    inline float getRotation() const { return mRotation; }
     //geomtry
     int addPolyLine(b2Vec2 *pointList, int pointCount, int color = 0xFFFFFFFF, float width = 1.0f);
     int addPolyFill(b2Vec2 *pointList, int pointCount, int color = 0xFFFFFFFF);
     int addRectFill(float x1, float y1, float x2, float y2, int color = 0xFFFFFFFF);
     PolyLine *getPolyLine(int index);
     PolyFill *getPolyFill(int index);
+    inline int getPolyLineCount() const { return mLineList.size(); }
+    inline int getPolyFillCount() const { return mFillList.size(); }
 
 private:
     GameScene *mScene;
@@ -56,6 +60,7 @@ private:
     std::vector<PolyLine*> mLineList;
     std::vector<PolyFill*> mFillList;
     b2Vec2 mPosition;
+    float mRotation;
 };
 
 #endif // GAMEOBJECT_H
