@@ -27,7 +27,7 @@ public:
 	virtual ~GameObject();
 	//events
 	virtual void onUpdate(float dt);
-	virtual void onDraw(GLView *view);
+	virtual void onDraw(GLView *view, unsigned int flags);
 	virtual void onCollision(b2Body *other);
     //setters
 	inline void setBody(b2Body *body) { mBody = body; }

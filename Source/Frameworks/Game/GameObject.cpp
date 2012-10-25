@@ -33,58 +33,50 @@ void GameObject::onUpdate(float dt)
 	}
 }
 
-void GameObject::onDraw(GLView *view)
+void GameObject::onDraw(GLView *view, unsigned int flags)
 {
-	//fill
-	for (int i = 0; i < mFillList.size(); i++)
+	if ((flags & GameScene::e_drawShapeFlag) == GameScene::e_drawShapeFlag)
 	{
-		PolyFill *poly = mFillList[i];
-		glColor4fv(poly->style.color);
-		glBegin(GL_TRIANGLES);
-		for (int j = 0; j < poly->triangleCount; j++)
+		//fill
+		for (int i = 0; i < mFillList.size(); i++)
 		{
-			GameObject::Triangle *tri = &(poly->triangleList[j]);
-			glVertex2fv((float*)&(tri->a));
-			glVertex2fv((float*)&(tri->b));
-			glVertex2fv((float*)&(tri->c));
+			PolyFill *poly = mFillList[i];
+			glColor4fv(poly->style.color);
+			glBegin(GL_TRIANGLES);
+			for (int j = 0; j < poly->triangleCount; j++)
+			{
+				GameObject::Triangle *tri = &(poly->triangleList[j]);
+				glVertex2fv((float*)&(tri->a));
+				glVertex2fv((float*)&(tri->b));
+				glVertex2fv((float*)&(tri->c));
+			}
+			glEnd();
 		}
-		glEnd();
-		//debug triangles
-#ifdef ENABLE_GAME_OBJECT_DRAW_DEBUG
-		glColor3f(1, 0, 0);
-		glBegin(GL_LINE_STRIP);
-		for (int j = 0; j < poly->triangleCount; j++)
+		//outline
+		for (int i = 0; i < mLineList.size(); i++)
 		{
-			GameObject::Triangle *tri = &(poly->triangleList[j]);
-			glVertex2fv((float*)&(tri->a));
-			glVertex2fv((float*)&(tri->b));
-			glVertex2fv((float*)&(tri->c));
-			glVertex2fv((float*)&(tri->a));
+			PolyLine *line = mLineList[i];
+			glColor4fv(line->style.color);
+			glLineWidth(line->style.width);
+			glBegin(GL_LINE_STRIP);
+			for (int j = 0; j < line->pointCount; j++)
+			{
+				glVertex2fv((float*)&(line->pointList[j]));
+			}
+			glEnd();
+			glLineWidth(1.0f);
 		}
-		glEnd();
-
-#endif
 	}
-	//outline
-	for (int i = 0; i < mLineList.size(); i++)
+	if ((flags & GameScene::e_drawImageFlag) == GameScene::e_drawImageFlag)
 	{
-		PolyLine *line = mLineList[i];
-		glColor4fv(line->style.color);
-		glLineWidth(line->style.width);
-		glBegin(GL_LINE_STRIP);
-		for (int j = 0; j < line->pointCount; j++)
+		//image
+		if (mTexture)
 		{
-			glVertex2fv((float*)&(line->pointList[j]));
+			glColor3f(1, 1, 1);
+			mTexture->drawImage(
+					-mTextureSize.x, -mTextureSize.y, mTextureSize.x, mTextureSize.y,
+					0, 0, 1, 1);
 		}
-		glEnd();
-	}
-	//image
-	if (mTexture)
-	{
-		glColor3f(1, 1, 1);
-		mTexture->drawImage(
-				-mTextureSize.x, -mTextureSize.y, mTextureSize.x, mTextureSize.y,
-				0, 0, 1, 1);
 	}
 }
 

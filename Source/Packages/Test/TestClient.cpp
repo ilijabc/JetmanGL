@@ -6,6 +6,7 @@
  */
 
 #include "TestClient.h"
+#include <GL/glfw.h>
 
 GameClient *GameClient::Initialize(GameClientSettings settings)
 {
@@ -18,7 +19,7 @@ TestClient::TestClient(GameClientSettings settings)
 	mView->setup();
 	mView->setSize(settings.width, settings.height);
 	mScene = new GameScene(this);
-	mScene->loadSVG("Data/level01.svg");
+	mScene->loadSVG("Data/level02.svg");
 	mZoom = 100;
 }
 
@@ -42,6 +43,17 @@ void TestClient::onDraw()
 
 void TestClient::onKeyEvent(int key, int action)
 {
+	if (action == GLFW_PRESS)
+	{
+		if (key == GLFW_KEY_SPACE)
+		{
+			//toggle drawing flags
+			if (mScene->getDrawFlags() == GameScene::e_drawBox2DFlag)
+				mScene->setDrawFlags(GameScene::e_drawShapeFlag | GameScene::e_drawImageFlag);
+			else
+				mScene->setDrawFlags(GameScene::e_drawBox2DFlag);
+		}
+	}
 }
 
 void TestClient::onMouseMoveEvent(int x, int y)

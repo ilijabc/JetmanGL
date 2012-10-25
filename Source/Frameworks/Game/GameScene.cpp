@@ -10,6 +10,7 @@
 
 GameScene::GameScene(GameClient *game)
 		: mGame(game)
+		, mDrawFlags(e_drawShapeFlag | e_drawImageFlag)
 {
 	mWorld = new b2World(b2Vec2(0, -10));
 	//mWorld->SetContactListener(this);
@@ -48,11 +49,14 @@ void GameScene::draw(GLView *view)
 		glPushMatrix();
 		glTranslatef(position.x, position.y, 0);
 		glRotatef(rotation, 0, 0, 1);
-		obj->onDraw(view);
+		obj->onDraw(view, mDrawFlags);
 		glPopMatrix();
 	}
 	// DEBUG DRAW FOR BOX2D
-	drawWorldDebug();
+	if ((mDrawFlags & e_drawBox2DFlag) == e_drawBox2DFlag)
+	{
+		drawWorldDebug();
+	}
 }
 
 GameObject *GameScene::addObject(GameObject *obj, bool to_back)
