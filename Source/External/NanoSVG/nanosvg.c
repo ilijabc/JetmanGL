@@ -947,6 +947,7 @@ static void svgParsePath(struct SVGParser* p, const char** attr)
 	char closedFlag;
 	int i;
 	char item[64];
+	struct SVGPath *path = NULL;
 
 	for (i = 0; attr[i]; i += 2)
 	{
@@ -1020,7 +1021,7 @@ static void svgParsePath(struct SVGParser* p, const char** attr)
 					{
 						// Commit path.
 						if (p->nbuf)
-							svgCreatePath(p, closedFlag, SVG_TYPE_PATH);
+							path = svgCreatePath(p, closedFlag, SVG_TYPE_PATH);
 						// Start new subpath.
 						svgResetPath(p);
 						closedFlag = 0;
@@ -1032,7 +1033,7 @@ static void svgParsePath(struct SVGParser* p, const char** attr)
 						closedFlag = 1;
 						// Commit path.
 						if (p->nbuf)
-							svgCreatePath(p, closedFlag, SVG_TYPE_PATH);
+							path = svgCreatePath(p, closedFlag, SVG_TYPE_PATH);
 						// Start new subpath.
 						svgResetPath(p);
 						closedFlag = 0;
@@ -1043,8 +1044,18 @@ static void svgParsePath(struct SVGParser* p, const char** attr)
 
 			// Commit path.
 			if (p->nbuf)
-				svgCreatePath(p, closedFlag, SVG_TYPE_PATH);
+				path = svgCreatePath(p, closedFlag, SVG_TYPE_PATH);
 
+		}
+		else if (strcmp(attr[i], "id") == 0)
+		{
+			// TODO: this will set a namo only for last path
+			//       also, 'arc' type is not parsed fully
+			if (path)
+			{
+				path->id = malloc(strlen(attr[i+1]) + 1);
+				strcpy(path->id, attr[i+1]);
+			}
 		}
 		else
 		{
@@ -1063,7 +1074,7 @@ static void svgParseRect(struct SVGParser* p, const char** attr)
 	float y = 0.0f;
 	float w = 0.0f;
 	float h = 0.0f;
-	char *id = 0;
+	char *id = NULL;
 	int i;
 
 	for (i = 0; attr[i]; i += 2)
@@ -1092,7 +1103,10 @@ static void svgParseRect(struct SVGParser* p, const char** attr)
 		svgPathPoint(p, x, y+h);
 
 		struct SVGPath *path = svgCreatePath(p, 1, SVG_TYPE_RECT);
-		path->id = id;
+		if (path)
+		{
+			path->id = id;
+		}
 	}
 }
 
@@ -1102,8 +1116,8 @@ static void svgParseImage(struct SVGParser* p, const char** attr)
 	float y = 0.0f;
 	float w = 0.0f;
 	float h = 0.0f;
-	char *link = 0;
-	char *id = 0;
+	char *link = NULL;
+	char *id = NULL;
 	int i;
 
 	for (i = 0; attr[i]; i += 2)
@@ -1137,8 +1151,11 @@ static void svgParseImage(struct SVGParser* p, const char** attr)
 		svgPathPoint(p, x, y+h);
 
 		struct SVGPath *path = svgCreatePath(p, 1, SVG_TYPE_IMAGE);
-		path->link = link;
-		path->id = id;
+		if (path)
+		{
+			path->link = link;
+			path->id = id;
+		}
 	}
 }
 
@@ -1148,6 +1165,7 @@ static void svgParseCircle(struct SVGParser* p, const char** attr)
 	float cy = 0.0f;
 	float r = 0.0f;
 	float da;
+	char *id = NULL;
 	int i,n;
 	float x,y,u;
 
@@ -1158,6 +1176,11 @@ static void svgParseCircle(struct SVGParser* p, const char** attr)
 			if (strcmp(attr[i], "cx") == 0) cx = parseFloat(attr[i+1]);
 			if (strcmp(attr[i], "cy") == 0) cy = parseFloat(attr[i+1]);
 			if (strcmp(attr[i], "r") == 0) r = fabsf(parseFloat(attr[i+1]));
+			if (strcmp(attr[i], "id") == 0)
+			{
+				id = malloc(strlen(attr[i+1]) + 1);
+				strcpy(id, attr[i+1]);
+			}
 		}
 	}
 
@@ -1177,7 +1200,64 @@ static void svgParseCircle(struct SVGParser* p, const char** attr)
 			svgPathPoint(p, x, y);
 		}
 
-		svgCreatePath(p, 1, SVG_TYPE_CIRCLE);
+		struct SVGPath *path = svgCreatePath(p, 1, SVG_TYPE_CIRCLE);
+		if (path)
+		{
+			path->id = id;
+		}
+	}
+}
+
+
+static void svgParseArc(struct SVGParser* p, const char** attr)
+{
+	float cx = 0.0f;
+	float cy = 0.0f;
+	float rx = 0.0f;
+	float ry = 0.0f;
+	float da;
+	char *id = NULL;
+	int i,n;
+	float x,y,u;
+
+	for (i = 0; attr[i]; i += 2)
+	{
+		if (!svgParseAttr(p, attr[i], attr[i + 1]))
+		{
+			if (strcmp(attr[i], "sodipodi:cx") == 0) cx = parseFloat(attr[i+1]);
+			if (strcmp(attr[i], "sodipodi:cx") == 0) cy = parseFloat(attr[i+1]);
+			if (strcmp(attr[i], "sodipodi:rx") == 0) rx = fabsf(parseFloat(attr[i+1]));
+			if (strcmp(attr[i], "sodipodi:ry") == 0) ry = fabsf(parseFloat(attr[i+1]));
+			if (strcmp(attr[i], "id") == 0)
+			{
+				id = malloc(strlen(attr[i+1]) + 1);
+				strcpy(id, attr[i+1]);
+			}
+		}
+	}
+
+	if (rx != 0.0f && ry != 0.0f)
+	{
+		float r = rx;
+		svgResetPath(p);
+
+		da = acosf(r/(r+p->tol))*2;
+		n = (int)ceilf(M_PI*2/da);
+
+		da = (float)(M_PI*2)/n;
+		for (i = 0; i < n; ++i)
+		{
+			u = i*da;
+			x = cx + cosf(u)*r;
+			y = cy + sinf(u)*r;
+			svgPathPoint(p, x, y);
+		}
+
+		struct SVGPath *path = svgCreatePath(p, 1, SVG_TYPE_CIRCLE);
+		if (path)
+		{
+			path->id = id;
+		}
 	}
 }
 
@@ -1187,6 +1267,7 @@ static void svgParseLine(struct SVGParser* p, const char** attr)
 	float y1 = 0.0;
 	float x2 = 0.0;
 	float y2 = 0.0;
+	char *id = NULL;
 	int i;
 
 	for (i = 0; attr[i]; i += 2)
@@ -1197,6 +1278,11 @@ static void svgParseLine(struct SVGParser* p, const char** attr)
 			if (strcmp(attr[i], "y1") == 0) y1 = parseFloat(attr[i + 1]);
 			if (strcmp(attr[i], "x2") == 0) x2 = parseFloat(attr[i + 1]);
 			if (strcmp(attr[i], "y2") == 0) y2 = parseFloat(attr[i + 1]);
+			if (strcmp(attr[i], "id") == 0)
+			{
+				id = malloc(strlen(attr[i+1]) + 1);
+				strcpy(id, attr[i+1]);
+			}
 		}
 	}
 
@@ -1205,7 +1291,11 @@ static void svgParseLine(struct SVGParser* p, const char** attr)
 	svgPathPoint(p, x1, y1);
 	svgPathPoint(p, x2, y2);
 
-	svgCreatePath(p, 0, SVG_TYPE_LINE);
+	struct SVGPath *path = svgCreatePath(p, 0, SVG_TYPE_LINE);
+	if (path)
+	{
+		path->id = id;
+	}
 }
 
 static void svgParsePoly(struct SVGParser* p, const char** attr, int closeFlag)
@@ -1215,6 +1305,7 @@ static void svgParsePoly(struct SVGParser* p, const char** attr, int closeFlag)
 	float args[2];
 	int nargs;
 	char item[64];
+	char *id = NULL;
 
 	svgResetPath(p);
 
@@ -1237,15 +1328,26 @@ static void svgParsePoly(struct SVGParser* p, const char** attr, int closeFlag)
 					}
 				}
 			}
+			if (strcmp(attr[i], "id") == 0)
+			{
+				id = malloc(strlen(attr[i+1]) + 1);
+				strcpy(id, attr[i+1]);
+			}
 		}
 	}
 
-	svgCreatePath(p, closeFlag, SVG_TYPE_POLY);
+	struct SVGPath *path = svgCreatePath(p, closeFlag, SVG_TYPE_POLY);
+	if (path)
+	{
+		path->id = id;
+	}
 }
 
 static void svgStartElement(void* ud, const char* el, const char** attr)
 {
 	struct SVGParser* p = (struct SVGParser*)ud;
+	int i;
+	int do_path = 1;
 
 	// Skip everything in defs
 	if (p->defsFlag)
@@ -1261,7 +1363,18 @@ static void svgStartElement(void* ud, const char* el, const char** attr)
 		if (p->pathFlag)	// Do not allow nested paths.
 			return;
 		svgPushAttr(p);
-		svgParsePath(p, attr);
+		//first see if path is arc/eclipse
+		for (i = 0; attr[i]; i += 2)
+		{
+			if (strcmp(attr[i], "sodipodi:type") == 0 && strcmp(attr[i+1], "arc") == 0)
+			{
+				svgParseArc(p, attr);
+				do_path = 0;
+				break;
+			}
+		}
+		if (do_path)
+			svgParsePath(p, attr);
 		p->pathFlag = 1;
 		svgPopAttr(p);
 	}
