@@ -14,6 +14,7 @@ GameObject::GameObject(GameScene *scene, int type)
 		, mPosition(0, 0)
 		, mRotation(0)
 {
+	strcpy(mName, "");
 }
 
 GameObject::~GameObject()

@@ -68,6 +68,16 @@ GameObject *GameScene::addObject(GameObject *obj, bool to_back)
 	return obj;
 }
 
+GameObject *GameScene::getObjectByName(const char *name)
+{
+	for (std::list<GameObject*>::iterator iobj = mGameObjectList.begin(); iobj != mGameObjectList.end(); iobj++)
+	{
+		if (strcmp((*iobj)->getName(), name) == 0)
+			return (*iobj);
+	}
+	return NULL;
+}
+
 void GameScene::loadSVG(const char *filename)
 {
 	float gscale = 0.02;
@@ -166,6 +176,10 @@ void GameScene::loadSVG(const char *filename)
 		// create object
 		if (obj)
 		{
+			if (path->id)
+			{
+				obj->setName(path->id);
+			}
 			printf("add object '%s' (%f, %f) %d %d %d\n", path->id, cx, cy, vs_size, path->closed, vs[0] == vs[vs_size-1]);
 			b2Body *body = NULL;
 			if (path->title)

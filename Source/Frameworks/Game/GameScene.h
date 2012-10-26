@@ -29,6 +29,7 @@ public:
 	void update(float dt);
 	void draw(GLView *view);
 	GameObject *addObject(GameObject *obj, bool to_back = true);
+	GameObject *getObjectByName(const char *name);
 	//loaders
 	void loadSVG(const char *filename);
 	//setters

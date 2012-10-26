@@ -36,12 +36,14 @@ public:
 	inline void setPosition(const b2Vec2 &pos) { mPosition = pos; }
 	inline void setPosition(float x, float y) { mPosition.Set(x, y); }
 	inline void setRotation(float rot) { mRotation = rot; }
+	inline void setName(const char *name) { strcpy(mName, name); }
 	//getters
 	inline b2Body *getBody() const { return mBody; }
 	inline GLTexture *getTexture() const { return mTexture; }
     inline int getType() const { return mType; }
     inline const b2Vec2 &getPosition() const { return mPosition; }
     inline float getRotation() const { return mRotation; }
+    inline const char *getName() const { return mName; }
     //geomtry
     int addPolyLine(b2Vec2 *pointList, int pointCount, int color = 0xFFFFFFFF, float width = 1.0f);
     int addPolyFill(b2Vec2 *pointList, int pointCount, int color = 0xFFFFFFFF);
@@ -61,6 +63,7 @@ private:
     std::vector<PolyFill*> mFillList;
     b2Vec2 mPosition;
     float mRotation;
+    char mName[250];
 };
 
 #endif // GAMEOBJECT_H
