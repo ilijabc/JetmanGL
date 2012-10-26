@@ -28,7 +28,10 @@ public:
 private:
 	GLView *mView;
 	GameScene *mScene;
-	float mZoom;
+	GLFloat2 mSceneSize;
+	int mButtonState[8];
+	GLFloat3 mMousePos;
+	GLFloat3 mCameraPos;
 };
 
 #endif /* TESTCLIENT_H_ */

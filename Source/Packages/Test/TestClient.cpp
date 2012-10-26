@@ -20,7 +20,10 @@ TestClient::TestClient(GameClientSettings settings)
 	mView->setSize(settings.width, settings.height);
 	mScene = new GameScene(this);
 	mScene->loadSVG("Data/level02.svg");
-	mZoom = 100;
+	mSceneSize.set(settings.width, settings.height);
+	for (int i = 0; i < 8; i++)
+		mButtonState[i] = GLFW_RELEASE;
+	mCameraPos.set(0, 0, 100);
 }
 
 TestClient::~TestClient()
@@ -36,8 +39,11 @@ void TestClient::onUpdate(float dt)
 
 void TestClient::onDraw()
 {
-	mView->beginScene2DWide(mZoom);
+	mSceneSize = mView->beginScene2DWide(mCameraPos.z);
+	glPushMatrix();
+	glTranslatef(mCameraPos.x, mCameraPos.y, 0);
 	mScene->draw(mView);
+	glPopMatrix();
 	mView->endScene2D();
 }
 
@@ -58,15 +64,31 @@ void TestClient::onKeyEvent(int key, int action)
 
 void TestClient::onMouseMoveEvent(int x, int y)
 {
+	float dx = x - mMousePos.x;
+	float dy = y - mMousePos.y;
+	if (mButtonState[GLFW_MOUSE_BUTTON_RIGHT] == GLFW_PRESS)
+	{
+		float fx = mSceneSize.x / (float)mView->getWidth();
+		float fy = mSceneSize.y / (float)mView->getHeight();
+		mCameraPos.x += dx * fx;
+		mCameraPos.y -= dy * fy;
+	}
+	mMousePos.x = x;
+	mMousePos.y = y;
 }
 
 void TestClient::onMouseButtonEvent(int button, int press)
 {
+	mButtonState[button] = press;
 }
 
 void TestClient::onMouseWheelEvent(int wheel)
 {
-	mZoom = 100 - wheel * 5;
+	float dz = wheel - mMousePos.z;
+	mCameraPos.z -= dz * 5;
+	if (mCameraPos.z < 5)
+		mCameraPos.z = 5;
+	mMousePos.z = wheel;
 }
 
 void TestClient::onSize(int width, int height)
