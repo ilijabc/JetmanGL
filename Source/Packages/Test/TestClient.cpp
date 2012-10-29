@@ -41,6 +41,15 @@ void TestClient::onDraw()
 {
 	mSceneSize = mView->beginScene2DWide(mCameraPos.z);
 	glPushMatrix();
+	//grid
+	glBegin(GL_LINES);
+	glColor3f(1, 1, 1);
+	glVertex2f(-mSceneSize.x / 2, mCameraPos.y);
+	glVertex2f(mSceneSize.x / 2, mCameraPos.y);
+	glVertex2f(mCameraPos.x, -mSceneSize.y / 2);
+	glVertex2f(mCameraPos.x, mSceneSize.y / 2);
+	glEnd();
+	//scene
 	glTranslatef(mCameraPos.x, mCameraPos.y, 0);
 	mScene->draw(mView);
 	glPopMatrix();

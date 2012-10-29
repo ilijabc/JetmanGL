@@ -1225,7 +1225,7 @@ static void svgParseArc(struct SVGParser* p, const char** attr)
 		if (!svgParseAttr(p, attr[i], attr[i + 1]))
 		{
 			if (strcmp(attr[i], "sodipodi:cx") == 0) cx = parseFloat(attr[i+1]);
-			if (strcmp(attr[i], "sodipodi:cx") == 0) cy = parseFloat(attr[i+1]);
+			if (strcmp(attr[i], "sodipodi:cy") == 0) cy = parseFloat(attr[i+1]);
 			if (strcmp(attr[i], "sodipodi:rx") == 0) rx = fabsf(parseFloat(attr[i+1]));
 			if (strcmp(attr[i], "sodipodi:ry") == 0) ry = fabsf(parseFloat(attr[i+1]));
 			if (strcmp(attr[i], "id") == 0)
@@ -1253,7 +1253,7 @@ static void svgParseArc(struct SVGParser* p, const char** attr)
 			svgPathPoint(p, x, y);
 		}
 
-		struct SVGPath *path = svgCreatePath(p, 1, SVG_TYPE_CIRCLE);
+		struct SVGPath *path = svgCreatePath(p, 1, SVG_TYPE_ARC);
 		if (path)
 		{
 			path->id = id;

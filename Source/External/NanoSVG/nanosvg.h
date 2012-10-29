@@ -44,6 +44,7 @@ extern "C" {
 #define SVG_TYPE_CIRCLE     4
 #define SVG_TYPE_LINE       5
 #define SVG_TYPE_POLY       6
+#define SVG_TYPE_ARC		7
 
 struct SVGPath
 {

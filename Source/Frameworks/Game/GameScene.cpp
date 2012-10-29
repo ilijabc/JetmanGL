@@ -51,6 +51,15 @@ void GameScene::draw(GLView *view)
 		glRotatef(rotation, 0, 0, 1);
 		obj->onDraw(view, mDrawFlags);
 		glPopMatrix();
+		//bounds
+		Rect bounds = obj->getBounds();
+		glBegin(GL_LINE_LOOP);
+		glColor3f(1, 1, 1);
+		glVertex2f(bounds.x1, bounds.y1);
+		glVertex2f(bounds.x2, bounds.y1);
+		glVertex2f(bounds.x2, bounds.y2);
+		glVertex2f(bounds.x1, bounds.y2);
+		glEnd();
 	}
 	// DEBUG DRAW FOR BOX2D
 	if ((mDrawFlags & e_drawBox2DFlag) == e_drawBox2DFlag)
@@ -105,8 +114,6 @@ void GameScene::loadSVG(const char *filename)
 			float x = path->pts[i*2] * gscale;
 			float y = -path->pts[i*2+1] * gscale;
 			vs[i].Set(x, y);
-			cx += x;
-			cy += y;
 			if (i == 0)
 			{
 				x1 = x2 = x;
@@ -120,8 +127,8 @@ void GameScene::loadSVG(const char *filename)
 				if (y > y2) y2 = y;
 			}
 		}
-		if (cx != 0) cx = cx / (float)vs_size;
-		if (cy != 0) cy = cy / (float)vs_size;
+		if (x2 - x1 != 0) cx = (x2 - x1) / 2;
+		if (y2 - y1 != 0) cy = (y2 - y1) / 2;
 		//reposition points
 		for (i = 0; i < vs_size; ++i)
 		{
@@ -152,7 +159,6 @@ void GameScene::loadSVG(const char *filename)
 				obj = new GameObject(this, 1);
 				obj->setTexture(tex);
 				obj->setTextureSize(x2 - x1, y2 - y1);
-				obj->setPosition(cx, cy);
 			}
 			else
 			{
@@ -170,12 +176,13 @@ void GameScene::loadSVG(const char *filename)
 			{
 				obj->addPolyFill(vs, path->closed ? vs_size - 1 : vs_size, path->fillColor);
 			}
-			obj->setPosition(cx, cy);
 		}
 
 		// create object
 		if (obj)
 		{
+			obj->setPosition(cx, cy);
+			obj->setBounds(x1, y1, x2, y2);
 			if (path->id)
 			{
 				obj->setName(path->id);
