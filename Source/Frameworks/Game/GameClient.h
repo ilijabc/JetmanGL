@@ -12,6 +12,7 @@
 
 struct GameClientSettings
 {
+	char *cmdline;
 	int width;
 	int height;
 	int audio;

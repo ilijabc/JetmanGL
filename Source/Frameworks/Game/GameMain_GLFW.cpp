@@ -108,6 +108,7 @@ int main(int argc, char *argv[])
     settings.width = width;
     settings.height = height;
     settings.audio = audio;
+    settings.cmdline = (argc > 1) ? argv[1] : NULL;
     g_client_game = GameClient::Initialize(settings);
     if (!g_client_game)
     {

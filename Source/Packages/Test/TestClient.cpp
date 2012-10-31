@@ -19,7 +19,10 @@ TestClient::TestClient(GameClientSettings settings)
 	mView->setup();
 	mView->setSize(settings.width, settings.height);
 	mScene = new GameScene(this);
-	mScene->loadSVG("Data/level01.svg");
+	if (settings.cmdline)
+		mScene->loadSVG(settings.cmdline);
+	else
+		printf("NO SVG LEVEL!\n");
 	mSceneSize.set(settings.width, settings.height);
 	for (int i = 0; i < 8; i++)
 		mButtonState[i] = GLFW_RELEASE;
