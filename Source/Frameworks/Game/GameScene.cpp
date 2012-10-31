@@ -133,8 +133,8 @@ void GameScene::loadSVG(const char *filename)
 				if (y > y2) y2 = y;
 			}
 		}
-		if (x2 - x1 != 0) cx = (x2 - x1) / 2;
-		if (y2 - y1 != 0) cy = (y2 - y1) / 2;
+		if (x1 + x2 != 0) cx = (x1 + x2) / 2;
+		if (y1 + y2 != 0) cy = (y1 + y2) / 2;
 		//reposition points
 		for (i = 0; i < vs_size; ++i)
 		{
@@ -193,7 +193,7 @@ void GameScene::loadSVG(const char *filename)
 			{
 				obj->setName(path->id);
 			}
-			printf("add object '%s' (%f, %f) %d %d %d\n", path->id, cx, cy, vs_size, path->closed, vs[0] == vs[vs_size-1]);
+			printf("add object '%s' (%f, %f) %f %f %f %f\n", path->id, cx, cy, x1, y1, x2, y2);
 			b2Body *body = NULL;
 			if (path->title)
 			{

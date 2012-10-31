@@ -66,10 +66,10 @@ void TestClient::onKeyEvent(int key, int action)
 		if (key == GLFW_KEY_SPACE)
 		{
 			//toggle drawing flags
-			if (mScene->getDrawFlags() == GameScene::e_drawBox2DFlag)
+			if ((mScene->getDrawFlags() & GameScene::e_drawBox2DFlag) == GameScene::e_drawBox2DFlag)
 				mScene->setDrawFlags(GameScene::e_drawShapeFlag | GameScene::e_drawImageFlag);
 			else
-				mScene->setDrawFlags(GameScene::e_drawBox2DFlag);
+				mScene->setDrawFlags(GameScene::e_drawBox2DFlag | GameScene::e_drawBoundsFlag);
 		}
 	}
 }
