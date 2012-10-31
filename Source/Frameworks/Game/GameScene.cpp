@@ -51,15 +51,21 @@ void GameScene::draw(GLView *view)
 		glRotatef(rotation, 0, 0, 1);
 		obj->onDraw(view, mDrawFlags);
 		glPopMatrix();
-		//bounds
-		Rect bounds = obj->getBounds();
-		glBegin(GL_LINE_LOOP);
-		glColor3f(1, 1, 1);
-		glVertex2f(bounds.x1, bounds.y1);
-		glVertex2f(bounds.x2, bounds.y1);
-		glVertex2f(bounds.x2, bounds.y2);
-		glVertex2f(bounds.x1, bounds.y2);
-		glEnd();
+	}
+	//bounds
+	if ((mDrawFlags & e_drawBoundsFlag) == e_drawBoundsFlag)
+	{
+		for (std::list<GameObject*>::iterator iobj = mGameObjectList.begin(); iobj != mGameObjectList.end(); iobj++)
+		{
+			Rect bounds = (*iobj)->getBounds();
+			glBegin(GL_LINE_LOOP);
+			glColor3f(1, 1, 1);
+			glVertex2f(bounds.x1, bounds.y1);
+			glVertex2f(bounds.x2, bounds.y1);
+			glVertex2f(bounds.x2, bounds.y2);
+			glVertex2f(bounds.x1, bounds.y2);
+			glEnd();
+		}
 	}
 	// DEBUG DRAW FOR BOX2D
 	if ((mDrawFlags & e_drawBox2DFlag) == e_drawBox2DFlag)

@@ -20,6 +20,7 @@ public:
 		e_drawShapeFlag = 0x1,
 		e_drawImageFlag = 0x2,
 		e_drawBox2DFlag = 0x4,
+		e_drawBoundsFlag = 0x8
 	};
 
 public:

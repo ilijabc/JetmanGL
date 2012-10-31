@@ -12,8 +12,9 @@
 #include "Box2D/Box2D.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <list>
+#include <string.h>
 #include <time.h>
+#include <list>
 
 class GameLevel;
 
@@ -23,8 +24,8 @@ struct Rect
     Rect() : x1(0), y1(0), x2(0), y2(0) { }
     Rect(float _x1, float _y1, float _x2, float _y2) : x1(_x1), y1(_y1), x2(_x2), y2(_y2) { }
 	inline void set(float _x1, float _y1, float _x2, float _y2) { x1=_x1; y1=_y1; x2=_x2; y2=_y2; }
-	inline float getCenterX() const { (x1+x2) ? (x1+x2)/2 : 0; }
-	inline float getCenterY() const { (y1+y2) ? (y1+y2)/2 : 0; }
+	inline float getCenterX() const { return (x1+x2) ? (x1+x2)/2 : 0; }
+	inline float getCenterY() const { return (y1+y2) ? (y1+y2)/2 : 0; }
 	inline float getWidth() const { return x2 - x1; }
 	inline float getHeight() const { return y2 - y1; }
     inline bool testPoint(float x, float y) { return (x >= x1 && x <= x2 && y >= y1 && y <= y2); }
