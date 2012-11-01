@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.32"
-     inkscape:cx="2152.603"
-     inkscape:cy="1404.6476"
+     inkscape:cx="2555.728"
+     inkscape:cy="1448.3976"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -85,10 +85,10 @@
        width="128"
        height="64"
        id="player"
-       x="2344.9875"
-       y="-627.29791">
+       x="2351.2375"
+       y="-858.54791">
       <title
-         id="title2997">igrac</title>
+         id="title2997">d</title>
     </image>
     <rect
        style="fill:#ff0000"
@@ -135,8 +135,11 @@
        width="128"
        height="128"
        id="alien"
-       x="2757.875"
-       y="-238.65552" />
+       x="2726.625"
+       y="-819.90552">
+      <title
+         id="title3002">d</title>
+    </image>
     <rect
        style="fill:#ff0000"
        id="box-red-8"
@@ -178,8 +181,8 @@
        id="box-red-4-4-4-1"
        width="87.820137"
        height="61.808708"
-       x="2134.2148"
-       y="-883.68488"
+       x="2077.9648"
+       y="-886.80988"
        inkscape:label="#rect2998">
       <title
          id="title2998-7">d</title>

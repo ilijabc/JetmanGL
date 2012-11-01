@@ -41,6 +41,7 @@ public:
 	//getters
 	inline b2Body *getBody() const { return mBody; }
 	inline GLTexture *getTexture() const { return mTexture; }
+	inline b2Vec2 getTextureSize() const { return mTextureSize; }
     inline int getType() const { return mType; }
     inline const b2Vec2 &getPosition() const { return mPosition; }
     inline float getRotation() const { return mRotation; }

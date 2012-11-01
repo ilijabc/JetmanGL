@@ -214,7 +214,6 @@ void GameScene::loadSVG(const char *filename)
 			}
 			if (body)
 			{
-				printf("  add shape\n");
 				//connect obj <=> body
 				body->SetUserData(obj);
 				obj->setBody(body);
@@ -223,6 +222,7 @@ void GameScene::loadSVG(const char *filename)
 				GameObject::PolyLine *line = obj->getPolyLine(0);
 				if (fill)
 				{
+					printf("  add fill shape\n");
 					for (int i = 0; i < fill->triangleCount; i++)
 					{
 						b2PolygonShape polyShape;
@@ -237,9 +237,21 @@ void GameScene::loadSVG(const char *filename)
 				}
 				else if (line)
 				{
+					printf("  add line shape\n");
 					b2ChainShape chainShape;
 					chainShape.CreateChain(line->pointList, line->pointCount);
 					body->CreateFixture(&chainShape, 0.0f);
+				}
+				else if (obj->getTexture())
+				{
+					b2PolygonShape polyShape;
+					polyShape.SetAsBox(obj->getTextureSize().x, obj->getTextureSize().y);
+					b2FixtureDef fixtureDef;
+					fixtureDef.shape = &polyShape;
+					fixtureDef.density = 1.0f;
+					fixtureDef.friction = 0.3f;
+					fixtureDef.restitution = 0.5f;
+					body->CreateFixture(&fixtureDef);
 				}
 			}
 			addObject(obj, false);
