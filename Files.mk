@@ -28,6 +28,8 @@ SRC_FRAMEWORK_GLPLUS := \
     Source/Frameworks/GLPlus/GLNode.cpp \
     Source/Frameworks/GLPlus/GLParticleSystem.cpp \
     Source/Frameworks/GLPlus/GLTexture.cpp \
+    Source/Frameworks/GLPlus/GLUIDesktop.cpp \
+    Source/Frameworks/GLPlus/GLUIWidget.cpp \
     Source/Frameworks/GLPlus/GLView.cpp \
     Source/Frameworks/GLPlus/stb_image.c
 

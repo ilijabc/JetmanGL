@@ -10,6 +10,7 @@
 
 #include "Game/GameClient.h"
 #include "Game/GameScene.h"
+#include "GLPlus/GLUIDesktop.h"
 
 class TestClient : public GameClient
 {
@@ -27,11 +28,13 @@ public:
 
 private:
 	GLView *mView;
+	GLFont *mFont;
 	GameScene *mScene;
 	GLFloat2 mSceneSize;
 	int mButtonState[8];
 	GLFloat3 mMousePos;
 	GLFloat3 mCameraPos;
+	GLUIDesktop *mDesktop;
 };
 
 #endif /* TESTCLIENT_H_ */
