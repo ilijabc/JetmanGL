@@ -10,7 +10,8 @@
 
 #include "Game/GameClient.h"
 #include "Game/GameScene.h"
-#include "GLPlus/GLUIDesktop.h"
+#include "GUI/GUIForm.h"
+#include "GUI/GUIButton.h"
 
 class TestClient : public GameClient
 {
@@ -34,7 +35,7 @@ private:
 	int mButtonState[8];
 	GLFloat3 mMousePos;
 	GLFloat3 mCameraPos;
-	GLUIDesktop *mDesktop;
+	GUIForm *mTestForm;
 };
 
 #endif /* TESTCLIENT_H_ */

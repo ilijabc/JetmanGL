@@ -28,13 +28,16 @@ SRC_FRAMEWORK_GLPLUS := \
     Source/Frameworks/GLPlus/GLNode.cpp \
     Source/Frameworks/GLPlus/GLParticleSystem.cpp \
     Source/Frameworks/GLPlus/GLTexture.cpp \
-    Source/Frameworks/GLPlus/GLUIDesktop.cpp \
-    Source/Frameworks/GLPlus/GLUIWidget.cpp \
     Source/Frameworks/GLPlus/GLView.cpp \
     Source/Frameworks/GLPlus/stb_image.c
 
 SRC_FRAMEWORK_ALPLUS := \
     Source/Frameworks/ALPlus/ALContext.cpp
+
+SRC_FRAMEWORK_GUI := \
+	Source/Frameworks/GUI/GUIButton.cpp \
+	Source/Frameworks/GUI/GUIControl.cpp \
+	Source/Frameworks/GUI/GUIForm.cpp
 
 #
 # Externals

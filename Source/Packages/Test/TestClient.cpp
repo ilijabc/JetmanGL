@@ -29,16 +29,16 @@ TestClient::TestClient(GameClientSettings settings)
 		mButtonState[i] = GLFW_RELEASE;
 	mCameraPos.set(0, 0, 100);
 	//gui
-	mDesktop = new GLUIDesktop(800, 600);
-	mDesktop->setFont(mFont);
-	GLUIWidget *button1 = mDesktop->createWidget(1, 50, 50, 100, 30, "Button 1");
-	GLUIWidget *button2 = mDesktop->createWidget(1, 50, 100, 100, 30, "Button 2");
-	GLUIWidget *button3 = mDesktop->createWidget(1, 50, 150, 100, 30, "Button 3");
+	mTestForm = new GUIForm(0, 0, 200, 300);
+	mTestForm->setFont(mFont);
+	GUIButton *button1 = mTestForm->addControl<GUIButton>(50, 50, 100, 30, "Button 1");
+	GUIButton *button2 = mTestForm->addControl<GUIButton>(50, 100, 100, 30, "Button 2");
+	GUIButton *button3 = mTestForm->addControl<GUIButton>(50, 150, 100, 30, "Button 3");
 }
 
 TestClient::~TestClient()
 {
-	delete mDesktop;
+	delete mTestForm;
 	delete mScene;
 	delete mView;
 }
@@ -67,7 +67,7 @@ void TestClient::onDraw()
 	mView->endScene2D();
 	//gui
 	mView->beginGui(800, 600);
-	mDesktop->draw(mView);
+	mTestForm->draw(mView);
 	mView->endGui();
 }
 
@@ -83,9 +83,9 @@ void TestClient::onKeyEvent(int key, int action)
 			else
 				mScene->setDrawFlags(GameScene::e_drawBox2DFlag | GameScene::e_drawBoundsFlag);
 		}
-		if (mDesktop)
+		if (mTestForm)
 		{
-			mDesktop->sendKeyPress(key);
+			mTestForm->sendKeyPress(key);
 		}
 	}
 }
@@ -103,21 +103,21 @@ void TestClient::onMouseMoveEvent(int x, int y)
 	}
 	mMousePos.x = x;
 	mMousePos.y = y;
-	if (mDesktop)
+	if (mTestForm)
 	{
-		mDesktop->sendMouseMove(x, y);
+		mTestForm->sendMouseMove(x, y);
 	}
 }
 
 void TestClient::onMouseButtonEvent(int button, int press)
 {
 	bool gui_event = false;
-	if (mDesktop)
+	if (mTestForm)
 	{
 		if (press == GLFW_PRESS)
-			gui_event = mDesktop->sendButtonDown();
+			gui_event = mTestForm->sendButtonDown();
 		else
-			mDesktop->sendButtonUp();
+			mTestForm->sendButtonUp();
 	}
 	if (!gui_event)
 		mButtonState[button] = press;
