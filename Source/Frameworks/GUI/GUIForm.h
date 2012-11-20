@@ -41,6 +41,8 @@ private:
 		int buttonDown;
 	} mMouseState;
 	GUIControl *mHoveredControl;
+	GUIControl *mClickedControl;
+	GUIControl *mFocusedControl;
 };
 
 #endif /* GUIFORM_H_ */

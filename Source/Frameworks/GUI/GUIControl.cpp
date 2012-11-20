@@ -7,6 +7,8 @@
 
 #include "GUIControl.h"
 
+#include <stdio.h>
+
 GUIControl::GUIControl(GUIControl *parent, int type)
 		: mParent(parent)
 		, mType(type)
@@ -18,7 +20,7 @@ GUIControl::GUIControl(GUIControl *parent, int type)
 		, mVisible(true)
 		, mEnabled(true)
 		, mText("")
-		, mStateFlags(0)
+		, mDrawFlags(0)
 		, mFont(NULL)
 {
 	if (parent)
@@ -31,6 +33,15 @@ GUIControl::GUIControl(GUIControl *parent, int type)
 
 GUIControl::~GUIControl()
 {
+}
+
+void GUIControl::onDraw(GLView *view)
+{
+}
+
+void GUIControl::onClick()
+{
+	printf("onClick not implemented!\n");
 }
 
 void GUIControl::setPosition(int left, int top, int width, int height)

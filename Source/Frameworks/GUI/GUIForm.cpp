@@ -15,6 +15,8 @@ GUIForm::GUIForm(int left, int top, int width, int height)
 	mMouseState.y = 0;
 	mMouseState.buttonDown = 0;
 	mHoveredControl = NULL;
+	mClickedControl = NULL;
+	mFocusedControl = NULL;
 }
 
 GUIForm::~GUIForm()
@@ -29,7 +31,7 @@ void GUIForm::onDraw(GLView *view)
 	float y2 = mTop + mHeight;
 	//fill
 	glBegin(GL_QUADS);
-	glColor4f(1, 1, 1, 0.6);
+	glColor4f(0, 0, 0, 0.6);
 	glVertex2f(x1, y1);
 	glVertex2f(x2, y1);
 	glVertex2f(x2, y2);
@@ -37,7 +39,7 @@ void GUIForm::onDraw(GLView *view)
 	glEnd();
 	//border
 	glBegin(GL_LINE_LOOP);
-	glColor3f(1, 1, 1);
+	glColor3f(0.6, 0.6, 0.6);
 	glVertex2f(x1, y1);
 	glVertex2f(x2, y1);
 	glVertex2f(x2, y2);
@@ -48,12 +50,27 @@ void GUIForm::onDraw(GLView *view)
 bool GUIForm::sendButtonDown()
 {
 	mMouseState.buttonDown = 1;
+	mClickedControl = mHoveredControl;
+	if (mClickedControl)
+	{
+		mClickedControl->setDrawFlag(GUIControl::e_drawClickedFlag, true);
+	}
 	return mHoveredControl && mHoveredControl != this;
 }
 
 bool GUIForm::sendButtonUp()
 {
 	mMouseState.buttonDown = 0;
+	if (mClickedControl)
+	{
+		mClickedControl->setDrawFlag(GUIControl::e_drawClickedFlag, false);
+		if (mClickedControl == mHoveredControl)
+		{
+			//click event !
+			mClickedControl->onClick();
+		}
+	}
+	mClickedControl = NULL;
 	return mHoveredControl && mHoveredControl != this;
 }
 
@@ -65,9 +82,9 @@ void GUIForm::sendMouseMove(int x, int y)
 	if (hover != mHoveredControl)
 	{
 		if (mHoveredControl)
-			mHoveredControl->setStateFlags(0);
+			mHoveredControl->setDrawFlag(GUIControl::e_drawHoveredFlag, false);
 		if (hover)
-			hover->setStateFlags(1);
+			hover->setDrawFlag(GUIControl::e_drawHoveredFlag, true);
 		mHoveredControl = hover;
 	}
 }

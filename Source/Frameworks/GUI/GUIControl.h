@@ -18,17 +18,24 @@ class GUIForm;
 class GUIControl
 {
 public:
+	enum {
+		e_drawHoveredFlag = 0x1,
+		e_drawClickedFlag = 0x2,
+		e_drawFocusedFlag = 0x4
+	};
+public:
 	GUIControl(GUIControl *parent, int type);
 	virtual ~GUIControl();
 	//callbacks
-	virtual void onDraw(GLView *view) { }
-	virtual void onClick() { }
+	virtual void onDraw(GLView *view);
+	virtual void onClick();
 	//setters
 	void setPosition(int left, int top, int width = -1, int height = -1);
 	inline void setVisible(bool visible) { mVisible = visible; }
 	inline void setEnabled(bool enabled) { mEnabled = enabled; }
 	void setText(const char *text);
-	inline void setStateFlags(int flags) { mStateFlags = flags; }
+	inline void setDrawFlags(int flags) { mDrawFlags = flags; }
+	inline void setDrawFlag(int flag, bool set) { mDrawFlags = set ? (mDrawFlags | flag) : (mDrawFlags & (~flag)); }
 	inline void setFont(GLFont *font) { mFont = font; }
 	//getters
 	inline GUIControl *getParent() const { return mParent; }
@@ -39,7 +46,8 @@ public:
 	inline int getWidth() const { return mWidth; }
 	inline int getHeight() const { return mHeight; }
 	inline const char *getText() const { return mText.c_str(); }
-	inline int getStateFlags() const { return mStateFlags; }
+	inline int getDrawFlags() const { return mDrawFlags; }
+	inline bool getDrawFlag(int flag) const { return (mDrawFlags & flag) == flag; }
 	inline GLFont *getFont() const { return mFont; }
 	//control
 	GUIControl *pickControl(int x, int y);
@@ -59,7 +67,7 @@ protected:
 	bool mVisible;
 	bool mEnabled;
 	std::string mText;
-	int mStateFlags;
+	int mDrawFlags;
 	GLFont *mFont;
 };
 

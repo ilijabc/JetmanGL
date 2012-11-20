@@ -15,10 +15,10 @@ void GUIButton::onDraw(GLView *view)
 	float y2 = mTop + mHeight;
 	//fill
 	glBegin(GL_QUADS);
-	if (mStateFlags)
+	if (getDrawFlag(GUIControl::e_drawHoveredFlag))
 		glColor4f(1, 1, 1, 0.2);
 	else
-		glColor4f(0, 0, 0, 0.5);
+		glColor4f(1, 1, 1, 0.4);
 	glVertex2f(x1, y1);
 	glVertex2f(x2, y1);
 	glVertex2f(x2, y2);
@@ -26,7 +26,10 @@ void GUIButton::onDraw(GLView *view)
 	glEnd();
 	//border
 	glBegin(GL_LINE_LOOP);
-	glColor3f(1, 1, 1);
+	if (getDrawFlag(GUIControl::e_drawClickedFlag))
+		glColor3f(1, 1, 0);
+	else
+		glColor3f(1, 1, 1);
 	glVertex2f(x1, y1);
 	glVertex2f(x2, y1);
 	glVertex2f(x2, y2);
@@ -35,7 +38,7 @@ void GUIButton::onDraw(GLView *view)
 	//text
 	if (mFont)
 	{
-		glColor3f(1, 1, 1);
+		//glColor3f(1, 1, 1);
 		mFont->drawString(x1, y1, mText.c_str());
 	}
 	glDisable(GL_TEXTURE_2D); // TODO: this is bypass for problem in GLFont (texture not turned off after print)
