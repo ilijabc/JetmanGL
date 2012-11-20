@@ -37,6 +37,7 @@ SRC_FRAMEWORK_ALPLUS := \
 SRC_FRAMEWORK_GUI := \
 	Source/Frameworks/GUI/GUIButton.cpp \
 	Source/Frameworks/GUI/GUIControl.cpp \
+	Source/Frameworks/GUI/GUIEventListener.cpp \
 	Source/Frameworks/GUI/GUIForm.cpp
 
 #

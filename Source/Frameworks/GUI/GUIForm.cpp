@@ -17,6 +17,7 @@ GUIForm::GUIForm(int left, int top, int width, int height)
 	mHoveredControl = NULL;
 	mClickedControl = NULL;
 	mFocusedControl = NULL;
+	mEventListener = NULL;
 }
 
 GUIForm::~GUIForm()
@@ -68,6 +69,8 @@ bool GUIForm::sendButtonUp()
 		{
 			//click event !
 			mClickedControl->onClick();
+			if (mEventListener)
+				mEventListener->sendEvent(GUIEvent::e_clickEvent, mClickedControl);
 		}
 	}
 	mClickedControl = NULL;
@@ -91,6 +94,14 @@ void GUIForm::sendMouseMove(int x, int y)
 
 void GUIForm::sendKeyPress(char key)
 {
+}
+
+void GUIForm::doEvents()
+{
+	if (mEventListener)
+	{
+		mEventListener->processEvents();
+	}
 }
 
 void GUIForm::draw(GLView *view)

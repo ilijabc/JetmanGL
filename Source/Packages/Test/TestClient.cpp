@@ -31,6 +31,7 @@ TestClient::TestClient(GameClientSettings settings)
 	//gui
 	mTestForm = new GUIForm(0, 0, 200, 300);
 	mTestForm->setFont(mFont);
+	mTestForm->setEventListener(this);
 	GUIButton *button1 = mTestForm->addControl<GUIButton>(50, 50, 100, 30, "Button 1");
 	GUIButton *button2 = mTestForm->addControl<GUIButton>(50, 100, 100, 30, "Button 2");
 	GUIButton *button3 = mTestForm->addControl<GUIButton>(50, 150, 100, 30, "Button 3");
@@ -46,6 +47,7 @@ TestClient::~TestClient()
 void TestClient::onUpdate(float dt)
 {
 	mScene->update(dt);
+	mTestForm->doEvents();
 }
 
 void TestClient::onDraw()
@@ -135,4 +137,12 @@ void TestClient::onMouseWheelEvent(int wheel)
 void TestClient::onSize(int width, int height)
 {
 	mView->setSize(width, height);
+}
+
+void TestClient::onEvent(GUIEvent *e)
+{
+	if (e->type == GUIEvent::e_clickEvent)
+	{
+		e->control->setText("clicked!");
+	}
 }

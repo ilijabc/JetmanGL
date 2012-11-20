@@ -9,6 +9,7 @@
 #define GUIFORM_H_
 
 #include "GUIControl.h"
+#include "GUIEventListener.h"
 
 class GUIForm: public GUIControl
 {
@@ -22,6 +23,7 @@ public:
 	bool sendButtonUp();
 	void sendMouseMove(int x, int y);
 	void sendKeyPress(char key);
+	void doEvents();
 	//draw
 	void draw(GLView *view);
 	//control
@@ -32,6 +34,8 @@ public:
 		ctl->setText(text);
 		return ctl;
 	}
+	//setters
+	inline void setEventListener(GUIEventListener *listener) { mEventListener = listener; }
 
 private:
 	struct
@@ -43,6 +47,7 @@ private:
 	GUIControl *mHoveredControl;
 	GUIControl *mClickedControl;
 	GUIControl *mFocusedControl;
+	GUIEventListener *mEventListener;
 };
 
 #endif /* GUIFORM_H_ */

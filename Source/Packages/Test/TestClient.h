@@ -13,7 +13,7 @@
 #include "GUI/GUIForm.h"
 #include "GUI/GUIButton.h"
 
-class TestClient : public GameClient
+class TestClient : public GameClient, public GUIEventListener
 {
 public:
 	TestClient(GameClientSettings settings);
@@ -26,6 +26,7 @@ public:
 	virtual void onMouseButtonEvent(int button, int press);
 	virtual void onMouseWheelEvent(int wheel);
     virtual void onSize(int width, int height);
+    virtual void onEvent(GUIEvent *e);
 
 private:
 	GLView *mView;
