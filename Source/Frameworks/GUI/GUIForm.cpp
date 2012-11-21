@@ -26,10 +26,10 @@ GUIForm::~GUIForm()
 
 void GUIForm::onDraw(GLView *view)
 {
-	float x1 = mLeft;
-	float y1 = mTop;
-	float x2 = mLeft + mWidth;
-	float y2 = mTop + mHeight;
+	float x1 = 0;
+	float y1 = 0;
+	float x2 = mWidth;
+	float y2 = mHeight;
 	//fill
 	glBegin(GL_QUADS);
 	glColor4f(0, 0, 0, 0.6);
@@ -106,5 +106,9 @@ void GUIForm::doEvents()
 
 void GUIForm::draw(GLView *view)
 {
-	drawControl(view);
+	glPushMatrix();
+	glEnable(GL_SCISSOR_TEST);
+	drawControl(view, mLeft, mTop);
+	glDisable(GL_SCISSOR_TEST);
+	glPopMatrix();
 }

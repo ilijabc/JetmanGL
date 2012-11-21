@@ -63,7 +63,7 @@ public:
 	GUIControl *pickControl(int x, int y);
 
 protected:
-	void drawControl(GLView *view);
+	void drawControl(GLView *view, int x, int y);
 	void updateTextPosition();
 
 protected:

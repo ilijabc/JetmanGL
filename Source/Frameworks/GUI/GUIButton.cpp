@@ -15,10 +15,10 @@ GUIButton::GUIButton(GUIControl *parent)
 
 void GUIButton::onDraw(GLView *view)
 {
-	float x1 = mLeft;
-	float y1 = mTop;
-	float x2 = mLeft + mWidth;
-	float y2 = mTop + mHeight;
+	float x1 = 0;
+	float y1 = 0;
+	float x2 = mWidth;
+	float y2 = mHeight;
 	//fill
 	glBegin(GL_QUADS);
 	if (getDrawFlag(GUIControl::e_drawHoveredFlag))

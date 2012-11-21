@@ -32,9 +32,9 @@ TestClient::TestClient(GameClientSettings settings)
 	mTestForm = new GUIForm(50, 50, 250, 300);
 	mTestForm->setFont(mFont);
 	mTestForm->setEventListener(this);
-	GUIButton *button1 = mTestForm->addControl<GUIButton>(20, 20, 200, 60, "Button 1");
-	GUIButton *button2 = mTestForm->addControl<GUIButton>(20, 100, 200, 60, "Button 2");
-	GUIButton *button3 = mTestForm->addControl<GUIButton>(20, 180, 200, 60, "Button 3");
+	GUIButton *button1 = mTestForm->addControl<GUIButton>(-20, -20, 200, 50, "Button 1");
+	GUIButton *button2 = mTestForm->addControl<GUIButton>(200, 120, 200, 50, "very, very long button text...");
+	GUIButton *button3 = mTestForm->addControl<GUIButton>(20, 260, 200, 50, "Button 3");
 }
 
 TestClient::~TestClient()
@@ -68,7 +68,7 @@ void TestClient::onDraw()
 	glPopMatrix();
 	mView->endScene2D();
 	//gui
-	mView->beginGui(800, 600);
+	mView->beginGui();
 	mTestForm->draw(mView);
 	mView->endGui();
 }
@@ -143,6 +143,7 @@ void TestClient::onEvent(GUIEvent *e)
 {
 	if (e->type == GUIEvent::e_clickEvent)
 	{
-		e->control->setText("clicked!");
+		//e->control->setText("clicked!");
+		e->control->setPosition(e->control->getLeft() + 10, e->control->getTop());
 	}
 }

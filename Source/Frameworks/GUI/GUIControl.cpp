@@ -61,34 +61,48 @@ GUIControl *GUIControl::pickControl(int x, int y)
 	if (x >= mLeft && x < mLeft + mWidth &&
 		y >= mTop && y < mTop + mHeight)
 	{
-		GUIControl *top_child = NULL;
-		std::list<GUIControl*>::iterator ictl;
-		for (ictl = mControlList.begin(); ictl != mControlList.end(); ictl++)
+		GUIControl *child = NULL;
+		std::list<GUIControl*>::reverse_iterator ictl;
+		for (ictl = mControlList.rbegin(); ictl != mControlList.rend(); ictl++)
 		{
-			GUIControl *child = (*ictl)->pickControl(x - mLeft, y - mTop);
+			child = (*ictl)->pickControl(x - mLeft, y - mTop);
 			if (child)
-				top_child = child;
+				break;
 		}
-		if (top_child)
-			return top_child;
+		if (child)
+			return child;
 		else
 			return this;
 	}
 	return NULL;
 }
 
-void GUIControl::drawControl(GLView *view)
+void GUIControl::drawControl(GLView *view, int x, int y)
 {
+	glLoadIdentity();
+	glTranslatef(x, y, 0);
+	//clipping
+	int sx = x;
+	int sy = y;
+	int sw = mWidth;
+	int sh = mHeight;
+	if (mParent)
+	{
+		if (mLeft < 0) sx = x - mLeft;
+		if (mTop < 0) sy = y - mTop;
+		if (mLeft + mWidth > mParent->mWidth) sw = mParent->mWidth - mLeft;
+		if (mTop + mHeight > mParent->mHeight) sh = mParent->mHeight - mTop;
+	}
+	glScissor(sx - 1, view->getHeight() - sy - sh - 1, sw + 1, sh + 1);
+	//draw event!
 	onDraw(view);
 	//children
-	glPushMatrix();
-	glTranslatef(mLeft, mTop, 0);
 	std::list<GUIControl*>::iterator ictl;
 	for (ictl = mControlList.begin(); ictl != mControlList.end(); ictl++)
 	{
-		(*ictl)->drawControl(view);
+		GUIControl *ctl = *ictl;
+		ctl->drawControl(view, x + ctl->getLeft(), y + ctl->getTop());
 	}
-	glPopMatrix();
 }
 
 void GUIControl::updateTextPosition()
