@@ -65,7 +65,8 @@ int BMFont::getStringWidth(const char *text) const
 	}
 	if (advx > advx_sum)
 		advx_sum = advx;
-	advx_sum += chars[c].width;
+	//TODO: this is not good for single line string. Should be checked on multi line
+	//advx_sum += chars[c].width;
 	return advx_sum;
 }
 

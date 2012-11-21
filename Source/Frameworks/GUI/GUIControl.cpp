@@ -20,6 +20,9 @@ GUIControl::GUIControl(GUIControl *parent, int type)
 		, mVisible(true)
 		, mEnabled(true)
 		, mText("")
+		, mTextAlign(0)
+		, mTextPositionX(0)
+		, mTextPositionY(0)
 		, mDrawFlags(0)
 		, mFont(NULL)
 {
@@ -50,11 +53,7 @@ void GUIControl::setPosition(int left, int top, int width, int height)
 	mTop = top;
 	if (width > -1) mWidth = width;
 	if (height > -1) mHeight = height;
-}
-
-void GUIControl::setText(const char *text)
-{
-	mText = text;
+	updateTextPosition();
 }
 
 GUIControl *GUIControl::pickControl(int x, int y)
@@ -66,7 +65,7 @@ GUIControl *GUIControl::pickControl(int x, int y)
 		std::list<GUIControl*>::iterator ictl;
 		for (ictl = mControlList.begin(); ictl != mControlList.end(); ictl++)
 		{
-			GUIControl *child = (*ictl)->pickControl(mLeft + x, mTop + y);
+			GUIControl *child = (*ictl)->pickControl(x - mLeft, y - mTop);
 			if (child)
 				top_child = child;
 		}
@@ -90,4 +89,23 @@ void GUIControl::drawControl(GLView *view)
 		(*ictl)->drawControl(view);
 	}
 	glPopMatrix();
+}
+
+void GUIControl::updateTextPosition()
+{
+	if (mFont)
+	{
+		int text_w = mFont->getStringWidth(mText.c_str());
+		int text_h = mFont->getStringHeight(mText.c_str());
+		mTextPositionX = 0;
+		mTextPositionY = 0;
+		if ((mTextAlign & e_alignCenter) == e_alignCenter)
+			mTextPositionX = mWidth / 2 - text_w / 2;
+		if ((mTextAlign & e_alignRight) == e_alignRight)
+			mTextPositionX = mWidth - text_w;
+		if ((mTextAlign & e_alignMiddle) == e_alignMiddle)
+			mTextPositionY = mHeight / 2 - text_h / 2;
+		if ((mTextAlign & e_alignBottom) == e_alignBottom)
+			mTextPositionY = mHeight - text_h;
+	}
 }

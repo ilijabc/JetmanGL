@@ -7,6 +7,12 @@
 
 #include "GUIButton.h"
 
+GUIButton::GUIButton(GUIControl *parent)
+		: GUIControl(parent, 0)
+{
+	setTextAlign(GUIControl::e_alignCenter | GUIControl::e_alignMiddle);
+}
+
 void GUIButton::onDraw(GLView *view)
 {
 	float x1 = mLeft;
@@ -39,7 +45,7 @@ void GUIButton::onDraw(GLView *view)
 	if (mFont)
 	{
 		//glColor3f(1, 1, 1);
-		mFont->drawString(x1, y1, mText.c_str());
+		mFont->drawString(x1 + mTextPositionX, y1 + mTextPositionY, mText.c_str());
 	}
 	glDisable(GL_TEXTURE_2D); // TODO: this is bypass for problem in GLFont (texture not turned off after print)
 }

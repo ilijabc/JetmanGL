@@ -13,7 +13,7 @@
 class GUIButton: public GUIControl
 {
 public:
-	GUIButton(GUIControl *parent) : GUIControl(parent, 0) { }
+	GUIButton(GUIControl *parent);
 	//callbacks
 	virtual void onDraw(GLView *view);
 

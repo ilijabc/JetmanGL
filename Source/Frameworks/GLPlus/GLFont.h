@@ -18,8 +18,9 @@ public:
 	void drawText(const char *text, int halign = 0);
 	void endText();
 
-	inline int getStringWidth(const char *text) const { return bmfont.getStringWidth(text); };
-	inline const GLTexture *getTexture(int page) const { return pages[page].texture; };
+	inline int getStringWidth(const char *text) const { return bmfont.getStringWidth(text); }
+	inline int getStringHeight(const char *text) const { return bmfont.common.lineHeight; }
+	inline const GLTexture *getTexture(int page) const { return pages[page].texture; }
 
 private:
 	void parseAngelCodeFont(const char *file_name);

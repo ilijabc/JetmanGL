@@ -29,12 +29,12 @@ TestClient::TestClient(GameClientSettings settings)
 		mButtonState[i] = GLFW_RELEASE;
 	mCameraPos.set(0, 0, 100);
 	//gui
-	mTestForm = new GUIForm(0, 0, 200, 300);
+	mTestForm = new GUIForm(50, 50, 250, 300);
 	mTestForm->setFont(mFont);
 	mTestForm->setEventListener(this);
-	GUIButton *button1 = mTestForm->addControl<GUIButton>(50, 50, 100, 30, "Button 1");
-	GUIButton *button2 = mTestForm->addControl<GUIButton>(50, 100, 100, 30, "Button 2");
-	GUIButton *button3 = mTestForm->addControl<GUIButton>(50, 150, 100, 30, "Button 3");
+	GUIButton *button1 = mTestForm->addControl<GUIButton>(20, 20, 200, 60, "Button 1");
+	GUIButton *button2 = mTestForm->addControl<GUIButton>(20, 100, 200, 60, "Button 2");
+	GUIButton *button3 = mTestForm->addControl<GUIButton>(20, 180, 200, 60, "Button 3");
 }
 
 TestClient::~TestClient()
@@ -64,7 +64,7 @@ void TestClient::onDraw()
 	glEnd();
 	//scene
 	glTranslatef(mCameraPos.x, mCameraPos.y, 0);
-	mScene->draw(mView);
+	//mScene->draw(mView);
 	glPopMatrix();
 	mView->endScene2D();
 	//gui
