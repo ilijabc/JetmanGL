@@ -37,8 +37,8 @@ public:
 	//callbacks
 	virtual void onDraw(GLView *view) = 0;
 	virtual void onClick() { }
-	virtual void onMouseDown() { }
-	virtual void onMouseUp() { }
+	virtual void onMouseDown(int x, int y) { }
+	virtual void onMouseUp(int x, int y) { }
 	virtual void onMouseMove(int x, int y) { }
 	//setters
 	void setPosition(int left, int top, int width = -1, int height = -1);

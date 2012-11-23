@@ -54,7 +54,7 @@ bool GUIForm::sendMouseDown()
 	mClickedControl = mHoveredControl;
 	if (mClickedControl)
 	{
-		mClickedControl->onMouseDown();
+		mClickedControl->onMouseDown(mMouseState.x, mMouseState.y);
 		mClickedControl->setDrawFlag(GUIControl::e_drawClickedFlag, true);
 	}
 	return mHoveredControl && mHoveredControl != this;
@@ -65,7 +65,7 @@ bool GUIForm::sendMouseUp()
 	mMouseState.buttonDown = 0;
 	if (mClickedControl)
 	{
-		mClickedControl->onMouseUp();
+		mClickedControl->onMouseUp(mMouseState.x, mMouseState.y);
 		mClickedControl->setDrawFlag(GUIControl::e_drawClickedFlag, false);
 		if (mClickedControl == mHoveredControl)
 		{

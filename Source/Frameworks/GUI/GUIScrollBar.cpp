@@ -6,11 +6,11 @@
  */
 
 #include "GUIScrollBar.h"
-#include "GUIForm.h"
 
 GUIScrollBar::GUIScrollBar(GUIControl *parent)
 		: GUIControl(parent, 0)
 		, mScrollPos(0)
+		, mIsClicked(false)
 		, mOrientation(e_verticalOrientation)
 {
 }
@@ -53,16 +53,20 @@ void GUIScrollBar::onDraw(GLView *view)
 	}
 }
 
-void GUIScrollBar::onMouseDown()
+void GUIScrollBar::onMouseDown(int x, int y)
 {
-	int x = getForm()->getMouseState().x;
-	int y = getForm()->getMouseState().y;
+	mIsClicked = true;
 	onMouseMove(x, y);
+}
+
+void GUIScrollBar::onMouseUp(int x, int y)
+{
+	mIsClicked = false;
 }
 
 void GUIScrollBar::onMouseMove(int x, int y)
 {
-	if (getForm()->getMouseState().buttonDown && getForm()->getClickedControl() == this)
+	if (mIsClicked)
 	{
 		if (mOrientation == e_verticalOrientation)
 		{

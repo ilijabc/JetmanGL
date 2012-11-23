@@ -23,7 +23,8 @@ public:
 	virtual ~GUIScrollBar();
 	//callbacks
 	virtual void onDraw(GLView *view);
-	virtual void onMouseDown();
+	virtual void onMouseDown(int x, int y);
+	virtual void onMouseUp(int x, int y);
 	virtual void onMouseMove(int x, int y);
 	//setters
 	inline void setOrientation(Orientation o) { mOrientation = o; }
@@ -32,6 +33,7 @@ public:
 
 private:
 	int mScrollPos;
+	bool mIsClicked;
 	Orientation mOrientation;
 };
 

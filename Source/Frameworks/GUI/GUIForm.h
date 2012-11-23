@@ -45,10 +45,10 @@ public:
 	//setters
 	inline void setEventListener(GUIEventListener *listener) { mEventListener = listener; }
 	//getters
-	inline const MouseState &getMouseState() const { return mMouseState; }
-	GUIControl *getHoveredControl() const { return mHoveredControl; }
-	GUIControl *getClickedControl() const { return mClickedControl; }
-	GUIControl *getFocusedControl() const { return mFocusedControl; }
+	//inline const MouseState &getMouseState() const { return mMouseState; }
+	//GUIControl *getHoveredControl() const { return mHoveredControl; }
+	//GUIControl *getClickedControl() const { return mClickedControl; }
+	//GUIControl *getFocusedControl() const { return mFocusedControl; }
 
 private:
 	MouseState mMouseState;
