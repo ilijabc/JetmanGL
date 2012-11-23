@@ -32,9 +32,12 @@ TestClient::TestClient(GameClientSettings settings)
 	mTestForm = new GUIForm(50, 50, 250, 300);
 	mTestForm->setFont(mFont);
 	mTestForm->setEventListener(this);
-	GUIButton *button1 = mTestForm->addControl<GUIButton>(-20, -20, 200, 50, "Button 1");
-	GUIButton *button2 = mTestForm->addControl<GUIButton>(200, 120, 200, 50, "very, very long button text...");
-	GUIButton *button3 = mTestForm->addControl<GUIButton>(20, 260, 200, 50, "Button 3");
+	GUIButton *button1 = mTestForm->addControl<GUIButton>(20, 20, 150, 50, "Button 1");
+	GUIButton *button2 = mTestForm->addControl<GUIButton>(20, 80, 150, 50, "very, very long button text...");
+	GUIButton *button3 = mTestForm->addControl<GUIButton>(20, 220, 150, 50, "Button 3");
+	GUIScrollBar *scroll1 = mTestForm->addControl<GUIScrollBar>(200, 0, 50, 300);
+	GUIScrollBar *scroll2 = mTestForm->addControl<GUIScrollBar>(0, 130, 100, 20);
+	scroll2->setOrientation(GUIScrollBar::e_horizontalOrientation);
 }
 
 TestClient::~TestClient()
@@ -117,9 +120,9 @@ void TestClient::onMouseButtonEvent(int button, int press)
 	if (mTestForm)
 	{
 		if (press == GLFW_PRESS)
-			gui_event = mTestForm->sendButtonDown();
+			gui_event = mTestForm->sendMouseDown();
 		else
-			mTestForm->sendButtonUp();
+			mTestForm->sendMouseUp();
 	}
 	if (!gui_event)
 		mButtonState[button] = press;
@@ -139,11 +142,7 @@ void TestClient::onSize(int width, int height)
 	mView->setSize(width, height);
 }
 
-void TestClient::onEvent(GUIEvent *e)
+void TestClient::onClickEvent(GUIControl *ctl)
 {
-	if (e->type == GUIEvent::e_clickEvent)
-	{
-		//e->control->setText("clicked!");
-		e->control->setPosition(e->control->getLeft() + 10, e->control->getTop());
-	}
+	//ctl->setPosition(ctl->getLeft() + 10, ctl->getTop());
 }

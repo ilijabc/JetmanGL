@@ -31,7 +31,16 @@ void GUIEventListener::processEvents()
 {
 	for (int i = mEventCount - 1; i >= 0; i--)
 	{
-		onEvent(&mEventList[i]);
+		GUIEvent *e = &(mEventList[i]);
+		switch (e->type)
+		{
+		case GUIEvent::e_clickEvent:
+			onClickEvent(e->control);
+			break;
+		case GUIEvent::e_keyPressEvent:
+			//TODO: handle key event
+			break;
+		}
 	}
 	clearEvents();
 }

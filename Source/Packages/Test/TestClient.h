@@ -12,6 +12,7 @@
 #include "Game/GameScene.h"
 #include "GUI/GUIForm.h"
 #include "GUI/GUIButton.h"
+#include "GUI/GUIScrollBar.h"
 
 class TestClient : public GameClient, public GUIEventListener
 {
@@ -26,7 +27,7 @@ public:
 	virtual void onMouseButtonEvent(int button, int press);
 	virtual void onMouseWheelEvent(int wheel);
     virtual void onSize(int width, int height);
-    virtual void onEvent(GUIEvent *e);
+    virtual void onClickEvent(GUIControl *ctl);
 
 private:
 	GLView *mView;

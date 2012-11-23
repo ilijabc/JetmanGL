@@ -30,7 +30,7 @@ class GUIEventListener
 public:
 	GUIEventListener();
 	virtual ~GUIEventListener();
-	virtual void onEvent(GUIEvent *e) = 0;
+	virtual void onClickEvent(GUIControl *ctl) = 0;
 	bool sendEvent(GUIEvent::Type t, GUIControl *c);
 private:
 	friend class GUIForm;

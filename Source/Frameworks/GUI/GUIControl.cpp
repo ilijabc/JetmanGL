@@ -25,11 +25,13 @@ GUIControl::GUIControl(GUIControl *parent, int type)
 		, mTextPositionY(0)
 		, mDrawFlags(0)
 		, mFont(NULL)
+		, mScreenX(0)
+		, mScreenY(0)
 {
 	if (parent)
 	{
 		parent->mControlList.push_back(this);
-		mForm = parent->mForm;
+		mForm = parent->mForm ? parent->mForm : (GUIForm*)parent;
 		mFont = parent->mFont;
 	}
 }
@@ -38,21 +40,21 @@ GUIControl::~GUIControl()
 {
 }
 
-void GUIControl::onDraw(GLView *view)
-{
-}
-
-void GUIControl::onClick()
-{
-	printf("onClick not implemented!\n");
-}
-
 void GUIControl::setPosition(int left, int top, int width, int height)
 {
 	mLeft = left;
 	mTop = top;
 	if (width > -1) mWidth = width;
 	if (height > -1) mHeight = height;
+	//calculate screen (absolute) position
+	mScreenX = mLeft;
+	mScreenY = mTop;
+	for (GUIControl *ctl = mParent; ctl; ctl = ctl->mParent)
+	{
+		mScreenX += ctl->mLeft;
+		mScreenY += ctl->mTop;
+	}
+	//calculate text position
 	updateTextPosition();
 }
 

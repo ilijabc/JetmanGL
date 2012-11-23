@@ -48,22 +48,24 @@ void GUIForm::onDraw(GLView *view)
 	glEnd();
 }
 
-bool GUIForm::sendButtonDown()
+bool GUIForm::sendMouseDown()
 {
 	mMouseState.buttonDown = 1;
 	mClickedControl = mHoveredControl;
 	if (mClickedControl)
 	{
+		mClickedControl->onMouseDown();
 		mClickedControl->setDrawFlag(GUIControl::e_drawClickedFlag, true);
 	}
 	return mHoveredControl && mHoveredControl != this;
 }
 
-bool GUIForm::sendButtonUp()
+bool GUIForm::sendMouseUp()
 {
 	mMouseState.buttonDown = 0;
 	if (mClickedControl)
 	{
+		mClickedControl->onMouseUp();
 		mClickedControl->setDrawFlag(GUIControl::e_drawClickedFlag, false);
 		if (mClickedControl == mHoveredControl)
 		{
@@ -82,6 +84,8 @@ void GUIForm::sendMouseMove(int x, int y)
 	mMouseState.x = x;
 	mMouseState.y = y;
 	GUIControl *hover = pickControl(x, y);
+	if (hover)
+		hover->onMouseMove(x, y);
 	if (hover != mHoveredControl)
 	{
 		if (mHoveredControl)

@@ -14,36 +14,44 @@
 class GUIForm: public GUIControl
 {
 public:
+	struct MouseState
+	{
+		int x;
+		int y;
+		int buttonDown;
+	};
+public:
 	GUIForm(int left, int top, int width, int height);
 	virtual ~GUIForm();
 	//callbacks
 	virtual void onDraw(GLView *view);
 	//control
-	bool sendButtonDown();
-	bool sendButtonUp();
+	bool sendMouseDown();
+	bool sendMouseUp();
 	void sendMouseMove(int x, int y);
 	void sendKeyPress(char key);
 	void doEvents();
 	//draw
 	void draw(GLView *view);
 	//control
-	template <class T> T* addControl(int x, int y, int w, int h, const char *text)
+	template <class T> T* addControl(int x, int y, int w, int h, const char *text = NULL)
 	{
 		T* ctl = new T(this);
 		ctl->setPosition(x, y, w, h);
-		ctl->setText(text);
+		if (text)
+			ctl->setText(text);
 		return ctl;
 	}
 	//setters
 	inline void setEventListener(GUIEventListener *listener) { mEventListener = listener; }
+	//getters
+	inline const MouseState &getMouseState() const { return mMouseState; }
+	GUIControl *getHoveredControl() const { return mHoveredControl; }
+	GUIControl *getClickedControl() const { return mClickedControl; }
+	GUIControl *getFocusedControl() const { return mFocusedControl; }
 
 private:
-	struct
-	{
-		int x;
-		int y;
-		int buttonDown;
-	} mMouseState;
+	MouseState mMouseState;
 	GUIControl *mHoveredControl;
 	GUIControl *mClickedControl;
 	GUIControl *mFocusedControl;

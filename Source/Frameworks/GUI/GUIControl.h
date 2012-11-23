@@ -35,8 +35,11 @@ public:
 	GUIControl(GUIControl *parent, int type);
 	virtual ~GUIControl();
 	//callbacks
-	virtual void onDraw(GLView *view);
-	virtual void onClick();
+	virtual void onDraw(GLView *view) = 0;
+	virtual void onClick() { }
+	virtual void onMouseDown() { }
+	virtual void onMouseUp() { }
+	virtual void onMouseMove(int x, int y) { }
 	//setters
 	void setPosition(int left, int top, int width = -1, int height = -1);
 	inline void setVisible(bool visible) { mVisible = visible; }
@@ -83,6 +86,8 @@ protected:
 	int mTextPositionY;
 	int mDrawFlags;
 	GLFont *mFont;
+	int mScreenX;
+	int mScreenY;
 };
 
 #endif /* GUICONTROL_H_ */
