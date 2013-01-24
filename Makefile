@@ -12,25 +12,10 @@ ifndef ($(TARGET))
 	TARGET := linux
 endif
 
-#################################################################################
-# Source files
-#################################################################################
-
-include Files.mk
-
-SRCS := \
-	$(SRC_FRAMEWORK_GAME) \
-	$(SRC_FRAMEWORK_GLPLUS) \
-	$(SRC_FRAMEWORK_ALPLUS) \
-	$(SRC_FRAMEWORK_GUI) \
-	$(SRC_EXTERNAL_BOX2D) \
-	$(SRC_EXTERNAL_NANOSVG) \
-	$(SRC_EXTERNAL_TINYXML) \
-	$(SRC_EXTERNAL_INIPARSER) \
-	$(SRC_EXTERNAL_POLY2TRI)
-
-#SRCS += $(SRC_PACKAGE_ALIEN)
-SRCS += $(SRC_PACKAGE_TEST)
+# Default package is Test
+ifndef ($(PACKAGE))
+	PACKAGE := Test
+endif
 
 #################################################################################
 # Compiler settings
@@ -64,10 +49,17 @@ ifeq ($(TARGET),win32-mingw)
 	RMDIR := rm -rf
 	MKDIR := mkdir -p
 	LIBS += -lgdi32 -lglu32 -lopengl32
-	SRC_RES := Source/Resources/resource.rc
+	SRC_RES += Source/Resources/resource.rc
 	INC_PATHS += -I/usr/local/include
 	LIB_PATHS += -L/usr/local/lib
 endif
+
+#################################################################################
+# Source files
+#################################################################################
+
+include Build/Frameworks.mk
+include Build/Package_$(PACKAGE).mk
 
 #################################################################################
 # Build rules

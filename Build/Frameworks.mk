@@ -1,14 +1,4 @@
 #
-# Packages
-#
-
-SRC_PACKAGE_ALIEN := \
-    Source/Packages/Alien/GameApp.cpp
-
-SRC_PACKAGE_TEST := \
-	Source/Packages/Test/TestClient.cpp
-
-#
 # Frameworks
 #
 
@@ -40,6 +30,12 @@ SRC_FRAMEWORK_GUI := \
 	Source/Frameworks/GUI/GUIEventListener.cpp \
 	Source/Frameworks/GUI/GUIForm.cpp \
 	Source/Frameworks/GUI/GUIScrollBar.cpp
+
+SRC_FRAMEWORKS := \
+	$(SRC_FRAMEWORK_GAME) \
+	$(SRC_FRAMEWORK_GLPLUS) \
+	$(SRC_FRAMEWORK_ALPLUS) \
+	$(SRC_FRAMEWORK_GUI)
 
 #
 # Externals
@@ -108,3 +104,10 @@ SRC_EXTERNAL_POLY2TRI := \
 	Source/External/poly2tri/sweep/cdt.cc \
 	Source/External/poly2tri/sweep/sweep_context.cc \
 	Source/External/poly2tri/sweep/sweep.cc
+
+SRC_EXTERNALS := \
+	$(SRC_EXTERNAL_BOX2D) \
+	$(SRC_EXTERNAL_NANOSVG) \
+	$(SRC_EXTERNAL_TINYXML) \
+	$(SRC_EXTERNAL_INIPARSER) \
+	$(SRC_EXTERNAL_POLY2TRI)
