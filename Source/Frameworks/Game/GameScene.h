@@ -10,7 +10,7 @@
 
 #include "GameCommon.h"
 #include "GameObject.h"
-#include "GameClient.h"
+#include "App/AppClient.h"
 
 class GameScene
 {
@@ -24,7 +24,7 @@ public:
 	};
 
 public:
-	GameScene(GameClient *game);
+	GameScene(AppClient *game);
 	virtual ~GameScene();
 	//control
 	void update(float dt);
@@ -37,7 +37,7 @@ public:
 	inline void setDrawFlags(unsigned int flags) { mDrawFlags = flags; }
 	//getters
     inline b2World *getWorld() const { return mWorld; }
-    inline GameClient *getGame() const { return mGame; }
+    inline AppClient *getGame() const { return mGame; }
     inline unsigned int getDrawFlags() const { return mDrawFlags; }
 
 private:
@@ -45,7 +45,7 @@ private:
     void drawBodyDebug(b2Body *body);
 
 private:
-    GameClient *mGame;
+    AppClient *mGame;
 	b2World *mWorld;
 	float mWorldUpdateTimeout;
 	std::list<GameObject*> mGameObjectList;

@@ -2,9 +2,11 @@
 # Frameworks
 #
 
+SRC_FRAMEWORK_APP := \
+	Source/Frameworks/App/AppClient.cpp \
+	Source/Frameworks/App/AppServer.cpp
+
 SRC_FRAMEWORK_GAME := \
-	Source/Frameworks/Game/GameClient.cpp \
-    Source/Frameworks/Game/GameMain_GLFW.cpp \
     Source/Frameworks/Game/GameObject.cpp \
     Source/Frameworks/Game/GameScene.cpp
 

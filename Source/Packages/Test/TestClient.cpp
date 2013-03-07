@@ -8,22 +8,24 @@
 #include "TestClient.h"
 #include <GL/glfw.h>
 
-GameClient *GameClient::Initialize(GameClientSettings settings)
+TestClient::TestClient(AppServer *server, const char *level_file)
+		: AppClient(server)
 {
-	return new TestClient(settings);
-}
-
-TestClient::TestClient(GameClientSettings settings)
-{
+	AppServer::Settings settings = getServer()->getSettings();
 	mView = new GLView();
 	mView->setup();
 	mView->setSize(settings.width, settings.height);
 	mFont = new GLFont("Data/Arial.fnt");
 	mScene = new GameScene(this);
-	if (settings.cmdline)
-		mScene->loadSVG(settings.cmdline);
+	if (level_file)
+	{
+		printf("Loading level %s...\n", level_file);
+		mScene->loadSVG(level_file);
+	}
 	else
+	{
 		printf("NO SVG LEVEL!\n");
+	}
 	mSceneSize.set(settings.width, settings.height);
 	for (int i = 0; i < 8; i++)
 		mButtonState[i] = GLFW_RELEASE;
@@ -67,7 +69,7 @@ void TestClient::onDraw()
 	glEnd();
 	//scene
 	glTranslatef(mCameraPos.x, mCameraPos.y, 0);
-	//mScene->draw(mView);
+	mScene->draw(mView);
 	glPopMatrix();
 	mView->endScene2D();
 	//gui

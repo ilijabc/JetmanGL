@@ -8,7 +8,7 @@
 #include "GameScene.h"
 #include "NanoSVG/nanosvg.h"
 
-GameScene::GameScene(GameClient *game)
+GameScene::GameScene(AppClient *game)
 		: mGame(game)
 		, mDrawFlags(e_drawShapeFlag | e_drawImageFlag)
 {

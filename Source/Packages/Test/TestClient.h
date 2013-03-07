@@ -8,16 +8,17 @@
 #ifndef TESTCLIENT_H_
 #define TESTCLIENT_H_
 
-#include "Game/GameClient.h"
+#include "App/AppClient.h"
+#include "App/AppServer.h"
 #include "Game/GameScene.h"
 #include "GUI/GUIForm.h"
 #include "GUI/GUIButton.h"
 #include "GUI/GUIScrollBar.h"
 
-class TestClient : public GameClient, public GUIEventListener
+class TestClient : public AppClient, public GUIEventListener
 {
 public:
-	TestClient(GameClientSettings settings);
+	TestClient(AppServer *server, const char *level_file);
 	virtual ~TestClient();
 	//callbacks
 	virtual void onUpdate(float dt);

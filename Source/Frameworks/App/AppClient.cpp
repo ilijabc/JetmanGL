@@ -5,15 +5,15 @@
  *      Author: idjukic
  */
 
-#include "GameClient.h"
+#include "AppClient.h"
+#include <string.h>
 
-GameClient::GameClient()
+AppClient::AppClient(AppServer *server)
 {
-	// TODO Auto-generated constructor stub
-
+	mServer = server;
 }
 
-GameClient::~GameClient()
+AppClient::~AppClient()
 {
 	for (int i = 0; i < mTexturePool.size(); i++)
 	{
@@ -21,7 +21,7 @@ GameClient::~GameClient()
 	}
 }
 
-GLTexture *GameClient::getTexture(const char *filename, int flags)
+GLTexture *AppClient::getTexture(const char *filename, int flags)
 {
 	int n = mTexturePool.size();
 	for (int i = 0; i < mTexturePool.size(); i++)

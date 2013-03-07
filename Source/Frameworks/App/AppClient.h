@@ -5,29 +5,26 @@
  *      Author: idjukic
  */
 
-#ifndef GAMECLIENT_H_
-#define GAMECLIENT_H_
+#ifndef APPCLIENT_H_
+#define APPCLIENT_H_
 
-#include "GameCommon.h"
+#include "GLPlus/GLPlus.h"
+#include <vector>
+#include <time.h>
 
-struct GameClientSettings
-{
-	char *cmdline;
-	int width;
-	int height;
-	int audio;
-};
+#ifdef DEBUG
+#define LOG(msg, args...) printf("[%d] "msg"\n", (int)time(NULL), ##args)
+#else
+#define LOG(args...)
+#endif
 
-class GameClient
+class AppServer;
+
+class AppClient
 {
 public:
-    //general
-	// EVERY CLIENT MUST IMPLEMENT THIS
-    static GameClient *Initialize(GameClientSettings settings);
-
-public:
-	GameClient();
-	virtual ~GameClient();
+	AppClient(AppServer *server);
+	virtual ~AppClient();
 	//callbacks
 	virtual void onUpdate(float dt) = 0;
 	virtual void onDraw() = 0;
@@ -38,8 +35,11 @@ public:
     virtual void onSize(int width, int height) = 0;
     //managers
     GLTexture *getTexture(const char *filename, int flags = 0);
+    //getters
+    inline AppServer* getServer() const { return mServer; }
 private:
+    AppServer *mServer;
     std::vector<GLTexture*> mTexturePool;
 };
 
-#endif /* GAMECLIENT_H_ */
+#endif /* APPCLIENT_H_ */
