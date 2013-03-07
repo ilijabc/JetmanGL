@@ -15,6 +15,7 @@ GameObject::GameObject(GameScene *scene, int type)
 		, mTextureSize(1, 1)
 		, mPosition(0, 0)
 		, mRotation(0)
+		, mVisible(true)
 {
 	strcpy(mName, "");
 }
@@ -199,8 +200,8 @@ void GameObject::parseProperties(const char* text)
 	char *line = strtok_r(text2, "\n", &line_end);
 	while (line)
 	{
-		char *name = strtok(line, " \t=,:");
-		char *value = strtok(NULL, " \t=,:");
+		char *name = strtok(line, "=");
+		char *value = strtok(NULL, "=");
 		if (name && value)
 			setProperty(name, value);
 		else if (name)

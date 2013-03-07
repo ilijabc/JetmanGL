@@ -116,7 +116,9 @@ body=static</desc>
        transform="translate(265.16504,-433.1029)">
       <desc
          id="desc3069">attach=POLA_TROUGLA
-shape=circle</desc>
+shape=circle
+visible=no
+restitution=0.8</desc>
     </path>
     <path
        style="fill:#008080;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"

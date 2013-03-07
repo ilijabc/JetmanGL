@@ -44,6 +44,8 @@ void GameScene::draw(GLView *view)
 	for (std::list<GameObject*>::iterator iobj = mGameObjectList.begin(); iobj != mGameObjectList.end(); iobj++)
 	{
 		GameObject* obj = *iobj;
+		if (!obj->isVisible())
+			continue;
 		b2Vec2 position = obj->getPosition();
 		float rotation = obj->getRotation();
 		b2Vec2 offset = obj->getPositionOffset();
@@ -254,6 +256,12 @@ void GameScene::processGameObjects()
 				body->SetUserData(obj);
 			}
 		}
+		GameObject::Property *visibleProp = obj->findProperty("visible");
+		if (visibleProp)
+		{
+			if (visibleProp->isValue("no"))
+				obj->setVisible(false);
+		}
 	}
 	// attach mounts
 	for (std::list<GameObject*>::iterator iobj = mGameObjectList.begin(); iobj != mGameObjectList.end(); iobj++)
@@ -287,16 +295,25 @@ void GameScene::processGameObjects()
 		GameObject *obj = *iobj;
 		b2Body *body = obj->getBody();
 		b2Vec2 offset = obj->getPositionOffset();
+		float density = 1.0f;
+		float friction = 0.3f;
+		float restitution = 0.5f;
 		if (body)
 		{
 			GameObject::PolyFill *fill = obj->getPolyFill(0);
 			GameObject::PolyLine *line = obj->getPolyLine(0);
 			GameObject::Property *shapeProp = obj->findProperty("shape");
-			float density = 1.0f;
-			float friction = 0.3f;
-			float restitution = 0.5f;
 			if (shapeProp)
 			{
+				GameObject::Property *densityProp = obj->findProperty("density");
+				GameObject::Property *frictionProp = obj->findProperty("friction");
+				GameObject::Property *restitutionProp = obj->findProperty("restitution");
+				if (densityProp)
+					density = densityProp->getFloatValue();
+				if (frictionProp)
+					friction = frictionProp->getFloatValue();
+				if (restitutionProp)
+					restitution = restitutionProp->getFloatValue();
 				if (shapeProp->isValue("polygon"))
 				{
 					if (fill)

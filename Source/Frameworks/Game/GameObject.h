@@ -29,7 +29,7 @@ public:
 		inline const char *getName() { return mName.c_str(); }
 		inline const char *getValue() { return mValue.c_str(); }
 		inline int getIntValue() { return atoi(mValue.c_str()); }
-		inline int getFloatValue() { return atof(mValue.c_str()); }
+		inline float getFloatValue() { return atof(mValue.c_str()); }
 		inline bool isValue(const char *value) { return mValue == value; }
 		std::string mName;
 		std::string mValue;
@@ -52,6 +52,7 @@ public:
 	inline void setName(const char *name) { strcpy(mName, name); }
 	inline void setBounds(float x1, float y1, float x2, float y2) { mBounds.set(x1, y1, x2, y2); }
 	inline void setPositionOffset(float x, float y) { mPositionOffset.Set(x, y); }
+	inline void setVisible(bool visible) { mVisible = visible; }
 	//getters
 	inline b2Body *getBody() const { return mBody; }
 	inline GLTexture *getTexture() const { return mTexture; }
@@ -62,6 +63,7 @@ public:
     inline const char *getName() const { return mName; }
     inline Rect getBounds() const { return mBounds; }
     inline const b2Vec2 &getPositionOffset() const { return mPositionOffset; }
+    inline bool isVisible() const { return mVisible; }
     //geomtry
     int addPolyLine(b2Vec2 *pointList, int pointCount, int color = 0xFFFFFFFF, float width = 1.0f);
     int addPolyFill(b2Vec2 *pointList, int pointCount, int color = 0xFFFFFFFF);
@@ -91,6 +93,7 @@ private:
     Rect mBounds;
     b2Vec2 mPositionOffset;
     std::vector<Property> mProperties;
+    bool mVisible;
 };
 
 #endif // GAMEOBJECT_H
