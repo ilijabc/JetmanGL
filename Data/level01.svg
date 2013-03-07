@@ -7,13 +7,14 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="1052.3622"
    height="744.09448"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="level01.svg">
   <defs
      id="defs4">
@@ -41,16 +42,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.45254834"
-     inkscape:cx="522.11925"
-     inkscape:cy="534.56845"
+     inkscape:zoom="0.64"
+     inkscape:cx="345.39873"
+     inkscape:cy="159.47124"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="746"
-     inkscape:window-height="584"
-     inkscape:window-x="450"
-     inkscape:window-y="264"
+     inkscape:window-width="917"
+     inkscape:window-height="730"
+     inkscape:window-x="458"
+     inkscape:window-y="207"
      inkscape:window-maximized="0" />
   <metadata
      id="metadata7">
@@ -82,11 +83,12 @@ body=dynamic</desc>
     </path>
     <rect
        style="fill:#ffff00;fill-opacity:1;stroke:#ff00ff"
-       id="rect2991"
+       id="zuta_kocka"
        width="196.875"
        height="106.25"
        x="452.31287"
-       y="98.448853">
+       y="98.448853"
+       inkscape:label="#rect2991">
       <desc
          id="desc3061">shape=polygon
 body=dynamic</desc>
@@ -94,11 +96,12 @@ body=dynamic</desc>
     <path
        style="fill:none;stroke:#000000;stroke-width:2.18086457px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="M 2.8687569,418.61257 130.48356,687.21057 852.48975,696.66715 999.83796,526.4488"
-       id="path3005"
+       id="kofa"
        inkscape:path-effect="#path-effect3007"
        inkscape:original-d="M 2.8687569,418.61257 130.48356,687.21057 852.48975,696.66715 999.83796,526.4488"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccc">
+       sodipodi:nodetypes="cccc"
+       inkscape:label="#path3005">
       <desc
          id="desc3063">shape=chain
 body=static</desc>
@@ -123,10 +126,11 @@ restitution=0.8</desc>
     <path
        style="fill:#008080;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 650,203.46948 34.375,112.5 153.125,-40.625 -62.5,-140.625 -125,68.75"
-       id="path3009"
+       id="zelena_kocka"
        inkscape:path-effect="#path-effect3011"
        inkscape:original-d="m 650,203.46948 34.375,112.5 153.125,-40.625 -62.5,-140.625 z"
-       inkscape:connector-curvature="0">
+       inkscape:connector-curvature="0"
+       inkscape:label="#path3009">
       <desc
          id="desc3059">shape=polygon
 body=dynamic</desc>
@@ -144,6 +148,29 @@ body=dynamic</desc>
        transform="translate(-19.887378,-346.92426)">
       <desc
          id="desc3067">attach=POLA_TROUGLA</desc>
+    </path>
+    <image
+       y="262.90698"
+       x="147"
+       id="tanjir_slika"
+       xlink:href="file:///E:/workspace/JetmanGL/Data/nlo.png"
+       height="128"
+       width="256"
+       inkscape:label="#image3014">
+      <desc
+         id="desc3034">attach=tanjir_oblik</desc>
+    </image>
+    <path
+       style="fill:none;stroke:#0000ff"
+       d="m 206.25,318.31323 c 24.66646,-63.05801 105.7021,-63.92022 136.71875,-3.125 60.2956,13.02378 55.58529,21.46643 62.5,28.125 -39.42445,61.00541 -219.93183,68.04086 -257.8125,-1.5625 13.08136,-12.88401 31.53218,-23.87578 58.59375,-23.4375 z"
+       id="tanjir_oblik"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:label="#rect3017">
+      <desc
+         id="desc3020">shape=polygon
+body=dynamic
+visible=no</desc>
     </path>
   </g>
 </svg>

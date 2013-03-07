@@ -15,6 +15,7 @@ GameObject::GameObject(GameScene *scene, int type)
 		, mTextureSize(1, 1)
 		, mPosition(0, 0)
 		, mRotation(0)
+		, mPositionOffset(0, 0)
 		, mVisible(true)
 {
 	strcpy(mName, "");

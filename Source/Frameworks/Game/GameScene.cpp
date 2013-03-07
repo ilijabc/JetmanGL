@@ -111,10 +111,7 @@ void GameScene::loadSVG(const char *filename)
 		GameObject *obj = NULL;
 		// parse svg object
 		// TODO: closed status is fixed here, but should be in nanosvg
-		int vs_size = path->npts;
-		if (path->closed)
-			vs_size = vs_size + 1;
-		b2Vec2 vs[vs_size];
+		std::vector<b2Vec2> vs;
 		int i = 0;
 		float cx = 0, cy = 0;
 		float x1, y1, x2, y2;
@@ -123,7 +120,10 @@ void GameScene::loadSVG(const char *filename)
 		{
 			float x = path->pts[i*2] * gscale;
 			float y = -path->pts[i*2+1] * gscale;
-			vs[i].Set(x, y);
+			//discard repeated points
+			if (i > 0 && vs[i - 1].x == x && vs[i - 1].y == y)
+				continue;
+			vs.push_back(b2Vec2(x, y));
 			if (i == 0)
 			{
 				x1 = x2 = x;
@@ -140,15 +140,17 @@ void GameScene::loadSVG(const char *filename)
 		if (x1 + x2 != 0) cx = (x1 + x2) / 2;
 		if (y1 + y2 != 0) cy = (y1 + y2) / 2;
 		//reposition points
-		for (i = 0; i < vs_size; ++i)
+		for (i = 0; i < vs.size(); ++i)
 		{
 			vs[i].x -= cx;
 			vs[i].y -= cy;
 		}
-		if (path->closed)
-			vs[vs_size - 1] = vs[0];
-		else if (vs[0] == vs[vs_size - 1])
+		//fix closing points
+		if (vs[0] == vs[vs.size() - 1])
+		{
 			path->closed = 1;
+			vs.pop_back();
+		}
 
 		// create body
 		if (path->type == SVG_TYPE_IMAGE && path->link)
@@ -179,14 +181,16 @@ void GameScene::loadSVG(const char *filename)
 		else
 		{
 			obj = new GameObject(this, 0);
+			// stroke
 			if (path->hasStroke)
-			{
-				obj->addPolyLine(vs, vs_size, path->strokeColor, path->strokeWidth);
-			}
+				obj->addPolyLine(&(vs[0]), vs.size(), path->strokeColor, path->strokeWidth);
+			else
+				obj->addPolyLine(&(vs[0]), vs.size(), 0, 1);
+			// fill
 			if (path->hasFill)
-			{
-				obj->addPolyFill(vs, path->closed ? vs_size - 1 : vs_size, path->fillColor);
-			}
+				obj->addPolyFill(&(vs[0]), vs.size(), path->fillColor);
+			else
+				obj->addPolyFill(&(vs[0]), vs.size(), 0);
 		}
 
 		// create object
@@ -198,7 +202,7 @@ void GameScene::loadSVG(const char *filename)
 				obj->setName(path->id);
 			if (path->description)
 				obj->parseProperties(path->description);
-#if DEBUG
+#ifdef DEBUG_SVG
 			printf("add object '%s' (%f, %f) %f %f %f %f\n", path->id, cx, cy, x1, y1, x2, y2);
 #endif
 			addObject(obj, false);
@@ -214,7 +218,7 @@ void GameScene::loadSVG(const char *filename)
 
 void GameScene::processGameObjects()
 {
-#if DEBUG
+#ifdef DEBUG_SVG
 	// print obj info
 	for (std::list<GameObject*>::iterator iobj = mGameObjectList.begin(); iobj != mGameObjectList.end(); iobj++)
 	{
@@ -267,14 +271,14 @@ void GameScene::processGameObjects()
 	for (std::list<GameObject*>::iterator iobj = mGameObjectList.begin(); iobj != mGameObjectList.end(); iobj++)
 	{
 		GameObject *obj = *iobj;
-		if (obj->getBody())
-		{
-			printf("ERROR: Object '%s' already has a body!\n", obj->getName());
-			continue;
-		}
 		GameObject::Property *attachProp = obj->findProperty("attach");
 		if (attachProp)
 		{
+			if (obj->getBody())
+			{
+				printf("ERROR: Object '%s' already has a body!\n", obj->getName());
+				continue;
+			}
 			GameObject *obj2 = getObjectByName(attachProp->getValue());
 			if (obj2)
 			{
