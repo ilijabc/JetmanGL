@@ -58,9 +58,10 @@ struct SVGPath
 	char closed;
 	char *link;
 	char *id;
+	char *label;
 	char type;
 	char *title;
-	char *desc;
+	char *description;
 	struct SVGPath* next;
 };
 

@@ -1057,6 +1057,14 @@ static void svgParsePath(struct SVGParser* p, const char** attr)
 				strcpy(path->id, attr[i+1]);
 			}
 		}
+		else if (strcmp(attr[i], "inkscape:label") == 0)
+		{
+			if (path)
+			{
+				path->label = malloc(strlen(attr[i+1]) + 1);
+				strcpy(path->label, attr[i+1]);
+			}
+		}
 		else
 		{
 			tmp[0] = attr[i];
@@ -1075,6 +1083,7 @@ static void svgParseRect(struct SVGParser* p, const char** attr)
 	float w = 0.0f;
 	float h = 0.0f;
 	char *id = NULL;
+	char *label = NULL;
 	int i;
 
 	for (i = 0; attr[i]; i += 2)
@@ -1090,6 +1099,11 @@ static void svgParseRect(struct SVGParser* p, const char** attr)
                 id = malloc(strlen(attr[i+1]) + 1);
                 strcpy(id, attr[i+1]);
             }
+			if (strcmp(attr[i], "inkscape:label") == 0)
+			{
+				label = malloc(strlen(attr[i+1]) + 1);
+				strcpy(label, attr[i+1]);
+			}
 		}
 	}
 
@@ -1106,6 +1120,12 @@ static void svgParseRect(struct SVGParser* p, const char** attr)
 		if (path)
 		{
 			path->id = id;
+			path->label = label;
+		}
+		else
+		{
+			free(id);
+			free(label);
 		}
 	}
 }
@@ -1118,6 +1138,7 @@ static void svgParseImage(struct SVGParser* p, const char** attr)
 	float h = 0.0f;
 	char *link = NULL;
 	char *id = NULL;
+	char *label = NULL;
 	int i;
 
 	for (i = 0; attr[i]; i += 2)
@@ -1138,6 +1159,11 @@ static void svgParseImage(struct SVGParser* p, const char** attr)
                 id = malloc(strlen(attr[i+1]) + 1);
                 strcpy(id, attr[i+1]);
             }
+            if (strcmp(attr[i], "inkscape:label") == 0)
+			{
+				label = malloc(strlen(attr[i+1]) + 1);
+				strcpy(label, attr[i+1]);
+			}
 		}
 	}
 
@@ -1155,6 +1181,13 @@ static void svgParseImage(struct SVGParser* p, const char** attr)
 		{
 			path->link = link;
 			path->id = id;
+			path->label = label;
+		}
+		else
+		{
+			free(link);
+			free(id);
+			free(label);
 		}
 	}
 }
@@ -1166,6 +1199,7 @@ static void svgParseCircle(struct SVGParser* p, const char** attr)
 	float r = 0.0f;
 	float da;
 	char *id = NULL;
+	char *label = NULL;
 	int i,n;
 	float x,y,u;
 
@@ -1180,6 +1214,11 @@ static void svgParseCircle(struct SVGParser* p, const char** attr)
 			{
 				id = malloc(strlen(attr[i+1]) + 1);
 				strcpy(id, attr[i+1]);
+			}
+			if (strcmp(attr[i], "inkscape:label") == 0)
+			{
+				label = malloc(strlen(attr[i+1]) + 1);
+				strcpy(label, attr[i+1]);
 			}
 		}
 	}
@@ -1204,6 +1243,12 @@ static void svgParseCircle(struct SVGParser* p, const char** attr)
 		if (path)
 		{
 			path->id = id;
+			path->label = label;
+		}
+		else
+		{
+			free(id);
+			free(label);
 		}
 	}
 }
@@ -1217,6 +1262,7 @@ static void svgParseArc(struct SVGParser* p, const char** attr)
 	float ry = 0.0f;
 	float da;
 	char *id = NULL;
+	char *label = NULL;
 	int i,n;
 	float x,y,u;
 
@@ -1232,6 +1278,11 @@ static void svgParseArc(struct SVGParser* p, const char** attr)
 			{
 				id = malloc(strlen(attr[i+1]) + 1);
 				strcpy(id, attr[i+1]);
+			}
+			if (strcmp(attr[i], "inkscape:label") == 0)
+			{
+				label = malloc(strlen(attr[i+1]) + 1);
+				strcpy(label, attr[i+1]);
 			}
 		}
 	}
@@ -1257,6 +1308,12 @@ static void svgParseArc(struct SVGParser* p, const char** attr)
 		if (path)
 		{
 			path->id = id;
+			path->label = label;
+		}
+		else
+		{
+			free(id);
+			free(label);
 		}
 	}
 }
@@ -1268,6 +1325,7 @@ static void svgParseLine(struct SVGParser* p, const char** attr)
 	float x2 = 0.0;
 	float y2 = 0.0;
 	char *id = NULL;
+	char *label = NULL;
 	int i;
 
 	for (i = 0; attr[i]; i += 2)
@@ -1283,6 +1341,11 @@ static void svgParseLine(struct SVGParser* p, const char** attr)
 				id = malloc(strlen(attr[i+1]) + 1);
 				strcpy(id, attr[i+1]);
 			}
+			if (strcmp(attr[i], "inkscape:label") == 0)
+			{
+				label = malloc(strlen(attr[i+1]) + 1);
+				strcpy(label, attr[i+1]);
+			}
 		}
 	}
 
@@ -1295,6 +1358,12 @@ static void svgParseLine(struct SVGParser* p, const char** attr)
 	if (path)
 	{
 		path->id = id;
+		path->label = label;
+	}
+	else
+	{
+		free(id);
+		free(label);
 	}
 }
 
@@ -1306,6 +1375,7 @@ static void svgParsePoly(struct SVGParser* p, const char** attr, int closeFlag)
 	int nargs;
 	char item[64];
 	char *id = NULL;
+	char *label = NULL;
 
 	svgResetPath(p);
 
@@ -1333,6 +1403,11 @@ static void svgParsePoly(struct SVGParser* p, const char** attr, int closeFlag)
 				id = malloc(strlen(attr[i+1]) + 1);
 				strcpy(id, attr[i+1]);
 			}
+			if (strcmp(attr[i], "inkscape:label") == 0)
+			{
+				label = malloc(strlen(attr[i+1]) + 1);
+				strcpy(label, attr[i+1]);
+			}
 		}
 	}
 
@@ -1340,6 +1415,12 @@ static void svgParsePoly(struct SVGParser* p, const char** attr, int closeFlag)
 	if (path)
 	{
 		path->id = id;
+		path->label = label;
+	}
+	else
+	{
+		free(id);
+		free(label);
 	}
 }
 
@@ -1468,8 +1549,8 @@ static void svgContent(void* ud, const char* s)
 	//desc
 	else if (p->contentFlag == 2)
 	{
-		path->desc = malloc(strlen(s) + 1);
-		strcpy(path->desc, s);
+		path->description = malloc(strlen(s) + 1);
+		strcpy(path->description, s);
 	}
 }
 
@@ -1539,10 +1620,12 @@ void svgDelete(struct SVGPath* plist)
             free(path->link);
         if (path->id)
             free(path->id);
+        if (path->label)
+        	free(path->label);
         if (path->title)
         	free(path->title);
-        if (path->desc)
-        	free(path->desc);
+        if (path->description)
+        	free(path->description);
 		free(path);
 		path = next;
 	}
