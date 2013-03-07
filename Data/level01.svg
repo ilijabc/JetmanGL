@@ -42,9 +42,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.64"
-     inkscape:cx="345.39873"
-     inkscape:cy="159.47124"
+     inkscape:zoom="0.5"
+     inkscape:cx="609.20731"
+     inkscape:cy="559.22141"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -90,7 +90,7 @@ body=dynamic</desc>
        y="98.448853"
        inkscape:label="#rect2991">
       <desc
-         id="desc3061">shape=polygon
+         id="desc3061">shape=auto
 body=dynamic</desc>
     </rect>
     <path
@@ -103,7 +103,7 @@ body=dynamic</desc>
        sodipodi:nodetypes="cccc"
        inkscape:label="#path3005">
       <desc
-         id="desc3063">shape=chain
+         id="desc3063">shape=auto
 body=static</desc>
     </path>
     <path
@@ -116,7 +116,7 @@ body=static</desc>
        sodipodi:ry="55.242718"
        d="m 176.77669,518.70422 a 61.871845,55.242718 0 1 1 -123.743689,0 61.871845,55.242718 0 1 1 123.743689,0 z"
        inkscape:label="#path2990"
-       transform="translate(265.16504,-433.1029)">
+       transform="matrix(0.80126927,0,0,0.8974216,295.62832,-390.30594)">
       <desc
          id="desc3069">attach=POLA_TROUGLA
 shape=circle
@@ -132,7 +132,7 @@ restitution=0.8</desc>
        inkscape:connector-curvature="0"
        inkscape:label="#path3009">
       <desc
-         id="desc3059">shape=polygon
+         id="desc3059">shape=auto
 body=dynamic</desc>
     </path>
     <path

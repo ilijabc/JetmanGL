@@ -17,6 +17,9 @@ GameObject::GameObject(GameScene *scene, int type)
 		, mRotation(0)
 		, mPositionOffset(0, 0)
 		, mVisible(true)
+		, mRadius(0)
+		, mHasLine(false)
+		, mHasFill(false)
 {
 	strcpy(mName, "");
 }
@@ -43,33 +46,39 @@ void GameObject::onDraw(GLView *view, unsigned int flags)
 	if ((flags & GameScene::e_drawShapeFlag) == GameScene::e_drawShapeFlag)
 	{
 		//fill
-		for (int i = 0; i < mFillList.size(); i++)
+		if (mHasFill)
 		{
-			PolyFill *poly = mFillList[i];
-			glColor4fv(poly->style.color);
-			glBegin(GL_TRIANGLES);
-			for (int j = 0; j < poly->triangleCount; j++)
+			for (int i = 0; i < mFillList.size(); i++)
 			{
-				GameObject::Triangle *tri = &(poly->triangleList[j]);
-				glVertex2fv((float*)&(tri->a));
-				glVertex2fv((float*)&(tri->b));
-				glVertex2fv((float*)&(tri->c));
+				PolyFill *poly = mFillList[i];
+				glColor4fv(poly->style.color);
+				glBegin(GL_TRIANGLES);
+				for (int j = 0; j < poly->triangleCount; j++)
+				{
+					GameObject::Triangle *tri = &(poly->triangleList[j]);
+					glVertex2fv((float*)&(tri->a));
+					glVertex2fv((float*)&(tri->b));
+					glVertex2fv((float*)&(tri->c));
+				}
+				glEnd();
 			}
-			glEnd();
 		}
 		//outline
-		for (int i = 0; i < mLineList.size(); i++)
+		if (mHasLine)
 		{
-			PolyLine *line = mLineList[i];
-			glColor4fv(line->style.color);
-			glLineWidth(line->style.width);
-			glBegin(GL_LINE_STRIP);
-			for (int j = 0; j < line->pointCount; j++)
+			for (int i = 0; i < mLineList.size(); i++)
 			{
-				glVertex2fv((float*)&(line->pointList[j]));
+				PolyLine *line = mLineList[i];
+				glColor4fv(line->style.color);
+				glLineWidth(line->style.width);
+				glBegin(GL_LINE_STRIP);
+				for (int j = 0; j < line->pointCount; j++)
+				{
+					glVertex2fv((float*)&(line->pointList[j]));
+				}
+				glEnd();
+				glLineWidth(1.0f);
 			}
-			glEnd();
-			glLineWidth(1.0f);
 		}
 	}
 	if ((flags & GameScene::e_drawImageFlag) == GameScene::e_drawImageFlag)

@@ -182,15 +182,27 @@ void GameScene::loadSVG(const char *filename)
 		{
 			obj = new GameObject(this, 0);
 			// stroke
+			obj->addPolyLine(&(vs[0]), vs.size(), path->strokeColor, path->strokeWidth);
 			if (path->hasStroke)
-				obj->addPolyLine(&(vs[0]), vs.size(), path->strokeColor, path->strokeWidth);
-			else
-				obj->addPolyLine(&(vs[0]), vs.size(), 0, 1);
+				obj->setHasLine(true);
 			// fill
+			obj->addPolyFill(&(vs[0]), vs.size(), path->fillColor);
 			if (path->hasFill)
-				obj->addPolyFill(&(vs[0]), vs.size(), path->fillColor);
-			else
-				obj->addPolyFill(&(vs[0]), vs.size(), 0);
+				obj->setHasFill(true);
+			//circle
+			// TODO: circles are still not proper handled by nanosvg
+			//       maybe to analyze geometry for now...
+#if 0
+			if (path->type == SVG_TYPE_CIRCLE)
+			{
+				float rx = fabs(x2 - x1) / 2;
+				float ry = fabs(y2 - y1) / 2;
+				if (rx == ry)
+					obj->setRadius(rx);
+			}
+#else
+			obj->setRadius(fabs(x2 - x1) / 2);
+#endif
 		}
 
 		// create object
@@ -318,8 +330,24 @@ void GameScene::processGameObjects()
 					friction = frictionProp->getFloatValue();
 				if (restitutionProp)
 					restitution = restitutionProp->getFloatValue();
-				if (shapeProp->isValue("polygon"))
+				int shapeType = 0;
+				if (shapeProp->isValue("auto"))
 				{
+					if (obj->getHasFill())
+						shapeType = 0;
+					else if (obj->getHasLine())
+						shapeType = 1;
+				}
+				else if (shapeProp->isValue("polygon"))
+					shapeType = 0;
+				else if (shapeProp->isValue("chain"))
+					shapeType = 1;
+				else if (shapeProp->isValue("circle"))
+					shapeType = 2;
+				// make shape
+				switch (shapeType)
+				{
+				case 0: // polygon
 					if (fill)
 					{
 						for (int i = 0; i < fill->triangleCount; i++)
@@ -341,9 +369,8 @@ void GameScene::processGameObjects()
 					}
 					else
 						printf("ERROR: Object '%s' needs a fill to be a polygon!\n", obj->getName());
-				}
-				else if (shapeProp->isValue("chain"))
-				{
+					break;
+				case 1: // chain
 					if (line)
 					{
 						b2ChainShape chainShape;
@@ -355,32 +382,26 @@ void GameScene::processGameObjects()
 					}
 					else
 						printf("ERROR: Object '%s' needs a line to be a chain!\n", obj->getName());
-				}
-				else if (shapeProp->isValue("circle"))
-				{
-					// TODO: add circle shape
-					b2CircleShape circleShape;
-					circleShape.m_p = offset;
-					circleShape.m_radius = fabs(obj->getBounds().x2 - obj->getBounds().x1) / 2;
-					b2FixtureDef fixtureDef;
-					fixtureDef.shape = &circleShape;
-					fixtureDef.density = density;
-					fixtureDef.friction = friction;
-					fixtureDef.restitution = restitution;
-					body->CreateFixture(&fixtureDef);
+					break;
+				case 2: // circle
+					if (obj->getRadius() > 0)
+					{
+						// TODO: add circle shape
+						b2CircleShape circleShape;
+						circleShape.m_p = offset;
+						circleShape.m_radius = obj->getRadius();
+						b2FixtureDef fixtureDef;
+						fixtureDef.shape = &circleShape;
+						fixtureDef.density = density;
+						fixtureDef.friction = friction;
+						fixtureDef.restitution = restitution;
+						body->CreateFixture(&fixtureDef);
+					}
+					else
+						printf("ERROR: Object '%s' needs a radius to be a circle!\n", obj->getName());
+					break;
 				}
 			}
-			/*else if (obj->getTexture())
-			{
-				b2PolygonShape polyShape;
-				polyShape.SetAsBox(obj->getTextureSize().x, obj->getTextureSize().y);
-				b2FixtureDef fixtureDef;
-				fixtureDef.shape = &polyShape;
-				fixtureDef.density = 1.0f;
-				fixtureDef.friction = 0.3f;
-				fixtureDef.restitution = 0.5f;
-				body->CreateFixture(&fixtureDef);
-			}*/
 		}
 	}
 }

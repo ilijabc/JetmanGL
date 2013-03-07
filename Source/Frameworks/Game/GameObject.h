@@ -53,6 +53,9 @@ public:
 	inline void setBounds(float x1, float y1, float x2, float y2) { mBounds.set(x1, y1, x2, y2); }
 	inline void setPositionOffset(float x, float y) { mPositionOffset.Set(x, y); }
 	inline void setVisible(bool visible) { mVisible = visible; }
+	inline void setRadius(float radius) { mRadius = radius; }
+	inline void setHasLine(bool b) { mHasLine = b; }
+	inline void setHasFill(bool b) { mHasFill = b; }
 	//getters
 	inline b2Body *getBody() const { return mBody; }
 	inline GLTexture *getTexture() const { return mTexture; }
@@ -64,6 +67,9 @@ public:
     inline Rect getBounds() const { return mBounds; }
     inline const b2Vec2 &getPositionOffset() const { return mPositionOffset; }
     inline bool isVisible() const { return mVisible; }
+    inline float getRadius() const { return mRadius; }
+    inline bool getHasLine() const { return mHasLine; }
+    inline bool getHasFill() const { return mHasFill; }
     //geomtry
     int addPolyLine(b2Vec2 *pointList, int pointCount, int color = 0xFFFFFFFF, float width = 1.0f);
     int addPolyFill(b2Vec2 *pointList, int pointCount, int color = 0xFFFFFFFF);
@@ -94,6 +100,9 @@ private:
     b2Vec2 mPositionOffset;
     std::vector<Property> mProperties;
     bool mVisible;
+    float mRadius;
+    bool mHasLine;
+    bool mHasFill;
 };
 
 #endif // GAMEOBJECT_H
