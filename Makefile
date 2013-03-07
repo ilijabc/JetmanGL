@@ -1,20 +1,22 @@
 #################################################################################
 # Project: Jetman Game
 # Author: Ilija Djukic
+#
+# Input variables:
+#    TARGET
+#    BUILD
+#    PACKAGE
 #################################################################################
+
+CC := gcc
+CPP := g++
+RMDIR := rm -rf
+MKDIR := mkdir -p
 
 OUT_DIR := Out
 OBJ_DIR := $(OUT_DIR)/obj
-ONAME := $(OUT_DIR)/Jetman
-
-# Default target is linux
-ifndef ($(TARGET))
-	TARGET := linux
-endif
-
-# Default package is Test
-ifndef ($(PACKAGE))
-	PACKAGE := Test
+ifneq ($(PACKAGE),)
+	ONAME := $(OUT_DIR)/$(PACKAGE)
 endif
 
 #################################################################################
@@ -36,18 +38,10 @@ endif
 #################################################################################
 
 ifeq ($(TARGET),linux)
-	CC := gcc
-	CPP := g++
-	RMDIR := rm -rf
-	MKDIR := mkdir -p
 	LIBS += -lm -ldl -lGL -lGLU -lXrandr
 endif
 
-ifeq ($(TARGET),win32-mingw)
-	CC := gcc
-	CPP := g++
-	RMDIR := rm -rf
-	MKDIR := mkdir -p
+ifeq ($(TARGET),mingw)
 	LIBS += -lgdi32 -lglu32 -lopengl32
 	SRC_RES += Source/Resources/resource.rc
 	INC_PATHS += -I/usr/local/include
@@ -58,8 +52,11 @@ endif
 # Source files
 #################################################################################
 
+include Build/Externals.mk
 include Build/Frameworks.mk
-include Build/Package_$(PACKAGE).mk
+ifneq ($(PACKAGE),)
+	include Build/Package_$(PACKAGE).mk
+endif
 
 #################################################################################
 # Build rules
@@ -100,6 +97,7 @@ info:
 	@echo '  OUTPUT=$(ONAME)'
 	@echo '  TARGET=$(TARGET)'
 	@echo '  BUILD=$(BUILD)'
+	@echo '  PACKAGE=$(PACKAGE)'
 	@echo ' ======================='
 
 build: info $(OBJS) $(RES)
@@ -119,7 +117,7 @@ help:
 	@echo " -----------------------------------------------------------------------------"
 	@echo " Usage:          make <rule> TARGET=<target> BUILD=<build>"
 	@echo " "
-	@echo " <rule>       :  build, clean, help                (default: help)"
-	@echo " <target>     :  linux, win32-mingw, win32-msys    (default: linux)"
-	@echo " <build>      :  release, debug                    (default: release)"
+	@echo " <rule>       :  build, clean, help"
+	@echo " <target>     :  linux, mingw"
+	@echo " <build>      :  release, debug"
 	@echo " -----------------------------------------------------------------------------"

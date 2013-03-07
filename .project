@@ -51,7 +51,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.fullBuildTarget</key>
-					<value>build TARGET=win32-mingw BUILD=debug</value>
+					<value>build TARGET=${TARGET} BUILD=${BUILD} PACKAGE=${PACKAGE}</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.stopOnError</key>
