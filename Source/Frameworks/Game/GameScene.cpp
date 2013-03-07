@@ -46,9 +46,11 @@ void GameScene::draw(GLView *view)
 		GameObject* obj = *iobj;
 		b2Vec2 position = obj->getPosition();
 		float rotation = obj->getRotation();
+		b2Vec2 offset = obj->getPositionOffset();
 		glPushMatrix();
 		glTranslatef(position.x, position.y, 0);
 		glRotatef(rotation, 0, 0, 1);
+		glTranslatef(offset.x, offset.y, 0);
 		obj->onDraw(view, mDrawFlags);
 		glPopMatrix();
 	}
@@ -59,7 +61,7 @@ void GameScene::draw(GLView *view)
 		{
 			Rect bounds = (*iobj)->getBounds();
 			glBegin(GL_LINE_LOOP);
-			glColor3f(1, 1, 1);
+			glColor3f(1, 1, 0);
 			glVertex2f(bounds.x1, bounds.y1);
 			glVertex2f(bounds.x2, bounds.y1);
 			glVertex2f(bounds.x2, bounds.y2);
@@ -272,7 +274,7 @@ void GameScene::processGameObjects()
 				if (obj2->getBody())
 				{
 					obj->setBody(obj2->getBody());
-					obj->setBodyPositionOffset(offset.x, offset.y);
+					obj->setPositionOffset(offset.x, offset.y);
 				}
 				else
 					printf("ERROR: Object '%s' (needed by '%s') does not posess a body!\n", obj2->getName(), obj->getName());
@@ -284,11 +286,15 @@ void GameScene::processGameObjects()
 	{
 		GameObject *obj = *iobj;
 		b2Body *body = obj->getBody();
+		b2Vec2 offset = obj->getPositionOffset();
 		if (body)
 		{
 			GameObject::PolyFill *fill = obj->getPolyFill(0);
 			GameObject::PolyLine *line = obj->getPolyLine(0);
 			GameObject::Property *shapeProp = obj->findProperty("shape");
+			float density = 1.0f;
+			float friction = 0.3f;
+			float restitution = 0.5f;
 			if (shapeProp)
 			{
 				if (shapeProp->isValue("polygon"))
@@ -298,12 +304,17 @@ void GameScene::processGameObjects()
 						for (int i = 0; i < fill->triangleCount; i++)
 						{
 							b2PolygonShape polyShape;
-							polyShape.Set(&(fill->triangleList[i].a), 3);
+							b2Vec2 triangle[3] = {
+									fill->triangleList[i].a + offset,
+									fill->triangleList[i].b + offset,
+									fill->triangleList[i].c + offset
+							};
+							polyShape.Set(triangle, 3);
 							b2FixtureDef fixtureDef;
 							fixtureDef.shape = &polyShape;
-							fixtureDef.density = 1.0f;
-							fixtureDef.friction = 0.3f;
-							fixtureDef.restitution = 0.5f;
+							fixtureDef.density = density;
+							fixtureDef.friction = friction;
+							fixtureDef.restitution = restitution;
 							body->CreateFixture(&fixtureDef);
 						}
 					}
@@ -315,7 +326,10 @@ void GameScene::processGameObjects()
 					if (line)
 					{
 						b2ChainShape chainShape;
-						chainShape.CreateChain(line->pointList, line->pointCount);
+						b2Vec2 points[line->pointCount];
+						for (int i = 0; i < line->pointCount; i++)
+							points[i] = line->pointList[i] + offset;
+						chainShape.CreateChain(points, line->pointCount);
 						body->CreateFixture(&chainShape, 0.0f);
 					}
 					else
@@ -324,6 +338,15 @@ void GameScene::processGameObjects()
 				else if (shapeProp->isValue("circle"))
 				{
 					// TODO: add circle shape
+					b2CircleShape circleShape;
+					circleShape.m_p = offset;
+					circleShape.m_radius = fabs(obj->getBounds().x2 - obj->getBounds().x1) / 2;
+					b2FixtureDef fixtureDef;
+					fixtureDef.shape = &circleShape;
+					fixtureDef.density = density;
+					fixtureDef.friction = friction;
+					fixtureDef.restitution = restitution;
+					body->CreateFixture(&fixtureDef);
 				}
 			}
 			/*else if (obj->getTexture())
@@ -408,6 +431,20 @@ void GameScene::drawBodyDebug(b2Body *body)
 						glVertex2f(v.x, v.y);
 					}
 					glEnd();
+			}
+			else if (shape->GetType() == b2Shape::e_circle)
+			{
+				glBegin(GL_LINE_LOOP);
+				b2CircleShape *circle = (b2CircleShape*)shape;
+				int segments = 18;
+				for (int i = 0; i < segments; i++)
+				{
+					float t = ((float)i / (float)segments) * GLPLUS_PI * 2;
+					float r = circle->m_radius;
+					b2Vec2 v = circle->m_p;
+					glVertex2f(cosf(t) * r + v.x, sinf(t) * r + v.y);
+				}
+				glEnd();
 			}
 		}
 		//next

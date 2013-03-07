@@ -51,7 +51,7 @@ public:
 	inline void setRotation(float rot) { mRotation = rot; }
 	inline void setName(const char *name) { strcpy(mName, name); }
 	inline void setBounds(float x1, float y1, float x2, float y2) { mBounds.set(x1, y1, x2, y2); }
-	inline void setBodyPositionOffset(float x, float y) { mBodyPositionOffset.Set(x, y); }
+	inline void setPositionOffset(float x, float y) { mPositionOffset.Set(x, y); }
 	//getters
 	inline b2Body *getBody() const { return mBody; }
 	inline GLTexture *getTexture() const { return mTexture; }
@@ -61,6 +61,7 @@ public:
     inline float getRotation() const { return mRotation; }
     inline const char *getName() const { return mName; }
     inline Rect getBounds() const { return mBounds; }
+    inline const b2Vec2 &getPositionOffset() const { return mPositionOffset; }
     //geomtry
     int addPolyLine(b2Vec2 *pointList, int pointCount, int color = 0xFFFFFFFF, float width = 1.0f);
     int addPolyFill(b2Vec2 *pointList, int pointCount, int color = 0xFFFFFFFF);
@@ -88,7 +89,7 @@ private:
     float mRotation;
     char mName[250];
     Rect mBounds;
-    b2Vec2 mBodyPositionOffset;
+    b2Vec2 mPositionOffset;
     std::vector<Property> mProperties;
 };
 

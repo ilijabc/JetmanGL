@@ -31,7 +31,7 @@ void GameObject::onUpdate(float dt)
 {
 	if (mBody)
 	{
-		mPosition = mBody->GetPosition() + mBodyPositionOffset;
+		mPosition = mBody->GetPosition();
 		mRotation = mBody->GetAngle() * GLPLUS_TODEG;
 	}
 }
