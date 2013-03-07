@@ -8,6 +8,7 @@ class GameScene;
 class GameObject
 {
 public:
+	// geometry
 	struct Triangle { b2Vec2 a, b, c; };
 	struct LineStyle { float color[4]; float width; };
 	struct FillStyle { float color[4]; int type; };
@@ -20,6 +21,18 @@ public:
 		PolyFill(int size);
 		~PolyFill();
 		Triangle *triangleList; int triangleCount; FillStyle style;
+	};
+	// properties
+	struct Property {
+		Property(const char *name, const char *value): mName(name), mValue(value) { }
+		inline void setValue(const char *value) { mValue = value; }
+		inline const char *getName() { return mName.c_str(); }
+		inline const char *getValue() { return mValue.c_str(); }
+		inline int getIntValue() { return atoi(mValue.c_str()); }
+		inline int getFloatValue() { return atof(mValue.c_str()); }
+		inline bool isValue(const char *value) { return mValue == value; }
+		std::string mName;
+		std::string mValue;
 	};
 
 public:
@@ -38,6 +51,7 @@ public:
 	inline void setRotation(float rot) { mRotation = rot; }
 	inline void setName(const char *name) { strcpy(mName, name); }
 	inline void setBounds(float x1, float y1, float x2, float y2) { mBounds.set(x1, y1, x2, y2); }
+	inline void setBodyPositionOffset(float x, float y) { mBodyPositionOffset.Set(x, y); }
 	//getters
 	inline b2Body *getBody() const { return mBody; }
 	inline GLTexture *getTexture() const { return mTexture; }
@@ -55,6 +69,12 @@ public:
     PolyFill *getPolyFill(int index);
     inline int getPolyLineCount() const { return mLineList.size(); }
     inline int getPolyFillCount() const { return mFillList.size(); }
+    //properties
+    void parseProperties(const char *text);
+    void setProperty(const char *name, const char *value);
+    inline int getPropertiesCount() { return mProperties.size(); }
+    inline Property *getProperty(int index) { return &(mProperties[index]); }
+    Property *findProperty(const char *name);
 
 private:
     GameScene *mScene;
@@ -68,6 +88,8 @@ private:
     float mRotation;
     char mName[250];
     Rect mBounds;
+    b2Vec2 mBodyPositionOffset;
+    std::vector<Property> mProperties;
 };
 
 #endif // GAMEOBJECT_H

@@ -3,6 +3,8 @@
 
 #include "poly2tri/poly2tri.h"
 
+#include <sstream>
+
 //#define ENABLE_GAME_OBJECT_DRAW_DEBUG
 
 GameObject::GameObject(GameScene *scene, int type)
@@ -29,7 +31,7 @@ void GameObject::onUpdate(float dt)
 {
 	if (mBody)
 	{
-		mPosition = mBody->GetPosition();
+		mPosition = mBody->GetPosition() + mBodyPositionOffset;
 		mRotation = mBody->GetAngle() * GLPLUS_TODEG;
 	}
 }
@@ -188,4 +190,41 @@ GameObject::PolyFill::PolyFill(int size)
 GameObject::PolyFill::~PolyFill()
 {
 	delete [] triangleList;
+}
+
+void GameObject::parseProperties(const char* text)
+{
+	char *text2 = strdup(text);
+	char *line_end;
+	char *line = strtok_r(text2, "\n", &line_end);
+	while (line)
+	{
+		char *name = strtok(line, " \t=,:");
+		char *value = strtok(NULL, " \t=,:");
+		if (name && value)
+			setProperty(name, value);
+		else if (name)
+			setProperty(name, "null");
+		line = strtok_r(NULL, "\n", &line_end);
+	}
+	free(text2);
+}
+
+void GameObject::setProperty(const char *name, const char *value)
+{
+	Property *prop = findProperty(name);
+	if (prop)
+		prop->setValue(value);
+	else
+		mProperties.push_back(Property(name, value));
+}
+
+GameObject::Property* GameObject::findProperty(const char* name)
+{
+	for (int i = 0; i < mProperties.size(); i++)
+	{
+		if (mProperties[i].mName == name)
+			return &(mProperties[i]);
+	}
+	return NULL;
 }

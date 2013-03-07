@@ -54,4 +54,8 @@ inline void parseIntColor(int color, float *vcolor)
 	vcolor[3] = ((color >> 24) & 0xFF) / 255.0f;
 }
 
+#if __WIN32__
+char *strtok_r(char *str, const char *delim, char **save);
+#endif
+
 #endif /* GAMECOMMON_H_ */

@@ -13,7 +13,7 @@
    height="744.09448"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="level01.svg">
   <defs
      id="defs4">
@@ -42,13 +42,13 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.45254834"
-     inkscape:cx="714.36391"
-     inkscape:cy="457.22865"
+     inkscape:cx="522.11925"
+     inkscape:cy="534.56845"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1237"
-     inkscape:window-height="447"
+     inkscape:window-width="746"
+     inkscape:window-height="584"
      inkscape:window-x="450"
      inkscape:window-y="264"
      inkscape:window-maximized="0" />
@@ -70,27 +70,39 @@
      id="layer1">
     <path
        style="fill:#b3b3b3;stroke:#ffff00;stroke-width:1.58905208px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 144.18882,133.47895 228.83596,168.75 78.90895,-203.125"
+       d="m 146.39853,-136.10551 228.83596,168.75 78.90895,-203.125"
        id="POLA_TROUGLA"
        inkscape:path-effect="#path-effect2985"
-       inkscape:original-d="m 144.18882,133.47895 228.83596,168.75 78.90895,-203.125"
+       inkscape:original-d="m 146.39853,-136.10551 228.83596,168.75 78.90895,-203.125"
        inkscape:connector-curvature="0"
-       inkscape:label="#path2983" />
+       inkscape:label="#path2983">
+      <desc
+         id="desc3065">shape=polygon
+body=dynamic</desc>
+    </path>
     <rect
        style="fill:#ffff00;fill-opacity:1;stroke:#ff00ff"
        id="rect2991"
        width="196.875"
        height="106.25"
        x="452.31287"
-       y="98.448853" />
+       y="98.448853">
+      <desc
+         id="desc3061">shape=polygon
+body=dynamic</desc>
+    </rect>
     <path
-       style="fill:none;stroke:#000000;stroke-width:1.04762566px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 450.873,205.91392 29.32848,269.6927 165.93172,9.49512 33.86362,-170.91209"
+       style="fill:none;stroke:#000000;stroke-width:2.18086457px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 2.8687569,418.61257 130.48356,687.21057 852.48975,696.66715 999.83796,526.4488"
        id="path3005"
        inkscape:path-effect="#path-effect3007"
-       inkscape:original-d="m 450.873,205.91392 29.32848,269.6927 165.93172,9.49512 33.86362,-170.91209"
+       inkscape:original-d="M 2.8687569,418.61257 130.48356,687.21057 852.48975,696.66715 999.83796,526.4488"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccc" />
+       sodipodi:nodetypes="cccc">
+      <desc
+         id="desc3063">shape=chain
+body=static</desc>
+    </path>
     <path
        sodipodi:type="arc"
        style="fill:#b3b3b3;fill-opacity:1;stroke:#ff00ff"
@@ -101,14 +113,22 @@
        sodipodi:ry="55.242718"
        d="m 176.77669,518.70422 a 61.871845,55.242718 0 1 1 -123.743689,0 61.871845,55.242718 0 1 1 123.743689,0 z"
        inkscape:label="#path2990"
-       transform="translate(262.95533,-163.51844)" />
+       transform="translate(265.16504,-433.1029)">
+      <desc
+         id="desc3069">attach=POLA_TROUGLA
+shape=polygon</desc>
+    </path>
     <path
        style="fill:#008080;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 650,203.46948 34.375,112.5 153.125,-40.625 -62.5,-140.625 -125,68.75"
        id="path3009"
        inkscape:path-effect="#path-effect3011"
        inkscape:original-d="m 650,203.46948 34.375,112.5 153.125,-40.625 -62.5,-140.625 z"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0">
+      <desc
+         id="desc3059">shape=polygon
+body=dynamic</desc>
+    </path>
     <path
        sodipodi:type="arc"
        style="fill:#b3b3b3;fill-opacity:1;stroke:#ff00ff"
@@ -119,6 +139,9 @@
        sodipodi:ry="48.61359"
        d="m 167.93786,207.13527 a 48.61359,48.61359 0 1 1 -97.227178,0 48.61359,48.61359 0 1 1 97.227178,0 z"
        inkscape:label="#path2991"
-       transform="translate(-22.097087,-77.339804)" />
+       transform="translate(-19.887378,-346.92426)">
+      <desc
+         id="desc3067">attach=POLA_TROUGLA</desc>
+    </path>
   </g>
 </svg>

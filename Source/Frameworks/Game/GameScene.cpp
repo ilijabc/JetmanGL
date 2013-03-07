@@ -145,6 +145,7 @@ void GameScene::loadSVG(const char *filename)
 			vs[vs_size - 1] = vs[0];
 		else if (vs[0] == vs[vs_size - 1])
 			path->closed = 1;
+
 		// create body
 		if (path->type == SVG_TYPE_IMAGE && path->link)
 		{
@@ -190,76 +191,154 @@ void GameScene::loadSVG(const char *filename)
 			obj->setPosition(cx, cy);
 			obj->setBounds(x1, y1, x2, y2);
 			if (path->id)
-			{
 				obj->setName(path->id);
-			}
+			if (path->description)
+				obj->parseProperties(path->description);
+#if DEBUG
 			printf("add object '%s' (%f, %f) %f %f %f %f\n", path->id, cx, cy, x1, y1, x2, y2);
-			b2Body *body = NULL;
-			if (path->title)
-			{
-				if (strcmp(path->title, "d") == 0)
-				{
-					b2BodyDef bodyDef;
-					bodyDef.type = b2_dynamicBody;
-					bodyDef.position.Set(cx, cy);
-					body = getWorld()->CreateBody(&bodyDef);
-				}
-				else if (strcmp(path->title, "s") == 0)
-				{
-					b2BodyDef bodyDef;
-					bodyDef.type = b2_staticBody;
-					bodyDef.position.Set(cx, cy);
-					body = getWorld()->CreateBody(&bodyDef);
-				}
-			}
-			if (body)
-			{
-				//connect obj <=> body
-				body->SetUserData(obj);
-				obj->setBody(body);
-				//shape
-				GameObject::PolyFill *fill = obj->getPolyFill(0);
-				GameObject::PolyLine *line = obj->getPolyLine(0);
-				if (fill)
-				{
-					printf("  add fill shape\n");
-					for (int i = 0; i < fill->triangleCount; i++)
-					{
-						b2PolygonShape polyShape;
-						polyShape.Set(&(fill->triangleList[i].a), 3);
-						b2FixtureDef fixtureDef;
-						fixtureDef.shape = &polyShape;
-						fixtureDef.density = 1.0f;
-						fixtureDef.friction = 0.3f;
-						fixtureDef.restitution = 0.5f;
-						body->CreateFixture(&fixtureDef);
-					}
-				}
-				else if (line)
-				{
-					printf("  add line shape\n");
-					b2ChainShape chainShape;
-					chainShape.CreateChain(line->pointList, line->pointCount);
-					body->CreateFixture(&chainShape, 0.0f);
-				}
-				else if (obj->getTexture())
-				{
-					b2PolygonShape polyShape;
-					polyShape.SetAsBox(obj->getTextureSize().x, obj->getTextureSize().y);
-					b2FixtureDef fixtureDef;
-					fixtureDef.shape = &polyShape;
-					fixtureDef.density = 1.0f;
-					fixtureDef.friction = 0.3f;
-					fixtureDef.restitution = 0.5f;
-					body->CreateFixture(&fixtureDef);
-				}
-			}
+#endif
 			addObject(obj, false);
 		}
 	}
 
 	// Delete
 	svgDelete(plist);
+
+	// build game world and connect objects
+	processGameObjects();
+}
+
+void GameScene::processGameObjects()
+{
+#if DEBUG
+	// print obj info
+	for (std::list<GameObject*>::iterator iobj = mGameObjectList.begin(); iobj != mGameObjectList.end(); iobj++)
+	{
+		GameObject *obj = *iobj;
+		printf("OBJECT: %s\n", obj->getName());
+		for (int i = 0; i < obj->getPropertiesCount(); i++)
+		{
+			GameObject::Property *prop = obj->getProperty(i);
+			printf("  %s = %s\n", prop->getName(), prop->getValue());
+		}
+	}
+#endif
+	// create bodies
+	for (std::list<GameObject*>::iterator iobj = mGameObjectList.begin(); iobj != mGameObjectList.end(); iobj++)
+	{
+		GameObject *obj = *iobj;
+		GameObject::Property *bodyProp = obj->findProperty("body");
+		if (bodyProp)
+		{
+			b2Body *body = NULL;
+			b2Vec2 pos = obj->getPosition();
+			if (bodyProp->isValue("static"))
+			{
+				b2BodyDef bodyDef;
+				bodyDef.type = b2_staticBody;
+				bodyDef.position.Set(pos.x, pos.y);
+				body = getWorld()->CreateBody(&bodyDef);
+			}
+			else if (bodyProp->isValue("dynamic"))
+			{
+				b2BodyDef bodyDef;
+				bodyDef.type = b2_dynamicBody;
+				bodyDef.position.Set(pos.x, pos.y);
+				body = getWorld()->CreateBody(&bodyDef);
+			}
+			if (body)
+			{
+				obj->setBody(body);
+				body->SetUserData(obj);
+			}
+		}
+	}
+	// attach mounts
+	for (std::list<GameObject*>::iterator iobj = mGameObjectList.begin(); iobj != mGameObjectList.end(); iobj++)
+	{
+		GameObject *obj = *iobj;
+		if (obj->getBody())
+		{
+			printf("ERROR: Object '%s' already has a body!\n", obj->getName());
+			continue;
+		}
+		GameObject::Property *attachProp = obj->findProperty("attach");
+		if (attachProp)
+		{
+			GameObject *obj2 = getObjectByName(attachProp->getValue());
+			if (obj2)
+			{
+				b2Vec2 offset = obj->getPosition() - obj2->getPosition();
+				if (obj2->getBody())
+				{
+					obj->setBody(obj2->getBody());
+					obj->setBodyPositionOffset(offset.x, offset.y);
+				}
+				else
+					printf("ERROR: Object '%s' (needed by '%s') does not posess a body!\n", obj2->getName(), obj->getName());
+			}
+		}
+	}
+	// create shapes
+	for (std::list<GameObject*>::iterator iobj = mGameObjectList.begin(); iobj != mGameObjectList.end(); iobj++)
+	{
+		GameObject *obj = *iobj;
+		b2Body *body = obj->getBody();
+		if (body)
+		{
+			GameObject::PolyFill *fill = obj->getPolyFill(0);
+			GameObject::PolyLine *line = obj->getPolyLine(0);
+			GameObject::Property *shapeProp = obj->findProperty("shape");
+			if (shapeProp)
+			{
+				if (shapeProp->isValue("polygon"))
+				{
+					if (fill)
+					{
+						for (int i = 0; i < fill->triangleCount; i++)
+						{
+							b2PolygonShape polyShape;
+							polyShape.Set(&(fill->triangleList[i].a), 3);
+							b2FixtureDef fixtureDef;
+							fixtureDef.shape = &polyShape;
+							fixtureDef.density = 1.0f;
+							fixtureDef.friction = 0.3f;
+							fixtureDef.restitution = 0.5f;
+							body->CreateFixture(&fixtureDef);
+						}
+					}
+					else
+						printf("ERROR: Object '%s' needs a fill to be a polygon!\n", obj->getName());
+				}
+				else if (shapeProp->isValue("chain"))
+				{
+					if (line)
+					{
+						b2ChainShape chainShape;
+						chainShape.CreateChain(line->pointList, line->pointCount);
+						body->CreateFixture(&chainShape, 0.0f);
+					}
+					else
+						printf("ERROR: Object '%s' needs a line to be a chain!\n", obj->getName());
+				}
+				else if (shapeProp->isValue("circle"))
+				{
+					// TODO: add circle shape
+				}
+			}
+			/*else if (obj->getTexture())
+			{
+				b2PolygonShape polyShape;
+				polyShape.SetAsBox(obj->getTextureSize().x, obj->getTextureSize().y);
+				b2FixtureDef fixtureDef;
+				fixtureDef.shape = &polyShape;
+				fixtureDef.density = 1.0f;
+				fixtureDef.friction = 0.3f;
+				fixtureDef.restitution = 0.5f;
+				body->CreateFixture(&fixtureDef);
+			}*/
+		}
+	}
 }
 
 void GameScene::drawWorldDebug()

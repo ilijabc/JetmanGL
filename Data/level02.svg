@@ -14,7 +14,7 @@
    height="744.09448"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="level02.svg">
   <defs
      id="defs4" />
@@ -26,15 +26,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.32"
-     inkscape:cx="2555.728"
-     inkscape:cy="1448.3976"
+     inkscape:cx="2068.228"
+     inkscape:cy="1554.6476"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="529"
      inkscape:window-height="507"
-     inkscape:window-x="220"
-     inkscape:window-y="220"
+     inkscape:window-x="650"
+     inkscape:window-y="210"
      inkscape:window-maximized="0" />
   <metadata
      id="metadata7">
@@ -67,6 +67,9 @@
        id="path2996"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc">
+      <desc
+         id="desc3025">shape=chain
+body=static</desc>
       <title
          id="title3021">s</title>
     </path>
@@ -79,14 +82,16 @@
        y="369.48572"
        inkscape:label="#rect2998" />
     <image
-       sodipodi:absref="C:\ilija\projects\JetmanGL\Data\nlo.png"
+       sodipodi:absref="D:\Home\git\JetmanGL\Data\nlo.png"
        xlink:href="nlo.png"
-       inkscape:label="#image3004"
-       width="128"
-       height="64"
-       id="player"
+       y="-858.54791"
        x="2351.2375"
-       y="-858.54791">
+       id="player"
+       height="64"
+       width="128"
+       inkscape:label="#image3004">
+      <desc
+         id="desc3017">body=dynamic</desc>
       <title
          id="title2997">d</title>
     </image>
@@ -129,14 +134,14 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccccccccc" />
     <image
-       sodipodi:absref="C:\ilija\projects\JetmanGL\Data\alien.png"
+       sodipodi:absref="D:\Home\git\JetmanGL\Data\alien.png"
        xlink:href="alien.png"
-       inkscape:label="#image3081"
-       width="128"
-       height="128"
-       id="alien"
+       y="-819.90552"
        x="2726.625"
-       y="-819.90552">
+       id="alien"
+       height="128"
+       width="128"
+       inkscape:label="#image3081">
       <title
          id="title3002">d</title>
     </image>
@@ -173,6 +178,10 @@
        x="2074.8398"
        y="-768.05988"
        inkscape:label="#rect2998">
+      <desc
+         id="desc3013">density=2
+shape=polygon
+attach=box-red-4-4-4-1</desc>
       <title
          id="title2998">d</title>
     </rect>
@@ -184,8 +193,46 @@
        x="2077.9648"
        y="-886.80988"
        inkscape:label="#rect2998">
+      <desc
+         id="desc3011">friction=10
+density=2
+shape=polygon
+body=dynamic</desc>
       <title
          id="title2998-7">d</title>
     </rect>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="rect3015"
+       width="137.5"
+       height="56.25"
+       x="2353.125"
+       y="-852.78052">
+      <desc
+         id="desc3027">shape=polygon
+attach=player</desc>
+    </rect>
+    <path
+       sodipodi:type="arc"
+       style="fill:none"
+       id="path3019"
+       sodipodi:cx="1640.625"
+       sodipodi:cy="-682.46802"
+       sodipodi:rx="59.375"
+       sodipodi:ry="64.0625"
+       d="m 1700,-682.46802 a 59.375,64.0625 0 1 1 -118.75,0 59.375,64.0625 0 1 1 118.75,0 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ff0000"
+       id="path3021"
+       sodipodi:cx="1670.3125"
+       sodipodi:cy="-744.96802"
+       sodipodi:rx="45.3125"
+       sodipodi:ry="45.3125"
+       d="m 1715.625,-744.96802 a 45.3125,45.3125 0 1 1 -90.625,0 45.3125,45.3125 0 1 1 90.625,0 z">
+      <desc
+         id="desc3023">shape=circle
+body=dynamic</desc>
+    </path>
   </g>
 </svg>

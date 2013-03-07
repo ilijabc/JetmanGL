@@ -41,6 +41,7 @@ public:
     inline unsigned int getDrawFlags() const { return mDrawFlags; }
 
 private:
+    void processGameObjects();
     void drawWorldDebug();
     void drawBodyDebug(b2Body *body);
 
