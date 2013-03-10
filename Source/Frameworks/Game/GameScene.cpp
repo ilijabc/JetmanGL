@@ -114,7 +114,7 @@ void GameScene::loadSVG(const char *filename)
 		std::vector<b2Vec2> vs;
 		int i = 0;
 		float cx = 0, cy = 0;
-		float x1, y1, x2, y2;
+		float x1=0, y1=0, x2=0, y2=0;
 		//rescale and calculate center anb bounds
 		for (i = 0; i < path->npts; ++i)
 		{
@@ -146,7 +146,7 @@ void GameScene::loadSVG(const char *filename)
 			vs[i].y -= cy;
 		}
 		//fix closing points
-		if (vs[0] == vs[vs.size() - 1])
+		if (vs.size() > 0 && vs[0] == vs[vs.size() - 1])
 		{
 			path->closed = 1;
 			vs.pop_back();
@@ -182,13 +182,24 @@ void GameScene::loadSVG(const char *filename)
 		{
 			obj = new GameObject(this, 0);
 			// stroke
-			obj->addPolyLine(&(vs[0]), vs.size(), path->strokeColor, path->strokeWidth);
-			if (path->hasStroke)
-				obj->setHasLine(true);
+			if (vs.size() >= 2)
+			{
+				GameObject::PolyLine *line = obj->addPolyLine(&(vs[0]), vs.size(), path->strokeColor, path->strokeWidth);
+				if (line)
+				{
+					line->visible = path->hasStroke;
+					line->closed = path->closed;
+				}
+			}
 			// fill
-			obj->addPolyFill(&(vs[0]), vs.size(), path->fillColor);
-			if (path->hasFill)
-				obj->setHasFill(true);
+			if (vs.size() >= 3)
+			{
+				GameObject::PolyFill *poly = obj->addPolyFill(&(vs[0]), vs.size(), path->fillColor);
+				if (poly)
+				{
+					poly->visible = path->hasFill;
+				}
+			}
 			//circle
 			// TODO: circles are still not proper handled by nanosvg
 			//       maybe to analyze geometry for now...
@@ -214,7 +225,12 @@ void GameScene::loadSVG(const char *filename)
 				obj->setName(path->id);
 			if (path->description)
 				obj->parseProperties(path->description);
+			if (path->group && path->group->id)
+				obj->setGroupName(path->group->id);
 #ifdef DEBUG_SVG
+			printf("ADD OBJECT: type=%d id=%s\n", path->type, path->id);
+			for (SVGPath *g = path->group; g; g = g->group)
+				printf("    group=%s\n", g->id);
 			printf("add object '%s' (%f, %f) %f %f %f %f\n", path->id, cx, cy, x1, y1, x2, y2);
 #endif
 			addObject(obj, false);
@@ -230,19 +246,20 @@ void GameScene::loadSVG(const char *filename)
 
 void GameScene::processGameObjects()
 {
-#ifdef DEBUG_SVG
+//#ifdef DEBUG_SVG
 	// print obj info
 	for (std::list<GameObject*>::iterator iobj = mGameObjectList.begin(); iobj != mGameObjectList.end(); iobj++)
 	{
 		GameObject *obj = *iobj;
 		printf("OBJECT: %s\n", obj->getName());
+		printf("        group = %s\n", obj->getGroupName());
 		for (int i = 0; i < obj->getPropertiesCount(); i++)
 		{
 			GameObject::Property *prop = obj->getProperty(i);
-			printf("  %s = %s\n", prop->getName(), prop->getValue());
+			printf("        %s = %s\n", prop->getName(), prop->getValue());
 		}
 	}
-#endif
+//#endif
 	// create bodies
 	for (std::list<GameObject*>::iterator iobj = mGameObjectList.begin(); iobj != mGameObjectList.end(); iobj++)
 	{
@@ -275,7 +292,7 @@ void GameScene::processGameObjects()
 		GameObject::Property *visibleProp = obj->findProperty("visible");
 		if (visibleProp)
 		{
-			if (visibleProp->isValue("no"))
+			if (visibleProp->isValue("false"))
 				obj->setVisible(false);
 		}
 	}
@@ -283,26 +300,34 @@ void GameScene::processGameObjects()
 	for (std::list<GameObject*>::iterator iobj = mGameObjectList.begin(); iobj != mGameObjectList.end(); iobj++)
 	{
 		GameObject *obj = *iobj;
+		GameObject::Property *shapeProp = obj->findProperty("shape");
+		if (!shapeProp)
+			continue;
+		GameObject *group = NULL;
 		GameObject::Property *attachProp = obj->findProperty("attach");
 		if (attachProp)
 		{
-			if (obj->getBody())
+			group = getObjectByName(attachProp->getValue());
+		}
+		else
+		{
+			group = getObjectByName(obj->getGroupName());
+		}
+		if (group)
+		{
+			if (group->getBody())
 			{
-				printf("ERROR: Object '%s' already has a body!\n", obj->getName());
-				continue;
-			}
-			GameObject *obj2 = getObjectByName(attachProp->getValue());
-			if (obj2)
-			{
-				b2Vec2 offset = obj->getPosition() - obj2->getPosition();
-				if (obj2->getBody())
+				if (obj->getBody())
 				{
-					obj->setBody(obj2->getBody());
-					obj->setPositionOffset(offset.x, offset.y);
+					printf("ERROR: Object '%s' already has a body!\n", obj->getName());
+					continue;
 				}
-				else
-					printf("ERROR: Object '%s' (needed by '%s') does not posess a body!\n", obj2->getName(), obj->getName());
+				b2Vec2 offset = obj->getPosition() - group->getPosition();
+				obj->setBody(group->getBody());
+				obj->setPositionOffset(offset.x, offset.y);
 			}
+			else
+				printf("ERROR: Object '%s' (needed by '%s') does not posess a body!\n", group->getName(), group->getName());
 		}
 	}
 	// create shapes
@@ -333,9 +358,9 @@ void GameScene::processGameObjects()
 				int shapeType = 0;
 				if (shapeProp->isValue("auto"))
 				{
-					if (obj->getHasFill())
+					if (fill && fill->visible)
 						shapeType = 0;
-					else if (obj->getHasLine())
+					else if (line && line->visible)
 						shapeType = 1;
 				}
 				else if (shapeProp->isValue("polygon"))
@@ -364,6 +389,7 @@ void GameScene::processGameObjects()
 							fixtureDef.density = density;
 							fixtureDef.friction = friction;
 							fixtureDef.restitution = restitution;
+							fixtureDef.userData = obj;
 							body->CreateFixture(&fixtureDef);
 						}
 					}
@@ -378,7 +404,11 @@ void GameScene::processGameObjects()
 						for (int i = 0; i < line->pointCount; i++)
 							points[i] = line->pointList[i] + offset;
 						chainShape.CreateChain(points, line->pointCount);
-						body->CreateFixture(&chainShape, 0.0f);
+						b2FixtureDef fixtureDef;
+						fixtureDef.shape = &chainShape;
+						fixtureDef.density = 0.0f;
+						fixtureDef.userData = obj;
+						body->CreateFixture(&fixtureDef);
 					}
 					else
 						printf("ERROR: Object '%s' needs a line to be a chain!\n", obj->getName());
@@ -395,6 +425,7 @@ void GameScene::processGameObjects()
 						fixtureDef.density = density;
 						fixtureDef.friction = friction;
 						fixtureDef.restitution = restitution;
+						fixtureDef.userData = obj;
 						body->CreateFixture(&fixtureDef);
 					}
 					else

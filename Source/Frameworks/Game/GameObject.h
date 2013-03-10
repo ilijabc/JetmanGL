@@ -15,12 +15,19 @@ public:
 	struct PolyLine {
 		PolyLine(int size);
 		~PolyLine();
-		b2Vec2 *pointList; int pointCount; LineStyle style;
+		b2Vec2 *pointList;
+		int pointCount;
+		LineStyle style;
+		bool visible;
+		bool closed;
 	};
 	struct PolyFill {
 		PolyFill(int size);
 		~PolyFill();
-		Triangle *triangleList; int triangleCount; FillStyle style;
+		Triangle *triangleList;
+		int triangleCount;
+		FillStyle style;
+		bool visible;
 	};
 	// properties
 	struct Property {
@@ -54,8 +61,7 @@ public:
 	inline void setPositionOffset(float x, float y) { mPositionOffset.Set(x, y); }
 	inline void setVisible(bool visible) { mVisible = visible; }
 	inline void setRadius(float radius) { mRadius = radius; }
-	inline void setHasLine(bool b) { mHasLine = b; }
-	inline void setHasFill(bool b) { mHasFill = b; }
+	inline void setGroupName(const char *group) { strcpy(mGroupName, group); }
 	//getters
 	inline b2Body *getBody() const { return mBody; }
 	inline GLTexture *getTexture() const { return mTexture; }
@@ -68,12 +74,11 @@ public:
     inline const b2Vec2 &getPositionOffset() const { return mPositionOffset; }
     inline bool isVisible() const { return mVisible; }
     inline float getRadius() const { return mRadius; }
-    inline bool getHasLine() const { return mHasLine; }
-    inline bool getHasFill() const { return mHasFill; }
+    inline const char *getGroupName() const { return mGroupName; }
     //geomtry
-    int addPolyLine(b2Vec2 *pointList, int pointCount, int color = 0xFFFFFFFF, float width = 1.0f);
-    int addPolyFill(b2Vec2 *pointList, int pointCount, int color = 0xFFFFFFFF);
-    int addRectFill(float x1, float y1, float x2, float y2, int color = 0xFFFFFFFF);
+    PolyLine *addPolyLine(b2Vec2 *pointList, int pointCount, int color = 0xFFFFFFFF, float width = 1.0f);
+    PolyFill *addPolyFill(b2Vec2 *pointList, int pointCount, int color = 0xFFFFFFFF);
+    PolyFill *addRectFill(float x1, float y1, float x2, float y2, int color = 0xFFFFFFFF);
     PolyLine *getPolyLine(int index);
     PolyFill *getPolyFill(int index);
     inline int getPolyLineCount() const { return mLineList.size(); }
@@ -101,8 +106,7 @@ private:
     std::vector<Property> mProperties;
     bool mVisible;
     float mRadius;
-    bool mHasLine;
-    bool mHasFill;
+    char mGroupName[250];
 };
 
 #endif // GAMEOBJECT_H

@@ -18,10 +18,9 @@ GameObject::GameObject(GameScene *scene, int type)
 		, mPositionOffset(0, 0)
 		, mVisible(true)
 		, mRadius(0)
-		, mHasLine(false)
-		, mHasFill(false)
 {
 	strcpy(mName, "");
+	strcpy(mGroupName, "");
 }
 
 GameObject::~GameObject()
@@ -46,39 +45,37 @@ void GameObject::onDraw(GLView *view, unsigned int flags)
 	if ((flags & GameScene::e_drawShapeFlag) == GameScene::e_drawShapeFlag)
 	{
 		//fill
-		if (mHasFill)
+		for (int i = 0; i < mFillList.size(); i++)
 		{
-			for (int i = 0; i < mFillList.size(); i++)
+			PolyFill *poly = mFillList[i];
+			if (!poly->visible)
+				continue;
+			glColor4fv(poly->style.color);
+			glBegin(GL_TRIANGLES);
+			for (int j = 0; j < poly->triangleCount; j++)
 			{
-				PolyFill *poly = mFillList[i];
-				glColor4fv(poly->style.color);
-				glBegin(GL_TRIANGLES);
-				for (int j = 0; j < poly->triangleCount; j++)
-				{
-					GameObject::Triangle *tri = &(poly->triangleList[j]);
-					glVertex2fv((float*)&(tri->a));
-					glVertex2fv((float*)&(tri->b));
-					glVertex2fv((float*)&(tri->c));
-				}
-				glEnd();
+				GameObject::Triangle *tri = &(poly->triangleList[j]);
+				glVertex2fv((float*)&(tri->a));
+				glVertex2fv((float*)&(tri->b));
+				glVertex2fv((float*)&(tri->c));
 			}
+			glEnd();
 		}
 		//outline
-		if (mHasLine)
+		for (int i = 0; i < mLineList.size(); i++)
 		{
-			for (int i = 0; i < mLineList.size(); i++)
+			PolyLine *line = mLineList[i];
+			if (!line->visible)
+				continue;
+			glColor4fv(line->style.color);
+			glLineWidth(line->style.width);
+			glBegin(line->closed ? GL_LINE_LOOP : GL_LINE_STRIP);
+			for (int j = 0; j < line->pointCount; j++)
 			{
-				PolyLine *line = mLineList[i];
-				glColor4fv(line->style.color);
-				glLineWidth(line->style.width);
-				glBegin(GL_LINE_STRIP);
-				for (int j = 0; j < line->pointCount; j++)
-				{
-					glVertex2fv((float*)&(line->pointList[j]));
-				}
-				glEnd();
-				glLineWidth(1.0f);
+				glVertex2fv((float*)&(line->pointList[j]));
 			}
+			glEnd();
+			glLineWidth(1.0f);
 		}
 	}
 	if ((flags & GameScene::e_drawImageFlag) == GameScene::e_drawImageFlag)
@@ -98,21 +95,21 @@ void GameObject::onCollision(b2Body *other)
 {
 }
 
-int GameObject::addPolyLine(b2Vec2 *pointList, int pointCount, int color, float width)
+GameObject::PolyLine *GameObject::addPolyLine(b2Vec2 *pointList, int pointCount, int color, float width)
 {
 	PolyLine *line = new PolyLine(pointCount);
 	memcpy(line->pointList, pointList, sizeof(b2Vec2) * pointCount);
 	parseIntColor(color, line->style.color);
 	line->style.width = width;
 	mLineList.push_back(line);
-	return mLineList.size() - 1;
+	return line;
 }
 
-int GameObject::addPolyFill(b2Vec2 *pointList, int pointCount, int color)
+GameObject::PolyFill *GameObject::addPolyFill(b2Vec2 *pointList, int pointCount, int color)
 {
 	if (pointCount < 2)
 	{
-		return -1;
+		return NULL;
 	}
 	else if (pointCount == 3)
 	{
@@ -121,7 +118,7 @@ int GameObject::addPolyFill(b2Vec2 *pointList, int pointCount, int color)
 		fill->triangleList[0].b = pointList[1];
 		fill->triangleList[0].c = pointList[2];
 		mFillList.push_back(fill);
-		return mFillList.size() - 1;
+		return fill;
 	}
 	else
 	{
@@ -143,11 +140,11 @@ int GameObject::addPolyFill(b2Vec2 *pointList, int pointCount, int color)
 		}
 		parseIntColor(color, fill->style.color);
 		mFillList.push_back(fill);
-		return mFillList.size() - 1;
+		return fill;
 	}
 }
 
-int GameObject::addRectFill(float x1, float y1, float x2, float y2, int color)
+GameObject::PolyFill *GameObject::addRectFill(float x1, float y1, float x2, float y2, int color)
 {
 	PolyFill *fill = new PolyFill(2);
 	fill->triangleList[0].a.Set(x1, y1);
@@ -159,7 +156,7 @@ int GameObject::addRectFill(float x1, float y1, float x2, float y2, int color)
 	parseIntColor(color, fill->style.color);
 	fill->style.type = 0;
 	mFillList.push_back(fill);
-	return mFillList.size() - 1;
+	return fill;
 }
 
 GameObject::PolyLine *GameObject::getPolyLine(int index)
@@ -183,6 +180,8 @@ GameObject::PolyLine::PolyLine(int size)
 	pointCount = size;
 	set4fv(style.color, 1, 1, 1, 1);
 	style.width = 1.0f;
+	visible = true;
+	closed = false;
 }
 
 GameObject::PolyLine::~PolyLine()
@@ -196,6 +195,7 @@ GameObject::PolyFill::PolyFill(int size)
 	triangleCount = size;
 	set4fv(style.color, 1, 1, 1, 1);
 	style.type = 0;
+	visible = true;
 }
 
 GameObject::PolyFill::~PolyFill()

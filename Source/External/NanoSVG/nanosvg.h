@@ -37,7 +37,7 @@ extern "C" {
 	svgDelete(plist);
 */
 
-#define SVG_TYPE_UNKNOWN    0
+#define SVG_TYPE_GROUP      0
 #define SVG_TYPE_PATH       1
 #define SVG_TYPE_RECT       2
 #define SVG_TYPE_IMAGE      3
@@ -62,7 +62,8 @@ struct SVGPath
 	char type;
 	char *title;
 	char *description;
-	struct SVGPath* next;
+	struct SVGPath *next;
+	struct SVGPath *group;
 };
 
 // Parses SVG file from a file, returns linked list of paths.

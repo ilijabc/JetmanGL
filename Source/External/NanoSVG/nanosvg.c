@@ -160,6 +160,7 @@ int parsexml(char* input,
 /* Simple SVG parser. */
 
 #define SVG_MAX_ATTR 128
+#define SVG_MAX_GROUP 32
 
 struct SVGAttrib
 {
@@ -178,6 +179,8 @@ struct SVGParser
 {
 	struct SVGAttrib attr[SVG_MAX_ATTR];
 	int attrHead;
+	struct SVGPath* group[SVG_MAX_GROUP];
+	int groupHead;
 	float* buf;
 	int nbuf;
 	int cbuf;
@@ -316,6 +319,43 @@ static void svgPopAttr(struct SVGParser* p)
 		p->attrHead--;
 }
 
+static struct SVGPath *svgGetGroup(struct SVGParser *p)
+{
+	return p->group[p->groupHead];
+}
+
+static void svgPushGroup(struct SVGParser *p)
+{
+	if (p->groupHead < SVG_MAX_GROUP - 1)
+	{
+		p->groupHead++;
+		p->group[p->groupHead] = p->plist;
+	}
+}
+
+static void svgPopGroup(struct SVGParser *p)
+{
+	if (p->groupHead > 0)
+		p->groupHead--;
+}
+
+static struct SVGPath* svgCreateGroup(struct SVGParser* p)
+{
+	struct SVGPath* path;
+	path = (struct SVGPath*)malloc(sizeof(struct SVGPath));
+	if (!path)
+		return NULL;
+	memset(path, 0, sizeof(struct SVGPath));
+	path->type = SVG_TYPE_GROUP;
+	path->group = svgGetGroup(p);
+
+	// connect
+	path->next = p->plist;
+	p->plist = path;
+
+	return path;
+}
+
 static struct SVGPath* svgCreatePath(struct SVGParser* p, char closed, char type)
 {
 	float* t;
@@ -348,9 +388,6 @@ static struct SVGPath* svgCreatePath(struct SVGParser* p, char closed, char type
 	path->type = type;
 	path->npts = p->nbuf;
 
-	path->next = p->plist;
-	p->plist = path;
-
 	// Transform path.
 	t = attr->xform;
 	for (i = 0; i < p->nbuf; ++i)
@@ -371,6 +408,12 @@ static struct SVGPath* svgCreatePath(struct SVGParser* p, char closed, char type
 	path->strokeColor = attr->strokeColor;
 	if (path->hasStroke)
 		path->strokeColor |= (unsigned int)(attr->strokeOpacity*255) << 24;
+
+	path->group = svgGetGroup(p);
+
+	// connect
+	path->next = p->plist;
+	p->plist = path;
 
     return path;
 }
@@ -935,6 +978,42 @@ static void pathQuadBezShortTo(struct SVGParser* p, float* cpx, float* cpy,
 	*cpy = y2;
 }
 
+static void svgParseGroup(struct SVGParser* p, const char** attr)
+{
+	char *id = NULL;
+	char *label = NULL;
+	int i;
+
+	for (i = 0; attr[i]; i += 2)
+	{
+		if (!svgParseAttr(p, attr[i], attr[i + 1]))
+		{
+			if (strcmp(attr[i], "id") == 0)
+            {
+                id = malloc(strlen(attr[i+1]) + 1);
+                strcpy(id, attr[i+1]);
+            }
+			if (strcmp(attr[i], "inkscape:label") == 0)
+			{
+				label = malloc(strlen(attr[i+1]) + 1);
+				strcpy(label, attr[i+1]);
+			}
+		}
+	}
+
+	struct SVGPath *path = svgCreateGroup(p);
+	if (path)
+	{
+		path->id = id;
+		path->label = label;
+	}
+	else
+	{
+		free(id);
+		free(label);
+	}
+}
+
 static void svgParsePath(struct SVGParser* p, const char** attr)
 {
 	const char* s;
@@ -1438,6 +1517,8 @@ static void svgStartElement(void* ud, const char* el, const char** attr)
 	{
 		svgPushAttr(p);
 		svgParseAttribs(p, attr);
+		svgParseGroup(p, attr);
+		svgPushGroup(p);
 	}
 	else if (strcmp(el, "path") == 0)
 	{
@@ -1515,6 +1596,7 @@ static void svgEndElement(void* ud, const char* el)
 
 	if (strcmp(el, "g") == 0)
 	{
+		svgPopGroup(p);
 		svgPopAttr(p);
 	}
 	else if (strcmp(el, "path") == 0)

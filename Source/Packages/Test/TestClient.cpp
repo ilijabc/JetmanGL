@@ -31,6 +31,8 @@ TestClient::TestClient(AppServer *server, const char *level_file)
 		mButtonState[i] = GLFW_RELEASE;
 	mCameraPos.set(0, 0, 100);
 	//gui
+	mTestForm = NULL;
+#if 0
 	mTestForm = new GUIForm(50, 50, 250, 300);
 	mTestForm->setFont(mFont);
 	mTestForm->setEventListener(this);
@@ -40,6 +42,7 @@ TestClient::TestClient(AppServer *server, const char *level_file)
 	GUIScrollBar *scroll1 = mTestForm->addControl<GUIScrollBar>(200, 0, 50, 300);
 	GUIScrollBar *scroll2 = mTestForm->addControl<GUIScrollBar>(0, 130, 100, 20);
 	scroll2->setOrientation(GUIScrollBar::e_horizontalOrientation);
+#endif
 }
 
 TestClient::~TestClient()
@@ -52,7 +55,8 @@ TestClient::~TestClient()
 void TestClient::onUpdate(float dt)
 {
 	mScene->update(dt);
-	mTestForm->doEvents();
+	if (mTestForm)
+		mTestForm->doEvents();
 }
 
 void TestClient::onDraw()
@@ -74,7 +78,8 @@ void TestClient::onDraw()
 	mView->endScene2D();
 	//gui
 	mView->beginGui();
-	mTestForm->draw(mView);
+	if (mTestForm)
+		mTestForm->draw(mView);
 	mView->endGui();
 }
 
